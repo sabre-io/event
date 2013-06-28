@@ -34,8 +34,8 @@ trait EventEmitterTrait {
      */
     public function on($eventName, callable $callBack, $priority = 100) {
 
-        $listeners = $this->listeners($eventName);
-        $listeners[] = [$priorty, $callBack];
+        $listeners =& $this->listeners($eventName);
+        $listeners[] = [$priority, $callBack];
         usort($listeners, function($a, $b) {
 
             return $a[0]-$b[0];
