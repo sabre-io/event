@@ -1,0 +1,6 @@
+#composer
+vendor
+composer.lock
+
+#vim lock files
+.*.swp

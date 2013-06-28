@@ -1,0 +1,32 @@
+{
+    "name": "sabre/event",
+    "description" : "The sabre/event library provides utilities for lightweight event-based programming",
+    "keywords" : [ "Events" ],
+    "homepage" : "https://github.com/fruux/sabre-event",
+    "license" : "BSD-3-Clause",
+    "require" : {
+        "php"          : ">=5.4.1"
+    },
+    "authors" : [
+        {
+            "name" : "Evert Pot",
+            "email" : "evert@rooftopsolutions.nl",
+            "homepage" : "http://evertpot.com/",
+            "role" : "Developer"
+        }
+    ],
+    "support" : {
+        "forum" : "https://groups.google.com/group/sabredav-discuss",
+        "source" : "https://github.com/fruux/sabre-event"
+    },
+    "autoload" : {
+        "psr-0" : {
+            "Sabre\\Event" : "lib/"
+        }
+    },
+    "extra" : {
+        "branch-alias" : {
+            "dev-master" : "1.0.x-dev"
+        }
+    }
+}

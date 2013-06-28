@@ -1,0 +1,13 @@
+<phpunit
+  colors="true"
+  bootstrap="bootstrap.php"
+  convertErrorsToExceptions="true"
+  convertNoticesToExceptions="true"
+  convertWarningsToExceptions="true"
+  strict="true"
+  >
+  <testsuite name="Sabre\Event">
+    <directory>Sabre/</directory>
+  </testsuite>
+
+</phpunit>
