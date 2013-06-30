@@ -22,7 +22,7 @@ interface EventEmitterInterface {
      * @param int $priority
      * @return void
      */
-    public function on($eventName, $callBack, $priority = 100);
+    public function on($eventName, callable $callBack, $priority = 100);
 
     /**
      * Emits an event.
