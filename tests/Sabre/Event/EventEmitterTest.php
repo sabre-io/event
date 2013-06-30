@@ -92,6 +92,40 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertEquals(2, $argResult);
 
+    }
+
+    /**
+     * @depends testPriority
+     */
+    function testPriority2() {
+
+        $result = [];
+        $ee = new EventEmitter();
+
+        $ee->on('foo', function() use (&$result) {
+
+            $result[] = 'a';
+
+        }, 200);
+        $ee->on('foo', function() use (&$result) {
+
+            $result[] = 'b';
+
+        }, 50);
+        $ee->on('foo', function() use (&$result) {
+
+            $result[] = 'c';
+
+        }, 300);
+        $ee->on('foo', function() use (&$result) {
+
+            $result[] = 'd';
+
+        });
+
+        $ee->emit('foo');
+        $this->assertEquals(['b','d','a','c'], $result);
 
     }
+
 }
