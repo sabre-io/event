@@ -32,7 +32,7 @@ trait EventEmitterTrait {
      * @param int $priority
      * @return void
      */
-    public function on($eventName, callable $callBack, $priority = 100) {
+    public function on($eventName, $callBack, $priority = 100) {
 
         $listeners =& $this->listeners($eventName);
         $listeners[] = [$priority, $callBack];
