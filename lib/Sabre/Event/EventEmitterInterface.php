@@ -51,4 +51,20 @@ interface EventEmitterInterface {
      */
     public function listeners($eventName);
 
+    /**
+     * Removes a specific listener from an event.
+     *
+     * @param string $eventName
+     * @param callable $listener
+     * @return void
+     */
+    public function removeListener($eventName, callable $listener);
+
+    /**
+     * Removes all listeners from the specified event.
+     *
+     * @param string $eventName
+     * @return void
+     */
+    public function removeAllListeners($eventName);
 }

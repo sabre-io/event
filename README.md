@@ -171,7 +171,7 @@ Questions?
 Head over to the [sabre/dav mailinglist], or you can also just open a ticket
 on [github][5].
 
-[1]:
+[1]: http://nodejs.org/api/events.html
 [2]: https://github.com/igorw/evenement
 [3]: http://getcomposer.org/
 [4]: http://groups.google.com/group/sabredav-discuss
