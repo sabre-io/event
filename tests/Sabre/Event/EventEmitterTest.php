@@ -128,4 +128,55 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
 
     }
 
+    function testRemoveListener() {
+
+        $result = false;
+
+        $callBack = function() use (&$result) {
+
+            $result = true;
+
+        };
+
+
+        $ee = new EventEmitter();
+
+        $ee->on('foo', $callBack);
+
+        $ee->emit('foo');
+        $this->assertTrue($result);
+        $result = false;
+
+        $ee->removeListener('foo', $callBack);
+
+        $ee->emit('foo');
+        $this->assertFalse($result);
+
+    }
+
+    function testRemoveAllListeners() {
+
+        $result = false;
+
+        $callBack = function() use (&$result) {
+
+            $result = true;
+
+        };
+
+
+        $ee = new EventEmitter();
+
+        $ee->on('foo', $callBack);
+
+        $ee->emit('foo');
+        $this->assertTrue($result);
+        $result = false;
+
+        $ee->removeAllListeners('foo');
+
+        $ee->emit('foo');
+        $this->assertFalse($result);
+
+    }
 }

@@ -103,7 +103,7 @@ trait EventEmitterTrait {
         $listeners =& $this->listeners($eventName);
         foreach($listeners as $index => $check) {
             if ($check[1]===$listener) {
-                unset($index);
+                unset($listeners[$index]);
                 break;
             }
         }
