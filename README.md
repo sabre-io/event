@@ -6,7 +6,7 @@ A lightweight library for event management in PHP.
 It's design is inspired by Node.js's EventEmitter. sabre/event requires PHP
 5.4.
 
-It's distinct from [Evénement][2], because I needed a couple of features that
+It's distinct from [Événement][2], because I needed a couple of features that
 were in conflict with it's design goals. Namely: prioritization, and the
 ability to stop the event chain, like javascript's `preventDefault`.
 
@@ -60,8 +60,8 @@ By supplying a priority, you can make sure that subscribers are handled in a
 specific order. The default priority is 100. Anything below that will be
 triggered earlier, anything higher later.
 
-Subscribers with an identical priority will execute in an undefined, but
-deterministic order.
+If there's two subscribers with the same priority, they will execute in an
+undefined, but deterministic order.
 
 ```php
 $eventEmitter->on('create', function() {
@@ -73,7 +73,7 @@ $eventEmitter->on('create', function() {
 
 ### Callbacks
 
-All default PHP callbacks are supported, so you don't have to use closures.
+All default PHP callbacks are supported, so closures are not required.
 
 ```php
 $eventEmitter->on('create', 'myFunction');
@@ -101,12 +101,12 @@ $eventEmitter->on('create', function() {
 `EventEmitter::emit()` will return `false` if the event was cancelled, and
 true if it wasn't.
 
-SabreDAV uses this feature heavily as well. When a HTTP request comes in
+SabreDAV uses this feature heavily as well. When a HTTP request is received
 various plugins see if they are capable of handling the request. If they
 do, they can return false so other plugins will not also attempt to handle
 the request.
 
-Exceptions also stop the chain.
+Throwing an exception will also stop the chain.
 
 ### Passing arguments
 
@@ -119,6 +119,7 @@ $eventEmitter->on('create', function($entityId) {
 
 });
 
+$entityId = 5;
 $eventEmitter->emit('create', [$entityId]);
 ```
 
@@ -131,7 +132,7 @@ $eventEmitter->on('create', function($entityId, &$warnings) {
 
     echo "An entity with id ", $entityId, " just got created.\n";
 
-    $warnings[] = 'Something bad may or may not have happened.\n";
+    $warnings[] = "Something bad may or may not have happened.\n";
 
 });
 
@@ -146,10 +147,9 @@ print_r($warnings);
 ### Integration into other objects.
 
 To add `EventEmitter` capabilities to any class, you can simply extend it.
-This may make sense for an Application Controller.
 
-If you cannot extend, because the class is already part of a class hierarchy,
-you can use the trait.
+If you cannot extend, because the class is already part of an existing class
+hierarchy you can use the supplied trait.
 
 ```php
 use Sabre\Event;
@@ -165,11 +165,19 @@ class MyNotUneventfulApplication
 }
 ```
 
+In the preceeding example, `MyNotUneventfulApplication` has all the
+capabilities of `EventEmitter`.
+
 Questions?
 ----------
 
-Head over to the [sabre/dav mailinglist], or you can also just open a ticket
-on [github][5].
+Head over to the [sabre/dav mailinglist][4], or you can also just open a ticket
+on [GitHub][5].
+
+Made at fruux
+-------------
+
+This library is being developed by [fruux](https://fruux.com/). Drop us a line for commercial services or enterprise support.
 
 [1]: http://nodejs.org/api/events.html
 [2]: https://github.com/igorw/evenement
