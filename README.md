@@ -3,8 +3,8 @@ sabre/event
 
 A lightweight library for event management in PHP.
 
-It's design is inspired by Node.js's EventEmitter. sabre/event requires PHP
-5.4.
+It's design is inspired by Node.js's [EventEmitter][1]. sabre/event requires
+PHP 5.4.
 
 It's distinct from [Événement][2], because I needed a couple of features that
 were in conflict with it's design goals. Namely: prioritization, and the
