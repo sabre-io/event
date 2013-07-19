@@ -25,6 +25,16 @@ interface EventEmitterInterface {
     public function on($eventName, callable $callBack, $priority = 100);
 
     /**
+     * Subscribe to an event exactly once.
+     *
+     * @param string $eventName
+     * @param callable $callBack
+     * @param int $priority
+     * @return void
+     */
+    public function once($eventName, callable $callBack, $priority = 100);
+
+    /**
      * Emits an event.
      *
      * This method will return true if 0 or more listeners were succesfully

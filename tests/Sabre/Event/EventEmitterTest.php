@@ -179,4 +179,25 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
         $this->assertFalse($result);
 
     }
+
+    function testOnce() {
+
+        $result = 0;
+
+        $callBack = function() use (&$result) {
+
+            $result++;
+
+        };
+
+        $ee = new EventEmitter();
+        $ee->once('foo', $callBack);
+
+        $ee->emit('foo');
+        $ee->emit('foo');
+
+        $this->assertEquals(1, $result);
+
+    }
+
 }

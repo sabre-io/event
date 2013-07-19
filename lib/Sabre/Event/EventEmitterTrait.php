@@ -45,6 +45,28 @@ trait EventEmitterTrait {
     }
 
     /**
+     * Subscribe to an event exactly once.
+     *
+     * @param string $eventName
+     * @param callable $callBack
+     * @param int $priority
+     * @return void
+     */
+    public function once($eventName, callable $callBack, $priority = 100) {
+
+        $wrapper = null;
+        $wrapper = function() use ($eventName, $callBack, &$wrapper) {
+
+            $this->removeListener($eventName, $wrapper);
+            $result = call_user_func_array($callBack, func_get_args());
+
+        };
+
+        $this->on($eventName, $wrapper);
+
+    }
+
+    /**
      * Emits an event.
      *
      * This method will return true if 0 or more listeners were succesfully
