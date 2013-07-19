@@ -1,4 +1,4 @@
-1.0.0-stable (2013-??-??)
+1.0.0-stable (2013-07-19)
 	* Added: removeListener, removeAllListeners
 	* Added: once, to only listen to an event emitting once.
 	* Added README.md.
