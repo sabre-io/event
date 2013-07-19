@@ -5,7 +5,7 @@ namespace Sabre\Event;
 /**
  * Event Emitter Interface
  *
- * Anything that accepts listeners and emits event should implement this
+ * Anything that accepts listeners and emits events should implement this
  * interface.
  *
  * @copyright Copyright (C) 2013 fruux GmbH. All rights reserved.
