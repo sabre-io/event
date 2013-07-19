@@ -103,7 +103,7 @@ true if it wasn't.
 
 SabreDAV uses this feature heavily as well. When a HTTP request is received
 various plugins see if they are capable of handling the request. If they
-do, they can return false so other plugins will not also attempt to handle
+do, they can return `false` so other plugins will not also attempt to handle
 the request.
 
 Throwing an exception will also stop the chain.
