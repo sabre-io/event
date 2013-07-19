@@ -160,7 +160,7 @@ class MyNotUneventfulApplication
     implements Event\EventEmitterInterface
 {
 
-    use Event\EventEmitterTrait();
+    use Event\EventEmitterTrait;
 
 }
 ```
