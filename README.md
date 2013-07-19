@@ -83,7 +83,7 @@ $eventEmitter->on('create', [$myInstance, 'myMethod']);
 
 ### Canceling the event handler.
 
-If a callback returns `false` the event chain is stopped immidiately.
+If a callback returns `false` the event chain is stopped immediately.
 
 A usecase is to use a listener to check if a user has permission to perform
 a certain action, and stop execution if they don't.
