@@ -5,7 +5,7 @@ namespace Sabre\Event;
 /**
  * Event Emitter Trait
  *
- * This traits contains all the basic functions to implement an
+ * This trait contains all the basic functions to implement an
  * EventEmitterInterface.
  *
  * Using the trait + interface allows you to add EventEmitter capabilities

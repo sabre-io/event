@@ -83,7 +83,7 @@ $eventEmitter->on('create', [$myInstance, 'myMethod']);
 
 ### Canceling the event handler.
 
-If a callback returns `false` the event chain is stopped immidiately.
+If a callback returns `false` the event chain is stopped immediately.
 
 A usecase is to use a listener to check if a user has permission to perform
 a certain action, and stop execution if they don't.
@@ -103,7 +103,7 @@ true if it wasn't.
 
 SabreDAV uses this feature heavily as well. When a HTTP request is received
 various plugins see if they are capable of handling the request. If they
-do, they can return false so other plugins will not also attempt to handle
+do, they can return `false` so other plugins will not also attempt to handle
 the request.
 
 Throwing an exception will also stop the chain.
