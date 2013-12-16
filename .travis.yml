@@ -2,6 +2,9 @@ language: php
 php:
   - 5.4
   - 5.5
+  - hhvm
+allow_failures:
+  - php: hhvm
 
 script: phpunit --configuration tests/phpunit.xml
 
