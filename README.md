@@ -20,7 +20,7 @@ or edit a `composer.json` file, and make sure it contains something like this:
 ```json
 {
     "require" : {
-        "sabre/event" : "~0.0.1@alpha"
+        "sabre/event" : "~1.0.0"
     }
 }
 ```
