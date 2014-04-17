@@ -4,7 +4,7 @@ namespace Sabre\Event;
 
 class PromiseTest extends \PHPUnit_Framework_TestCase {
 
-    function testPromiseSuccess() {
+    function testSuccess() {
 
         $finalValue = 0;
         $promise = new Promise();
@@ -18,7 +18,7 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
 
     }
 
-    function testPromiseFail() {
+    function testFail() {
 
         $finalValue = 0;
         $promise = new Promise();
@@ -32,7 +32,7 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
 
     }
 
-    function testPromiseChain() {
+    function testChain() {
 
         $finalValue = 0;
         $promise = new Promise();
@@ -51,4 +51,33 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
 
     }
 
+    function testPendingResult() {
+
+        $finalValue = 0;
+        $promise = new Promise();
+
+
+        $promise->then(function($value) use (&$finalValue) {
+            $finalValue=$value + 2;
+        });
+
+        $promise->fulfill(4);
+        $this->assertEquals(6, $finalValue);
+
+    }
+
+    function testPendingFail() {
+
+        $finalValue = 0;
+        $promise = new Promise();
+
+
+        $promise->then(null, function($value) use (&$finalValue) {
+            $finalValue=$value + 2;
+        });
+
+        $promise->reject(4);
+        $this->assertEquals(6, $finalValue);
+
+    }
 }
