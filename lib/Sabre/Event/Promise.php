@@ -8,7 +8,7 @@ use Exception;
  * An implementation of the Promise pattern.
  *
  * Promises basically allow you to avoid what is commonly called 'callback
- * hell'. It allows for easily chaining of asyncronous operations.
+ * hell'. It allows for easily chaining of asynchronous operations.
  *
  * @copyright Copyright (C) 2007-2014 fruux GmbH. All rights reserved.
  * @author Evert Pot (http://evertpot.com/)
