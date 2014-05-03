@@ -37,13 +37,13 @@ trait EventEmitterTrait {
         if (!isset($this->listeners[$eventName])) {
             $this->listeners[$eventName] = [
                 true,  // If there's only one item, it's sorted
-                [
-                    [$priority, $callBack],
-                ]
+                [$priority],
+                [$callBack]
             ];
         } else {
             $this->listeners[$eventName][0] = false; // marked as unsorted
-            $this->listeners[$eventName][1][] = [$priority, $callBack];
+            $this->listeners[$eventName][1][] = $priority;
+            $this->listeners[$eventName][2][] = $callBack;
         }
 
     }
@@ -101,7 +101,7 @@ trait EventEmitterTrait {
      * their priority.
      *
      * @param string $eventName
-     * @return callable[] 
+     * @return callable[]
      */
     public function listeners($eventName) {
 
@@ -113,28 +113,20 @@ trait EventEmitterTrait {
         if (!$this->listeners[$eventName][0]) {
 
             // Sorting
-            usort($this->listeners[$eventName][1], function($a, $b) {
-
-                return $a[0]-$b[0];
-
-            });
+            array_multisort($this->listeners[$eventName][1], SORT_NUMERIC, $this->listeners[$eventName][2]);
 
             // Marking the listeners as sorted
             $this->listeners[$eventName][0] = true;
         }
 
-        $result = [];
-        foreach($this->listeners[$eventName][1] as $listener) {
-            $result[] = $listener[1];
-        }
-        return $result;
+        return $this->listeners[$eventName][2];
 
     }
 
     /**
      * Removes a specific listener from an event.
      *
-     * If the listener could not be found, this method will return false. If it 
+     * If the listener could not be found, this method will return false. If it
      * was removed it will return true.
      *
      * @param string $eventName
@@ -146,9 +138,10 @@ trait EventEmitterTrait {
         if (!isset($this->listeners[$eventName])) {
             return false;
         }
-        foreach($this->listeners[$eventName][1] as $index => $check) {
-            if ($check[1] === $listener) {
+        foreach($this->listeners[$eventName][2] as $index => $check) {
+            if ($check === $listener) {
                 unset($this->listeners[$eventName][1][$index]);
+                unset($this->listeners[$eventName][2][$index]);
                 return true;
             }
         }
