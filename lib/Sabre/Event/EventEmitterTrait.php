@@ -11,9 +11,9 @@ namespace Sabre\Event;
  * Using the trait + interface allows you to add EventEmitter capabilities
  * without having to change your base-class.
  *
- * @copyright Copyright (C) 2013 fruux GmbH. All rights reserved.
+ * @copyright Copyright (C) 2013-2014 fruux GmbH. All rights reserved.
  * @author Evert Pot (http://evertpot.com/)
- * @license https://raw.github.com/fruux/sabre-event/master/LICENSE
+ * @license http://sabre.io/license/
  */
 trait EventEmitterTrait {
 
