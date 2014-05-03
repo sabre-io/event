@@ -123,10 +123,11 @@ trait EventEmitterTrait {
             $this->listeners[$eventName][0] = true;
         }
 
-        return array_map(
-            function($listener) { return $listener[1]; },
-            $this->listeners[$eventName][1]
-        );
+        $result = [];
+        foreach($this->listeners[$eventName][1] as $listener) {
+            $result[] = $listener[1];
+        }
+        return $result;
 
     }
 
