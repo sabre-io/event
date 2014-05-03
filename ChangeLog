@@ -1,3 +1,8 @@
+2.0.0-stable (2014-??-??)
+	* Changed: EventEmitter::listeners now returns just the callbacks for an
+	  event, and no longer returns the list by reference. The list is now
+	  automatically sorted by priority.
+
 1.0.0-stable (2013-07-19)
 	* Added: removeListener, removeAllListeners
 	* Added: once, to only listen to an event emitting once.
