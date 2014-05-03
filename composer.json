@@ -20,8 +20,8 @@
         "source" : "https://github.com/fruux/sabre-event"
     },
     "autoload" : {
-        "psr-0" : {
-            "Sabre\\Event" : "lib/"
+        "psr-4" : {
+            "Sabre\\Event\\" : "lib/"
         }
     }
 }
