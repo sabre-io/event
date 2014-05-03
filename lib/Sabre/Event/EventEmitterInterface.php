@@ -8,9 +8,9 @@ namespace Sabre\Event;
  * Anything that accepts listeners and emits events should implement this
  * interface.
  *
- * @copyright Copyright (C) 2013 fruux GmbH. All rights reserved.
+ * @copyright Copyright (C) 2013-2014 fruux GmbH. All rights reserved.
  * @author Evert Pot (http://evertpot.com/)
- * @license https://raw.github.com/fruux/sabre-event/master/LICENSE
+ * @license http://sabre.io/license/
  */
 interface EventEmitterInterface {
 
