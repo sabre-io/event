@@ -34,13 +34,17 @@ trait EventEmitterTrait {
      */
     public function on($eventName, callable $callBack, $priority = 100) {
 
-        $listeners =& $this->listeners($eventName);
-        $listeners[] = [$priority, $callBack];
-        usort($listeners, function($a, $b) {
-
-            return $a[0]-$b[0];
-
-        });
+        if (!isset($this->listeners[$eventName])) {
+            $this->listeners[$eventName] = [
+                true,  // If there's only one item, it's sorted
+                [$priority],
+                [$callBack]
+            ];
+        } else {
+            $this->listeners[$eventName][0] = false; // marked as unsorted
+            $this->listeners[$eventName][1][] = $priority;
+            $this->listeners[$eventName][2][] = $callBack;
+        }
 
     }
 
@@ -80,7 +84,7 @@ trait EventEmitterTrait {
 
         foreach($this->listeners($eventName) as $listener) {
 
-            $result = call_user_func_array($listener[1], $arguments);
+            $result = call_user_func_array($listener, $arguments);
             if ($result === false) {
                 return false;
             }
@@ -90,45 +94,58 @@ trait EventEmitterTrait {
 
     }
 
-
     /**
      * Returns the list of listeners for an event.
      *
-     * The list is returned as an array. Every item is another array with 2
-     * elements: priority and the callback.
-     *
-     * The array is returned by reference, and can therefore be used to
-     * manipulate the list of events.
+     * The list is returned as an array, and the list of events are sorted by
+     * their priority.
      *
      * @param string $eventName
-     * @return array
+     * @return callable[]
      */
-    public function &listeners($eventName) {
+    public function listeners($eventName) {
 
         if (!isset($this->listeners[$eventName])) {
-            $this->listeners[$eventName] = [];
+            return [];
         }
 
-        return $this->listeners[$eventName];
+        // The list is not sorted
+        if (!$this->listeners[$eventName][0]) {
+
+            // Sorting
+            array_multisort($this->listeners[$eventName][1], SORT_NUMERIC, $this->listeners[$eventName][2]);
+
+            // Marking the listeners as sorted
+            $this->listeners[$eventName][0] = true;
+        }
+
+        return $this->listeners[$eventName][2];
 
     }
 
     /**
      * Removes a specific listener from an event.
      *
+     * If the listener could not be found, this method will return false. If it
+     * was removed it will return true.
+     *
      * @param string $eventName
      * @param callable $listener
-     * @return void
+     * @return bool
      */
     public function removeListener($eventName, callable $listener) {
 
-        $listeners =& $this->listeners($eventName);
-        foreach($listeners as $index => $check) {
-            if ($check[1]===$listener) {
-                unset($listeners[$index]);
-                break;
+        if (!isset($this->listeners[$eventName])) {
+            return false;
+        }
+        foreach($this->listeners[$eventName][2] as $index => $check) {
+            if ($check === $listener) {
+                unset($this->listeners[$eventName][1][$index]);
+                unset($this->listeners[$eventName][2][$index]);
+                return true;
             }
         }
+        return false;
 
     }
 
@@ -140,8 +157,7 @@ trait EventEmitterTrait {
      */
     public function removeAllListeners($eventName) {
 
-        $listeners =& $this->listeners($eventName);
-        $listeners = [];
+        unset($this->listeners[$eventName]);
 
     }
 

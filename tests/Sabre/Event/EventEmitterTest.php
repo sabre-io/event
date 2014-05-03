@@ -11,6 +11,19 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
 
     }
 
+    public function testListeners() {
+
+        $ee = new EventEmitter();
+
+        $callback1 = function() { };
+        $callback2 = function() { };
+        $ee->on('foo', $callback1, 200);
+        $ee->on('foo', $callback2, 100);
+
+        $this->assertEquals([$callback2, $callback1], $ee->listeners('foo'));
+
+    }
+
     /**
      * @depends testInit
      */
