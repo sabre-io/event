@@ -4,6 +4,9 @@
 	  automatically sorted by priority.
 	* Update: Speed improvements.
 	* Changed: Now uses psr-4 autoloading.
+	* Added: When calling emit, it's now possible to specify a callback that
+	  will be triggered after each method handled. This is dubbed the
+	  'continueCallback' and can be used to implement strategy patterns.
 
 1.0.0-stable (2013-07-19)
 	* Added: removeListener, removeAllListeners
