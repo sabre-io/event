@@ -66,23 +66,23 @@ interface EventEmitterInterface {
     /**
      * Returns the list of listeners for an event.
      *
-     * The list is returned as an array. Every item is another array with 2
-     * elements: priority and the callback.
-     *
-     * The array is returned by reference, and can therefore be used to
-     * manipulate the list of events.
+     * The list is returned as an array, and the list of events are sorted by
+     * their priority.
      *
      * @param string $eventName
-     * @return array
+     * @return callable[]
      */
     public function listeners($eventName);
 
     /**
      * Removes a specific listener from an event.
      *
+     * If the listener could not be found, this method will return false. If it
+     * was removed it will return true.
+     *
      * @param string $eventName
      * @param callable $listener
-     * @return void
+     * @return bool
      */
     public function removeListener($eventName, callable $listener);
 
