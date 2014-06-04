@@ -2,7 +2,7 @@
     "name": "sabre/event",
     "description" : "The sabre/event library provides utilities for lightweight event-based programming",
     "keywords" : [ "Events" ],
-    "homepage" : "https://github.com/fruux/sabre-event",
+    "homepage" : "http://sabre.io/event/",
     "license" : "BSD-3-Clause",
     "require" : {
         "php"          : ">=5.4.1"
