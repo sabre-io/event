@@ -59,7 +59,7 @@ interface EventEmitterInterface {
      * @param string $eventName
      * @return array
      */
-    public function listeners($eventName);
+    public function & listeners($eventName);
 
     /**
      * Removes a specific listener from an event.

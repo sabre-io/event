@@ -103,7 +103,7 @@ trait EventEmitterTrait {
      * @param string $eventName
      * @return array
      */
-    public function &listeners($eventName) {
+    public function & listeners($eventName) {
 
         if (!isset($this->listeners[$eventName])) {
             $this->listeners[$eventName] = [];
