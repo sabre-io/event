@@ -57,6 +57,28 @@ class Promise {
     protected $value = null;
 
     /**
+     * Creates the promise.
+     *
+     * The passed argument is the executor. The executor is automatically
+     * called with two arguments.
+     *   1. Resolver
+     *   2. Rejector
+     *
+     * Each are callbacks that map to $this->resolve and $this->reject.
+     * Using the executor is optional.
+     *
+     * @param callable $executor
+     * @return void
+     */
+    public function __construct(callable $executor = null) {
+
+        if ($executor) {
+            $executor([$this, 'resolve'], [$this, 'reject']);
+        }
+
+    }
+
+    /**
      * This method allows you to specify the callback that will be called after
      * the promise has been fulfilled or rejected.
      *
