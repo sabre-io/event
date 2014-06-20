@@ -2,7 +2,7 @@
 
 namespace Sabre\Event;
 
-class EventEmitterTest extends \PHPUnit_Framework_TestCase {
+class ContinueCallbackTest extends \PHPUnit_Framework_TestCase {
 
     function testContinueCallBack() {
 
