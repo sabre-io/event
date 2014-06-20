@@ -160,7 +160,65 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
         $this->assertTrue($result);
         $result = false;
 
-        $ee->removeListener('foo', $callBack);
+        $this->assertTrue(
+            $ee->removeListener('foo', $callBack)
+        );
+
+        $ee->emit('foo');
+        $this->assertFalse($result);
+
+    }
+
+    function testRemoveUnknownListener() {
+
+        $result = false;
+
+        $callBack = function() use (&$result) {
+
+            $result = true;
+
+        };
+
+        $ee = new EventEmitter();
+
+        $ee->on('foo', $callBack);
+
+        $ee->emit('foo');
+        $this->assertTrue($result);
+        $result = false;
+
+        $this->assertFalse($ee->removeListener('bar', $callBack));
+
+        $ee->emit('foo');
+        $this->assertTrue($result);
+
+    }
+
+    function testRemoveListenerTwice() {
+
+        $result = false;
+
+        $callBack = function() use (&$result) {
+
+            $result = true;
+
+        };
+
+
+        $ee = new EventEmitter();
+
+        $ee->on('foo', $callBack);
+
+        $ee->emit('foo');
+        $this->assertTrue($result);
+        $result = false;
+
+        $this->assertTrue(
+            $ee->removeListener('foo', $callBack)
+        );
+        $this->assertFalse(
+            $ee->removeListener('foo', $callBack)
+        );
 
         $ee->emit('foo');
         $this->assertFalse($result);
@@ -239,73 +297,4 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
 
     }
 
-    function testContinueCallBack() {
-
-        $ee = new EventEmitter();
-
-        $handlerCounter = 0;
-        $bla = function() use (&$handlerCounter) {
-            $handlerCounter++;
-        };
-        $ee->on('foo', $bla);
-        $ee->on('foo', $bla);
-        $ee->on('foo', $bla);
-
-        $continueCounter = 0;
-        $r = $ee->emit('foo',[],function() use (&$continueCounter) {
-            $continueCounter++;
-            return true;
-        });
-        $this->assertTrue($r);
-        $this->assertEquals(3, $handlerCounter);
-        $this->assertEquals(2, $continueCounter);
-
-    }
-
-    function testContinueCallBackBreak() {
-
-        $ee = new EventEmitter();
-
-        $handlerCounter = 0;
-        $bla = function() use (&$handlerCounter) {
-            $handlerCounter++;
-        };
-        $ee->on('foo', $bla);
-        $ee->on('foo', $bla);
-        $ee->on('foo', $bla);
-
-        $continueCounter = 0;
-        $r = $ee->emit('foo',[],function() use (&$continueCounter) {
-            $continueCounter++;
-            return false;
-        });
-        $this->assertTrue($r);
-        $this->assertEquals(1, $handlerCounter);
-        $this->assertEquals(1, $continueCounter);
-
-    }
-
-    function testContinueCallBackBreakByHandler() {
-
-        $ee = new EventEmitter();
-
-        $handlerCounter = 0;
-        $bla = function() use (&$handlerCounter) {
-            $handlerCounter++;
-            return false;
-        };
-        $ee->on('foo', $bla);
-        $ee->on('foo', $bla);
-        $ee->on('foo', $bla);
-
-        $continueCounter = 0;
-        $r = $ee->emit('foo',[],function() use (&$continueCounter) {
-            $continueCounter++;
-            return false;
-        });
-        $this->assertFalse($r);
-        $this->assertEquals(1, $handlerCounter);
-        $this->assertEquals(0, $continueCounter);
-
-    }
 }
