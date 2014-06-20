@@ -11,6 +11,19 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
 
     }
 
+    public function testListeners() {
+
+        $ee = new EventEmitter();
+
+        $callback1 = function() { };
+        $callback2 = function() { };
+        $ee->on('foo', $callback1, 200);
+        $ee->on('foo', $callback2, 100);
+
+        $this->assertEquals([$callback2, $callback1], $ee->listeners('foo'));
+
+    }
+
     /**
      * @depends testInit
      */
@@ -174,6 +187,32 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
         $result = false;
 
         $ee->removeAllListeners('foo');
+
+        $ee->emit('foo');
+        $this->assertFalse($result);
+
+    }
+
+    function testRemoveAllListenersNoArg() {
+
+        $result = false;
+
+        $callBack = function() use (&$result) {
+
+            $result = true;
+
+        };
+
+
+        $ee = new EventEmitter();
+
+        $ee->on('foo', $callBack);
+
+        $ee->emit('foo');
+        $this->assertTrue($result);
+        $result = false;
+
+        $ee->removeAllListeners();
 
         $ee->emit('foo');
         $this->assertFalse($result);

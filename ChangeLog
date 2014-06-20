@@ -1,3 +1,15 @@
+2.0.0-stable (2014-??-??)
+	* Changed: EventEmitter::listeners now returns just the callbacks for an
+	  event, and no longer returns the list by reference. The list is now
+	  automatically sorted by priority.
+	* Update: Speed improvements.
+	* Updated: It's now possible to remove all listeners for every event.
+	* Changed: Now uses psr-4 autoloading.
+
+1.0.1-stable (2014-06-12)
+	* hhvm compatible!
+	* Fixed: Issue #4. Compatiblitiy for PHP < 5.4.14.
+
 1.0.0-stable (2013-07-19)
 	* Added: removeListener, removeAllListeners
 	* Added: once, to only listen to an event emitting once.
