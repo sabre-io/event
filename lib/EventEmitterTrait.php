@@ -152,7 +152,7 @@ trait EventEmitterTrait {
     /**
      * Removes all listeners.
      *
-     * If the eventName argument is specified, all listeners for that event is
+     * If the eventName argument is specified, all listeners for that event are
      * removed. If it is not specified, every listener for every event is
      * removed.
      *
