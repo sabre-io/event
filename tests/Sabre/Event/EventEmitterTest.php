@@ -193,6 +193,32 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
 
     }
 
+    function testRemoveAllListenersNoArg() {
+
+        $result = false;
+
+        $callBack = function() use (&$result) {
+
+            $result = true;
+
+        };
+
+
+        $ee = new EventEmitter();
+
+        $ee->on('foo', $callBack);
+
+        $ee->emit('foo');
+        $this->assertTrue($result);
+        $result = false;
+
+        $ee->removeAllListeners();
+
+        $ee->emit('foo');
+        $this->assertFalse($result);
+
+    }
+
     function testOnce() {
 
         $result = 0;
