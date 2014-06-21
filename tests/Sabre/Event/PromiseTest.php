@@ -81,6 +81,42 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
 
     }
 
+    public function testExecutorSuccess() {
+
+        $promise = (new Promise(function($success, $fail) {
+
+            $success('hi');
+
+        }))->then(function($result) use (&$realResult) {
+
+            $realResult = $result;
+
+        });
+
+        $this->assertEquals('hi', $realResult);
+
+    }
+
+    public function testExecutorFail() {
+
+        $promise = (new Promise(function($success, $fail) {
+
+            $fail('hi');
+
+        }))->then(function($result) use (&$realResult) {
+
+            $realResult = 'incorrect';
+
+        }, function($reason) use (&$realResult) {
+
+            $realResult = $reason;
+
+        });
+
+        $this->assertEquals('hi', $realResult);
+
+    }
+
     public function testAll() {
 
         $promise1 = new Promise();
@@ -109,15 +145,13 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
         Promise::all([$promise1, $promise2])->then(
             function($value) use (&$finalValue) {
                 $finalValue = 'foo';
+                return 'test';
             },
             function($value) use (&$finalValue) {
                 $finalValue = $value;
+                return 'test2';
             }
-        )->then(function($e) {
-            echo "Horrible failure\n";
-        }, function ($e) {
-            echo "Foo\n";
-        });
+        );
 
         $promise1->reject(1);
         $this->assertEquals(1, $finalValue);

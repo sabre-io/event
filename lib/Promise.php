@@ -160,12 +160,12 @@ class Promise {
      * @param mixed $value
      * @return void
      */
-    public function reject($value = null) {
+    public function reject($reason = null) {
         if ($this->state !== self::PENDING) {
             throw new PromiseAlreadyResolvedException('This promise is already resolved, and you\'re not allowed to resolve a promise more than once');
         }
         $this->state = self::REJECTED;
-        $this->value = $value;
+        $this->value = $reason;
         foreach($this->subscribers as $subscriber) {
             if (is_callable($subscriber[2])) {
                 $this->invokeCallback($subscriber[0], $subscriber[2]);
@@ -191,15 +191,17 @@ class Promise {
 
             foreach($promises as $promiseIndex => $subPromise) {
 
-                $subPromise->then(function($result) use ($promiseIndex, &$completeResult, &$successCount, $success, $promises) {
-                    $completeResult[$promiseIndex] = $result;
-                    $successCount++;
-                    if ($successCount===count($promises)) {
-                        $success($completeResult);
+                $subPromise->then(
+                    function($result) use ($promiseIndex, &$completeResult, &$successCount, $success, $promises) {
+                        $completeResult[$promiseIndex] = $result;
+                        $successCount++;
+                        if ($successCount===count($promises)) {
+                            $success($completeResult);
+                        }
+                    }, function($result) use ($fail) {
+                        $fail($result);
                     }
-                }, function($result) use ($fail) {
-                    $fail($result);
-                });
+                );
 
             }
         });
