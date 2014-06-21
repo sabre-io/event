@@ -6,6 +6,6 @@ php:
   - hhvm
   - hhvm-nightly
 
-script: phpunit --configuration tests/phpunit.xml
+script: phpunit
 
 before_script: composer install
