@@ -1,13 +1,14 @@
 2.0.0-stable (2014-??-??)
+	* Added: When calling emit, it's now possible to specify a callback that
+	  will be triggered after each method handled. This is dubbed the
+	  'continueCallback' and can be used to implement strategy patterns.
+	* Added: Promise object!
 	* Changed: EventEmitter::listeners now returns just the callbacks for an
 	  event, and no longer returns the list by reference. The list is now
 	  automatically sorted by priority.
 	* Update: Speed improvements.
 	* Updated: It's now possible to remove all listeners for every event.
 	* Changed: Now uses psr-4 autoloading.
-	* Added: When calling emit, it's now possible to specify a callback that
-	  will be triggered after each method handled. This is dubbed the
-	  'continueCallback' and can be used to implement strategy patterns.
 
 1.0.1-stable (2014-06-12)
 	* hhvm compatible!
