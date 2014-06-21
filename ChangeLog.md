@@ -1,7 +1,7 @@
 ChangeLog
 =========
 
-2.0.0 (2014-??-??)
+2.0.0 (2014-06-21)
 ------------------
 
 * Added: When calling emit, it's now possible to specify a callback that will be
