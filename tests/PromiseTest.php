@@ -48,6 +48,25 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertEquals(7, $finalValue);
 
+    }
+    function testChainPromise() {
+
+        $finalValue = 0;
+        $promise = new Promise();
+        $promise->fulfill(1);
+
+        $subPromise = new Promise();
+
+        $promise->then(function($value) use ($subPromise) {
+            return $subPromise;
+        })->then(function($value) use (&$finalValue) {
+            $finalValue = $value + 4;
+            return $finalValue;
+        });
+
+        $subPromise->fulfill(2);
+
+        $this->assertEquals(6, $finalValue);
 
     }
 
