@@ -1,7 +1,7 @@
 {
     "name": "sabre/event",
-    "description" : "The sabre/event library provides utilities for lightweight event-based programming",
-    "keywords" : [ "Events", "EventEmitter" ],
+    "description" : "sabre/event is a library for lightweight event-based programming",
+    "keywords" : [ "Events", "EventEmitter", "Promise", "Hooks", "Plugin", "Signal" ],
     "homepage" : "http://sabre.io/event/",
     "license" : "BSD-3-Clause",
     "require" : {
