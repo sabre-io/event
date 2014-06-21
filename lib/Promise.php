@@ -66,7 +66,6 @@ class Promise {
      * Using the executor is optional.
      *
      * @param callable $executor
-     * @return void
      */
     public function __construct(callable $executor = null) {
 
@@ -100,7 +99,7 @@ class Promise {
      *
      * @param callable $onFulfilled
      * @param callable $onRejected
-     * @return void
+     * @return Promise
      */
     public function then(callable $onFulfilled = null, callable $onRejected = null) {
 

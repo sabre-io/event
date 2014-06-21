@@ -6,7 +6,7 @@ A lightweight library for event-based development in PHP.
 This library provides two patterns:
 
 1. EventEmitter
-2. Promise
+2. Promises
 
 Full documentation can be found on [the website][1].
 
