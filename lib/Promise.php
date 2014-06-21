@@ -197,7 +197,8 @@ class Promise {
                         if ($successCount===count($promises)) {
                             $success($completeResult);
                         }
-                    }, function($result) use ($fail) {
+                })->error(
+                    function($result) use ($fail) {
                         $fail($result);
                     }
                 );
