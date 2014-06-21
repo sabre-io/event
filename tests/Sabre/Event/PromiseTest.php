@@ -117,6 +117,53 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
 
     }
 
+    /**
+     * @expectedException \Sabre\Event\PromiseAlreadyResolvedException
+     */
+    public function testFulfillTwice() {
+
+        $promise = new Promise();
+        $promise->fulfill(1);
+        $promise->fulfill(1);
+
+    }
+
+    /**
+     * @expectedException \Sabre\Event\PromiseAlreadyResolvedException
+     */
+    public function testRejectTwice() {
+
+        $promise = new Promise();
+        $promise->reject(1);
+        $promise->reject(1);
+
+    }
+
+    public function testFromFailureHandler() {
+
+        $ok = 0;
+        $promise = new Promise();
+        $promise->error(function($reason) {
+
+            $this->assertEquals('foo', $reason);
+            throw new \Exception('hi');
+
+        })->then(function() use (&$ok) {
+
+            $ok = -1;
+
+        }, function() use (&$ok) {
+
+            $ok = 1;
+
+        });
+
+        $this->assertEquals(0, $ok);
+        $promise->reject('foo');
+        $this->assertEquals(1, $ok);
+
+    }
+
     public function testAll() {
 
         $promise1 = new Promise();

@@ -131,7 +131,7 @@ class Promise {
      */
     public function error(callable $onRejected) {
 
-        $this->then(null, $onRejected);
+        return $this->then(null, $onRejected);
 
     }
 
