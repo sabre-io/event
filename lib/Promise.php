@@ -147,9 +147,7 @@ class Promise {
         $this->state = self::FULFILLED;
         $this->value = $value;
         foreach($this->subscribers as $subscriber) {
-            if (is_callable($subscriber[1])) {
-                $this->invokeCallback($subscriber[0], $subscriber[1]);
-            }
+            $this->invokeCallback($subscriber[0], $subscriber[1]);
         }
     }
 
@@ -166,9 +164,7 @@ class Promise {
         $this->state = self::REJECTED;
         $this->value = $reason;
         foreach($this->subscribers as $subscriber) {
-            if (is_callable($subscriber[2])) {
-                $this->invokeCallback($subscriber[0], $subscriber[2]);
-            }
+            $this->invokeCallback($subscriber[0], $subscriber[2]);
         }
 
     }
@@ -197,9 +193,10 @@ class Promise {
                         if ($successCount===count($promises)) {
                             $success($completeResult);
                         }
+                        return $result;
                 })->error(
-                    function($result) use ($fail) {
-                        $fail($result);
+                    function($reason) use ($fail) {
+                        $fail($reason);
                     }
                 );
 

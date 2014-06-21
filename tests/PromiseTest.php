@@ -196,7 +196,6 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
             },
             function($value) use (&$finalValue) {
                 $finalValue = $value;
-                return 'test2';
             }
         );
 
