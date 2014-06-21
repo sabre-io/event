@@ -61,10 +61,8 @@ class Promise {
      *
      * The passed argument is the executor. The executor is automatically
      * called with two arguments.
-     *   1. Resolver
-     *   2. Rejector
      *
-     * Each are callbacks that map to $this->resolve and $this->reject.
+     * Each are callbacks that map to $this->fulfill and $this->reject.
      * Using the executor is optional.
      *
      * @param callable $executor
@@ -73,7 +71,10 @@ class Promise {
     public function __construct(callable $executor = null) {
 
         if ($executor) {
-            $executor([$this, 'resolve'], [$this, 'reject']);
+            $executor(
+                [$this, 'fulfill'],
+                [$this, 'reject']
+            );
         }
 
     }
@@ -103,7 +104,7 @@ class Promise {
      */
     public function then(callable $onFulfilled = null, callable $onRejected = null) {
 
-        $subPromise = new Promise(function() { });
+        $subPromise = new Promise();
         switch($this->state) {
             case self::PENDING :
                 $this->subscribers[] = [$subPromise, $onFulfilled, $onRejected];
@@ -120,12 +121,30 @@ class Promise {
     }
 
     /**
+     * Add a callback for when this promise is rejected.
+     *
+     * I would have used the word 'catch', but it's a reserved word in PHP, so
+     * we're not allowed to call our function that.
+     *
+     * @param callable $onRejected
+     * @return void
+     */
+    public function error(callable $onRejected) {
+
+        $this->then(null, $onRejected);
+
+    }
+
+    /**
      * Marks this promise as fulfilled and sets its return value.
      *
      * @param mixed $value
      * @return void
      */
     public function fulfill($value = null) {
+        if ($this->state !== self::PENDING) {
+            throw new PromiseAlreadyResolvedException('This promise is already resolved, and you\'re not allowed to resolve a promise more than once');
+        }
         $this->state = self::FULFILLED;
         $this->value = $value;
         foreach($this->subscribers as $subscriber) {
@@ -142,6 +161,9 @@ class Promise {
      * @return void
      */
     public function reject($value = null) {
+        if ($this->state !== self::PENDING) {
+            throw new PromiseAlreadyResolvedException('This promise is already resolved, and you\'re not allowed to resolve a promise more than once');
+        }
         $this->state = self::REJECTED;
         $this->value = $value;
         foreach($this->subscribers as $subscriber) {
@@ -162,14 +184,14 @@ class Promise {
      */
     static function all(array $promises) {
 
-        return new self(function($success, $fail)  use ($promises) {
+        return new self(function($success, $fail) use ($promises) {
 
             $successCount = 0;
             $completeResult = [];
 
             foreach($promises as $promiseIndex => $subPromise) {
 
-                $subPromise->then(function($result) use ($promiseIndex, &$completeResult, &$succesCount, $success, $promises) {
+                $subPromise->then(function($result) use ($promiseIndex, &$completeResult, &$successCount, $success, $promises) {
                     $completeResult[$promiseIndex] = $result;
                     $successCount++;
                     if ($successCount===count($promises)) {

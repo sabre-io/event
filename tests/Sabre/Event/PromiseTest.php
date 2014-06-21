@@ -43,7 +43,7 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
             return $finalValue;
         })->then(function($value) use (&$finalValue) {
             $finalValue = $value + 4;
-            return $finalValue; 
+            return $finalValue;
         });
 
         $this->assertEquals(7, $finalValue);
@@ -66,7 +66,7 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
 
     }
 
-    function testPendingFail() {
+    public function testPendingFail() {
 
         $finalValue = 0;
         $promise = new Promise();
@@ -80,4 +80,50 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(6, $finalValue);
 
     }
+
+    public function testAll() {
+
+        $promise1 = new Promise();
+        $promise2 = new Promise();
+
+        $finalValue = 0;
+        Promise::all([$promise1, $promise2])->then(function($value) use (&$finalValue) {
+
+            $finalValue = $value;
+
+        });
+
+        $promise1->fulfill(1);
+        $this->assertEquals(0, $finalValue);
+        $promise2->fulfill(2);
+        $this->assertEquals([1,2], $finalValue);
+
+    }
+
+    public function testAllReject() {
+
+        $promise1 = new Promise();
+        $promise2 = new Promise();
+
+        $finalValue = 0;
+        Promise::all([$promise1, $promise2])->then(
+            function($value) use (&$finalValue) {
+                $finalValue = 'foo';
+            },
+            function($value) use (&$finalValue) {
+                $finalValue = $value;
+            }
+        )->then(function($e) {
+            echo "Horrible failure\n";
+        }, function ($e) {
+            echo "Foo\n";
+        });
+
+        $promise1->reject(1);
+        $this->assertEquals(1, $finalValue);
+        $promise2->reject(2);
+        $this->assertEquals(1, $finalValue);
+
+    }
+
 }
