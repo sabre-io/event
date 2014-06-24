@@ -154,7 +154,7 @@ class Promise {
     /**
      * Marks this promise as rejected, and set it's rejection reason.
      *
-     * @param mixed $value
+     * @param mixed $reason
      * @return void
      */
     public function reject($reason = null) {
