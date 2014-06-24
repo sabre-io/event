@@ -6,6 +6,11 @@ php:
   - hhvm
   - hhvm-nightly
 
+matrix:
+  fast_finish: true
+  allow_failures:
+    - php: hhvm-nightly
+
 script: phpunit
 
 before_script: composer install
