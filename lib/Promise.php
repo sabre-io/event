@@ -177,7 +177,7 @@ class Promise {
      * @param Promise[] $promises
      * @return Promise
      */
-    static function all(array $promises) {
+    static public function all(array $promises) {
 
         return new self(function($success, $fail) use ($promises) {
 
@@ -194,7 +194,8 @@ class Promise {
                             $success($completeResult);
                         }
                         return $result;
-                })->error(
+                    }
+                )->error(
                     function($reason) use ($fail) {
                         $fail($reason);
                     }
@@ -222,7 +223,7 @@ class Promise {
             try {
                 $result = $callBack($this->value);
                 if ($result instanceof Promise) {
-                    $result->then([$subPromise,'fulfill'], [$subPromise,'reject']);
+                    $result->then([$subPromise, 'fulfill'], [$subPromise, 'reject']);
                 } else {
                     $subPromise->fulfill($result);
                 }

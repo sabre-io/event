@@ -11,6 +11,8 @@ matrix:
   allow_failures:
     - php: hhvm-nightly
 
-script: phpunit
+script:
+    - phpunit
+    - ./vendor/bin/phpcs  -v --standard=tests/phpcs/ruleset.xml lib/
 
-before_script: composer install
+before_script: composer install --dev
