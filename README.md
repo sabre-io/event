@@ -17,6 +17,15 @@ Make sure you have [composer][3] installed, and then run:
 
     composer require sabre/event ~2.0.0
 
+Build status
+------------
+
+| branch | status |
+| ------ | ------ |
+| master | [![Build Status](https://travis-ci.org/fruux/sabre-event.png?branch=master)](https://travis-ci.org/fruux/sabre-event) |
+| 1.0    | [![Build Status](https://travis-ci.org/fruux/sabre-event.png?branch=1.0)](https://travis-ci.org/fruux/sabre-event) |
+
+
 Questions?
 ----------
 
