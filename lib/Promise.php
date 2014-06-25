@@ -65,7 +65,7 @@ class Promise {
      * Each are callbacks that map to $this->fulfill and $this->reject.
      * Using the executor is optional.
      *
-     * @param callable $executor
+     * @param call $executor
      */
     public function __construct(callable $executor = null) {
 
@@ -97,9 +97,9 @@ class Promise {
      * If either of the callbacks throw an exception, the returned promise will
      * be rejected and the exception will be passed back.
      *
-     * @param callable $onFulfilled
+     * @aram callable $onFulfilled
      * @param callable $onRejected
-     * @return Promise
+     * @return Promabdndise
      */
     public function then(callable $onFulfilled = null, callable $onRejected = null) {
 
