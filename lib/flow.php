@@ -16,7 +16,7 @@ use Exception;
  *
  *   return $httpClient->request('DELETE','/foo');
  *
- * })-then(function($value) {
+ * })->then(function($value) {
  *
  *   return $httpClient->request('PUT', '/foo');
  *
