@@ -29,7 +29,10 @@
     "autoload": {
         "psr-4": {
             "Sabre\\Event\\": "lib/"
-        }
+        },
+        "files" : [
+            "lib/flow.php"
+        ]
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "*"
