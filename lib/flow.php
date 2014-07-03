@@ -64,8 +64,6 @@ function flow(callable $gen) {
 
         while($generator->valid()) {
 
-            $recurImmediately = false;
-
             $yieldedValue = $generator->current();
 
             if ($yieldedValue instanceof Promise) {
@@ -92,6 +90,7 @@ function flow(callable $gen) {
                     // locally.
                     $promise->reject($reason);
                 });
+                $pendingValue = true;
                 // We need to break out of the loop, because $advanceGenerator
                 // will be called asynchronously when the promise has a result.
                 break;
@@ -103,16 +102,17 @@ function flow(callable $gen) {
 
         }
 
+        // If the generator is at the end, and we didn't run into an exception,
+        // we can fullfill the promise with the last thing that was yielded to
+        // us.
+        if (!$generator->valid() && $promise->state === Promise::PENDING) {
+            $promise->fulfill($lastYieldResult);
+        }
+
     };
 
     try {
         $advanceGenerator();
-        // If the generator is at the end, and we didn't run into an exception,
-        // we can fullfill the promise with the last thing that was yielded to
-        // us.
-        if (!$generator->valid()) {
-            $promise->fulfill($lastYieldResult);
-        }
     } catch(Exception $e) {
         $promise->reject($e);
     }
