@@ -126,7 +126,7 @@ class Promise {
      * we're not allowed to call our function that.
      *
      * @param callable $onRejected
-     * @return void
+     * @return Promise
      */
     public function error(callable $onRejected) {
 
