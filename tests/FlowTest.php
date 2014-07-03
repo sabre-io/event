@@ -203,4 +203,23 @@ class FlowTest extends \PHPUnit_Framework_TestCase {
 
     }
 
+    function testResolveToLastYield() {
+
+        $ok = false;
+        flow(function() {
+
+            yield 1;
+            yield 2;
+            $hello = 'hi';
+
+        })->then(function($value) use (&$ok) {
+            $this->assertEquals(2,$value);
+            $ok = true;
+        })->error(function($reason) {
+            $this->fail($reason);
+        });
+        $this->assertTrue($ok);
+
+    }
+
 }

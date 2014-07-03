@@ -54,18 +54,15 @@ function flow(callable $gen) {
     // This is the value we're returning.
     $promise = new Promise();
 
+    $lastYieldResult = null;
+
     /**
      * So tempted to use the mythical y-combinator here, but it's not needed in
      * PHP.
      */
-    $advanceGenerator = function() use (&$advanceGenerator, $generator, $promise) {
+    $advanceGenerator = function() use (&$advanceGenerator, $generator, $promise, &$lastYieldResult) {
 
-        if (!$generator->valid()) {
-            $promise->fulfill();
-            return;
-        }
-
-        do {
+        while($generator->valid()) {
 
             $recurImmediately = false;
 
@@ -74,6 +71,7 @@ function flow(callable $gen) {
             if ($yieldedValue instanceof Promise) {
                 $yieldedValue->then(
                     function($value) use ($generator, $advanceGenerator) {
+                        $lastYieldResult = $value;
                         $generator->send($value);
                         $advanceGenerator();
                     },
@@ -99,16 +97,22 @@ function flow(callable $gen) {
                 break;
             } else {
                 // If the value was not a promise, we'll just let it pass through.
+                $lastYieldResult = $yieldedValue;
                 $generator->send($yieldedValue);
             }
 
-        } while ($generator->valid());
-
+        }
 
     };
 
     try {
         $advanceGenerator();
+        // If the generator is at the end, and we didn't run into an exception,
+        // we can fullfill the promise with the last thing that was yielded to
+        // us.
+        if (!$generator->valid()) {
+            $promise->fulfill($lastYieldResult);
+        }
     } catch(Exception $e) {
         $promise->reject($e);
     }
