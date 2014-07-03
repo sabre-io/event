@@ -20,9 +20,7 @@ class FlowTest extends \PHPUnit_Framework_TestCase {
         flow(function() use (&$start) {
 
             $start+=1;
-            // hhvm requires a value to be yielded.
-            // yield; would have been fine for vanilla php.
-            yield null;
+            yield;
 
         });
 
