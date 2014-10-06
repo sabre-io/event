@@ -297,4 +297,33 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
 
     }
 
+    /**
+     * @depends testCancelEvent
+     */
+    function testPriorityOnce() {
+
+        $argResult = 0;
+
+        $ee = new EventEmitter();
+        $ee->once('foo', function($arg) use (&$argResult) {
+
+            $argResult = 1;
+            return false;
+
+        });
+        $ee->once('foo', function($arg) use (&$argResult) {
+
+            $argResult = 2;
+            return false;
+
+        }, 1);
+
+
+        $this->assertFalse(
+            $ee->emit('foo', ['bar'])
+        );
+
+        $this->assertEquals(2, $argResult);
+
+    }
 }
