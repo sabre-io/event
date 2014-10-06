@@ -62,11 +62,11 @@ trait EventEmitterTrait {
         $wrapper = function() use ($eventName, $callBack, &$wrapper) {
 
             $this->removeListener($eventName, $wrapper);
-            $result = call_user_func_array($callBack, func_get_args());
+            return call_user_func_array($callBack, func_get_args());
 
         };
 
-        $this->on($eventName, $wrapper);
+        $this->on($eventName, $wrapper, $priority);
 
     }
 
