@@ -15,7 +15,7 @@ Installation
 
 Make sure you have [composer][3] installed, and then run:
 
-    composer require sabre/event ~2.0.0
+    composer require sabre/event "~2.0.0"
 
 Build status
 ------------
