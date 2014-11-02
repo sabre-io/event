@@ -56,9 +56,12 @@ class EventEmitter implements EventEmitterInterface {
     public function once($eventName, $callBack, $priority = 100) {
 
         $wrapper = null;
-        $wrapper = function() use ($eventName, $callBack, &$wrapper) {
 
-            $this->removeListener($eventName, $wrapper);
+        $self = $this;
+
+        $wrapper = function() use ($eventName, $callBack, &$wrapper, $self) {
+
+            $self->removeListener($eventName, $wrapper);
             return call_user_func_array($callBack, func_get_args());
 
         };

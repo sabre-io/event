@@ -60,7 +60,7 @@ interface EventEmitterInterface {
      * @param callback $continueCallBack
      * @return bool
      */
-    public function emit($eventName, array $arguments = [], $continueCallBack = null);
+    public function emit($eventName, array $arguments = array(), $continueCallBack = null);
 
 
     /**

@@ -191,13 +191,13 @@ class Promise {
                         $completeResult[$promiseIndex] = $result;
                         $successCount++;
                         if ($successCount===count($promises)) {
-                            $success($completeResult);
+                            call_user_func($success,$completeResult);
                         }
                         return $result;
                     }
                 )->error(
                     function($reason) use ($fail) {
-                        $fail($reason);
+                        call_user_func($fail, $reason);
                     }
                 );
 
@@ -221,7 +221,7 @@ class Promise {
 
         if (is_callable($callBack)) {
             try {
-                $result = $callBack($this->value);
+                $result = call_user_func($callBack,$this->value);
                 if ($result instanceof Promise) {
                     $result->then(array($subPromise, 'fulfill'), array($subPromise, 'reject'));
                 } else {

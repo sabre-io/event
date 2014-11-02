@@ -104,9 +104,11 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
 
         $promise = (new Promise(function($success, $fail) {
 
-            $success('hi');
+            call_user_func($success,'hi');
 
-        }))->then(function($result) use (&$realResult) {
+        }));
+
+        $promise->then(function($result) use (&$realResult) {
 
             $realResult = $result;
 
@@ -120,9 +122,11 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
 
         $promise = (new Promise(function($success, $fail) {
 
-            $fail('hi');
+            call_user_func($fail,'hi');
 
-        }))->then(function($result) use (&$realResult) {
+        }));
+
+        $promise->then(function($result) use (&$realResult) {
 
             $realResult = 'incorrect';
 
@@ -161,10 +165,11 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
     public function testFromFailureHandler() {
 
         $ok = 0;
+        $self = $this;
         $promise = new Promise();
-        $promise->error(function($reason) {
+        $promise->error(function($reason) use ($self) {
 
-            $this->assertEquals('foo', $reason);
+            $self->assertEquals('foo', $reason);
             throw new \Exception('hi');
 
         })->then(function() use (&$ok) {
@@ -189,7 +194,7 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
         $promise2 = new Promise();
 
         $finalValue = 0;
-        Promise::all([$promise1, $promise2])->then(function($value) use (&$finalValue) {
+        Promise::all(array($promise1, $promise2))->then(function($value) use (&$finalValue) {
 
             $finalValue = $value;
 
@@ -198,7 +203,7 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
         $promise1->fulfill(1);
         $this->assertEquals(0, $finalValue);
         $promise2->fulfill(2);
-        $this->assertEquals([1,2], $finalValue);
+        $this->assertEquals(array(1,2), $finalValue);
 
     }
 
@@ -208,7 +213,7 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
         $promise2 = new Promise();
 
         $finalValue = 0;
-        Promise::all([$promise1, $promise2])->then(
+        Promise::all(array($promise1, $promise2))->then(
             function($value) use (&$finalValue) {
                 $finalValue = 'foo';
                 return 'test';

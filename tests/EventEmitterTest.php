@@ -20,7 +20,7 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
         $ee->on('foo', $callback1, 200);
         $ee->on('foo', $callback2, 100);
 
-        $this->assertEquals([$callback2, $callback1], $ee->listeners('foo'));
+        $this->assertEquals(array($callback2, $callback1), $ee->listeners('foo'));
 
     }
 
@@ -39,7 +39,7 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
         });
 
         $this->assertTrue(
-            $ee->emit('foo', ['bar'])
+            $ee->emit('foo', array('bar'))
         );
 
         $this->assertEquals('bar', $argResult);
@@ -69,7 +69,7 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
 
 
         $this->assertFalse(
-            $ee->emit('foo', ['bar'])
+            $ee->emit('foo', array('bar'))
         );
 
         $this->assertEquals(1, $argResult);
@@ -100,7 +100,7 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
 
 
         $this->assertFalse(
-            $ee->emit('foo', ['bar'])
+            $ee->emit('foo', array('bar'))
         );
 
         $this->assertEquals(2, $argResult);
@@ -112,7 +112,7 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
      */
     function testPriority2() {
 
-        $result = [];
+        $result = array();
         $ee = new EventEmitter();
 
         $ee->on('foo', function() use (&$result) {
@@ -137,7 +137,7 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
         });
 
         $ee->emit('foo');
-        $this->assertEquals(['b','d','a','c'], $result);
+        $this->assertEquals(array('b','d','a','c'), $result);
 
     }
 
@@ -320,7 +320,7 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
 
 
         $this->assertFalse(
-            $ee->emit('foo', ['bar'])
+            $ee->emit('foo', array('bar'))
         );
 
         $this->assertEquals(2, $argResult);
