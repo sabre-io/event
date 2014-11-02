@@ -1,6 +1,10 @@
 sabre/event
 ===========
 
+**You are looking at a PHP 5.3 fork of sabre/event. Note that this is provided
+as a courtesy, and not officially supported. Thanks to [Markus Staab][6] for
+porting.**
+
 A lightweight library for event-based development in PHP.
 
 This library provides two patterns:
@@ -15,7 +19,7 @@ Installation
 
 Make sure you have [composer][3] installed, and then run:
 
-    composer require sabre/event "~2.0.0"
+    composer require sabre/event dev-php53
 
 Build status
 ------------
@@ -41,3 +45,4 @@ This library is being developed by [fruux](https://fruux.com/). Drop us a line f
 [3]: http://getcomposer.org/
 [4]: http://groups.google.com/group/sabredav-discuss
 [5]: https://github.com/fruux/sabre-event/issues/
+[6]: https://github.com/staabm

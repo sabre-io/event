@@ -44,7 +44,7 @@ class Promise {
      *
      * @var array
      */
-    protected $subscribers = [];
+    protected $subscribers = array();
 
     /**
      * The result of the promise.
@@ -67,12 +67,12 @@ class Promise {
      *
      * @param callable $executor
      */
-    public function __construct(callable $executor = null) {
+    public function __construct($executor = null) {
 
         if ($executor) {
             $executor(
-                [$this, 'fulfill'],
-                [$this, 'reject']
+                array($this, 'fulfill'),
+                array($this, 'reject')
             );
         }
 
@@ -101,12 +101,12 @@ class Promise {
      * @param callable $onRejected
      * @return Promise
      */
-    public function then(callable $onFulfilled = null, callable $onRejected = null) {
+    public function then($onFulfilled = null, $onRejected = null) {
 
         $subPromise = new Promise();
         switch($this->state) {
             case self::PENDING :
-                $this->subscribers[] = [$subPromise, $onFulfilled, $onRejected];
+                $this->subscribers[] = array($subPromise, $onFulfilled, $onRejected);
                 break;
             case self::FULFILLED :
                 $this->invokeCallback($subPromise, $onFulfilled);
@@ -128,7 +128,7 @@ class Promise {
      * @param callable $onRejected
      * @return Promise
      */
-    public function error(callable $onRejected) {
+    public function error($onRejected) {
 
         return $this->then(null, $onRejected);
 
@@ -182,7 +182,7 @@ class Promise {
         return new self(function($success, $fail) use ($promises) {
 
             $successCount = 0;
-            $completeResult = [];
+            $completeResult = array();
 
             foreach($promises as $promiseIndex => $subPromise) {
 
@@ -217,13 +217,13 @@ class Promise {
      * @param callable $callBack
      * @return void
      */
-    protected function invokeCallback(Promise $subPromise, callable $callBack = null) {
+    protected function invokeCallback(Promise $subPromise, $callBack = null) {
 
         if (is_callable($callBack)) {
             try {
                 $result = $callBack($this->value);
                 if ($result instanceof Promise) {
-                    $result->then([$subPromise, 'fulfill'], [$subPromise, 'reject']);
+                    $result->then(array($subPromise, 'fulfill'), array($subPromise, 'reject'));
                 } else {
                     $subPromise->fulfill($result);
                 }
