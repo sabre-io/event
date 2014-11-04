@@ -179,7 +179,7 @@ class Promise {
      */
     static public function all(array $promises) {
 
-        return new self(function($success, $fail) use ($promises) {
+        return new static(function($success, $fail) use ($promises) {
 
             $successCount = 0;
             $completeResult = [];
