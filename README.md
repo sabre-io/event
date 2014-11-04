@@ -16,7 +16,7 @@ Installation
 Make sure you have [composer][3] installed, and then run:
 
     composer require sabre/event "~2.0.0"
-    
+
 For legacy reasons, we also provide a unsupported [PHP 5.3 compatible version][6].
 We recommend that you update your servers and use the regular version instead, though.
 
