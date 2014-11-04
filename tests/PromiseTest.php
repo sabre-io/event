@@ -75,7 +75,6 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
         $finalValue = 0;
         $promise = new Promise();
 
-
         $promise->then(function($value) use (&$finalValue) {
             $finalValue=$value + 2;
         });
@@ -89,7 +88,6 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
 
         $finalValue = 0;
         $promise = new Promise();
-
 
         $promise->then(null, function($value) use (&$finalValue) {
             $finalValue=$value + 2;
