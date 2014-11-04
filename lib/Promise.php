@@ -103,7 +103,7 @@ class Promise {
      */
     public function then(callable $onFulfilled = null, callable $onRejected = null) {
 
-        $subPromise = new Promise();
+        $subPromise = new static();
         switch($this->state) {
             case self::PENDING :
                 $this->subscribers[] = [$subPromise, $onFulfilled, $onRejected];
@@ -217,12 +217,12 @@ class Promise {
      * @param callable $callBack
      * @return void
      */
-    protected function invokeCallback(Promise $subPromise, callable $callBack = null) {
+    protected function invokeCallback(self $subPromise, callable $callBack = null) {
 
         if (is_callable($callBack)) {
             try {
                 $result = $callBack($this->value);
-                if ($result instanceof Promise) {
+                if ($result instanceof self) {
                     $result->then([$subPromise, 'fulfill'], [$subPromise, 'reject']);
                 } else {
                     $subPromise->fulfill($result);
