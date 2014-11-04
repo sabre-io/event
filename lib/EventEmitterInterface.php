@@ -62,7 +62,6 @@ interface EventEmitterInterface {
      */
     public function emit($eventName, array $arguments = [], callable $continueCallBack = null);
 
-
     /**
      * Returns the list of listeners for an event.
      *
