@@ -7,7 +7,7 @@ namespace Sabre\Event;
  *
  * @copyright Copyright (C) 2013-2014 fruux GmbH. All rights reserved.
  * @author Evert Pot (http://evertpot.com/)
- * @license http://sabre.io/license/
+ * @license http://sabre.io/license/ Modified BSD License
  */
 class Version {
 
