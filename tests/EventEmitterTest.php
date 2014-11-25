@@ -44,7 +44,6 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertEquals('bar', $argResult);
 
-
     }
 
     /**
@@ -67,13 +66,11 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
 
         });
 
-
         $this->assertFalse(
             $ee->emit('foo', ['bar'])
         );
 
         $this->assertEquals(1, $argResult);
-
 
     }
 
@@ -97,7 +94,6 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
             return false;
 
         }, 1);
-
 
         $this->assertFalse(
             $ee->emit('foo', ['bar'])
@@ -151,7 +147,6 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
 
         };
 
-
         $ee = new EventEmitter();
 
         $ee->on('foo', $callBack);
@@ -204,7 +199,6 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
 
         };
 
-
         $ee = new EventEmitter();
 
         $ee->on('foo', $callBack);
@@ -228,16 +222,13 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
     function testRemoveAllListeners() {
 
         $result = false;
-
         $callBack = function() use (&$result) {
 
             $result = true;
 
         };
 
-
         $ee = new EventEmitter();
-
         $ee->on('foo', $callBack);
 
         $ee->emit('foo');
@@ -263,7 +254,6 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
 
 
         $ee = new EventEmitter();
-
         $ee->on('foo', $callBack);
 
         $ee->emit('foo');
@@ -317,7 +307,6 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
             return false;
 
         }, 1);
-
 
         $this->assertFalse(
             $ee->emit('foo', ['bar'])
