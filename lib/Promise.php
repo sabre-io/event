@@ -99,11 +99,11 @@ class Promise {
      *
      * @param callable $onFulfilled
      * @param callable $onRejected
-     * @return Promise
+     * @return static
      */
     public function then(callable $onFulfilled = null, callable $onRejected = null) {
 
-        $subPromise = new Promise();
+        $subPromise = new static();
         switch($this->state) {
             case self::PENDING :
                 $this->subscribers[] = [$subPromise, $onFulfilled, $onRejected];
@@ -126,7 +126,7 @@ class Promise {
      * we're not allowed to call our function that.
      *
      * @param callable $onRejected
-     * @return Promise
+     * @return static
      */
     public function error(callable $onRejected) {
 
@@ -175,11 +175,11 @@ class Promise {
      * promises are fulfilled.
      *
      * @param Promise[] $promises
-     * @return Promise
+     * @return static
      */
     static public function all(array $promises) {
 
-        return new self(function($success, $fail) use ($promises) {
+        return new static(function($success, $fail) use ($promises) {
 
             $successCount = 0;
             $completeResult = [];
