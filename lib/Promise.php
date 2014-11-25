@@ -99,7 +99,7 @@ class Promise {
      *
      * @param callable $onFulfilled
      * @param callable $onRejected
-     * @return Promise
+     * @return static
      */
     public function then(callable $onFulfilled = null, callable $onRejected = null) {
 
@@ -126,7 +126,7 @@ class Promise {
      * we're not allowed to call our function that.
      *
      * @param callable $onRejected
-     * @return Promise
+     * @return static
      */
     public function error(callable $onRejected) {
 
@@ -175,7 +175,7 @@ class Promise {
      * promises are fulfilled.
      *
      * @param Promise[] $promises
-     * @return Promise
+     * @return static
      */
     static public function all(array $promises) {
 
