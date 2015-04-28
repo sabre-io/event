@@ -32,6 +32,9 @@
         }
     },
     "require-dev": {
-        "squizlabs/php_codesniffer": "*"
+        "sabre/cs": "dev-master"
+    },
+    "config" : {
+        "bin-dir" : "bin/"
     }
 }
