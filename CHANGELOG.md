@@ -1,11 +1,18 @@
 ChangeLog
 =========
 
+2.0.2 (????-??-??)
+------------------
+
+* Fixed: coding standards using php-cs-fixer.
+
+
 2.0.1 (2014-10-06)
 ------------------
 
 * Fixed: `$priority` was ignored in `EventEmitter::once` method.
 * Fixed: Breaking the event chain was not possible in `EventEmitter::once`.
+
 
 2.0.0 (2014-06-21)
 ------------------
