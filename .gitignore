@@ -7,3 +7,7 @@ composer.lock
 
 #development stuff
 tests/cov
+
+#composer binaries
+bin/php-cs-fixer
+bin/sabre-cs-fixer
