@@ -11,7 +11,7 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
         $promise->fulfill(1);
 
         $promise->then(function($value) use (&$finalValue) {
-            $finalValue=$value + 2;
+            $finalValue = $value + 2;
         });
 
         $this->assertEquals(3, $finalValue);
@@ -25,7 +25,7 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
         $promise->reject(1);
 
         $promise->then(null, function($value) use (&$finalValue) {
-            $finalValue=$value + 2;
+            $finalValue = $value + 2;
         });
 
         $this->assertEquals(3, $finalValue);
@@ -39,7 +39,7 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
         $promise->fulfill(1);
 
         $promise->then(function($value) use (&$finalValue) {
-            $finalValue=$value + 2;
+            $finalValue = $value + 2;
             return $finalValue;
         })->then(function($value) use (&$finalValue) {
             $finalValue = $value + 4;
@@ -76,7 +76,7 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
         $promise = new Promise();
 
         $promise->then(function($value) use (&$finalValue) {
-            $finalValue=$value + 2;
+            $finalValue = $value + 2;
         });
 
         $promise->fulfill(4);
@@ -84,13 +84,13 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
 
     }
 
-    public function testPendingFail() {
+    function testPendingFail() {
 
         $finalValue = 0;
         $promise = new Promise();
 
         $promise->then(null, function($value) use (&$finalValue) {
-            $finalValue=$value + 2;
+            $finalValue = $value + 2;
         });
 
         $promise->reject(4);
@@ -98,7 +98,7 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
 
     }
 
-    public function testExecutorSuccess() {
+    function testExecutorSuccess() {
 
         $promise = (new Promise(function($success, $fail) {
 
@@ -114,7 +114,7 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
 
     }
 
-    public function testExecutorFail() {
+    function testExecutorFail() {
 
         $promise = (new Promise(function($success, $fail) {
 
@@ -137,7 +137,7 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
     /**
      * @expectedException \Sabre\Event\PromiseAlreadyResolvedException
      */
-    public function testFulfillTwice() {
+    function testFulfillTwice() {
 
         $promise = new Promise();
         $promise->fulfill(1);
@@ -148,7 +148,7 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
     /**
      * @expectedException \Sabre\Event\PromiseAlreadyResolvedException
      */
-    public function testRejectTwice() {
+    function testRejectTwice() {
 
         $promise = new Promise();
         $promise->reject(1);
@@ -156,7 +156,7 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
 
     }
 
-    public function testFromFailureHandler() {
+    function testFromFailureHandler() {
 
         $ok = 0;
         $promise = new Promise();
@@ -181,7 +181,7 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
 
     }
 
-    public function testAll() {
+    function testAll() {
 
         $promise1 = new Promise();
         $promise2 = new Promise();
@@ -196,11 +196,11 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
         $promise1->fulfill(1);
         $this->assertEquals(0, $finalValue);
         $promise2->fulfill(2);
-        $this->assertEquals([1,2], $finalValue);
+        $this->assertEquals([1, 2], $finalValue);
 
     }
 
-    public function testAllReject() {
+    function testAllReject() {
 
         $promise1 = new Promise();
         $promise2 = new Promise();

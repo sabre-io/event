@@ -67,7 +67,7 @@ class Promise {
      *
      * @param callable $executor
      */
-    public function __construct(callable $executor = null) {
+    function __construct(callable $executor = null) {
 
         if ($executor) {
             $executor(
@@ -101,9 +101,9 @@ class Promise {
      * @param callable $onRejected
      * @return Promise
      */
-    public function then(callable $onFulfilled = null, callable $onRejected = null) {
+    function then(callable $onFulfilled = null, callable $onRejected = null) {
 
-        $subPromise = new Promise();
+        $subPromise = new self();
         switch($this->state) {
             case self::PENDING :
                 $this->subscribers[] = [$subPromise, $onFulfilled, $onRejected];
@@ -128,7 +128,7 @@ class Promise {
      * @param callable $onRejected
      * @return Promise
      */
-    public function error(callable $onRejected) {
+    function error(callable $onRejected) {
 
         return $this->then(null, $onRejected);
 
@@ -140,7 +140,7 @@ class Promise {
      * @param mixed $value
      * @return void
      */
-    public function fulfill($value = null) {
+    function fulfill($value = null) {
         if ($this->state !== self::PENDING) {
             throw new PromiseAlreadyResolvedException('This promise is already resolved, and you\'re not allowed to resolve a promise more than once');
         }
@@ -157,7 +157,7 @@ class Promise {
      * @param mixed $reason
      * @return void
      */
-    public function reject($reason = null) {
+    function reject($reason = null) {
         if ($this->state !== self::PENDING) {
             throw new PromiseAlreadyResolvedException('This promise is already resolved, and you\'re not allowed to resolve a promise more than once');
         }
@@ -177,7 +177,7 @@ class Promise {
      * @param Promise[] $promises
      * @return Promise
      */
-    static public function all(array $promises) {
+    static function all(array $promises) {
 
         return new self(function($success, $fail) use ($promises) {
 
@@ -190,7 +190,7 @@ class Promise {
                     function($result) use ($promiseIndex, &$completeResult, &$successCount, $success, $promises) {
                         $completeResult[$promiseIndex] = $result;
                         $successCount++;
-                        if ($successCount===count($promises)) {
+                        if ($successCount === count($promises)) {
                             $success($completeResult);
                         }
                         return $result;
@@ -222,7 +222,7 @@ class Promise {
         if (is_callable($callBack)) {
             try {
                 $result = $callBack($this->value);
-                if ($result instanceof Promise) {
+                if ($result instanceof self) {
                     $result->then([$subPromise, 'fulfill'], [$subPromise, 'reject']);
                 } else {
                     $subPromise->fulfill($result);

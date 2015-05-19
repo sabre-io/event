@@ -11,7 +11,7 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
 
     }
 
-    public function testListeners() {
+    function testListeners() {
 
         $ee = new EventEmitter();
 
@@ -133,7 +133,7 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
         });
 
         $ee->emit('foo');
-        $this->assertEquals(['b','d','a','c'], $result);
+        $this->assertEquals(['b', 'd', 'a', 'c'], $result);
 
     }
 

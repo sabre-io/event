@@ -12,7 +12,7 @@ matrix:
     - php: 7
 
 script:
-    - phpunit
-    - ./vendor/bin/phpcs  -v --standard=tests/phpcs/ruleset.xml lib/
+    - ./bin/phpunit
+    - ./bin/sabre-cs-fixer fix . --dry-run --diff
 
 before_script: composer install --dev

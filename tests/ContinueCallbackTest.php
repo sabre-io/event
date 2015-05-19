@@ -17,7 +17,7 @@ class ContinueCallbackTest extends \PHPUnit_Framework_TestCase {
         $ee->on('foo', $bla);
 
         $continueCounter = 0;
-        $r = $ee->emit('foo',[],function() use (&$continueCounter) {
+        $r = $ee->emit('foo', [], function() use (&$continueCounter) {
             $continueCounter++;
             return true;
         });
@@ -40,7 +40,7 @@ class ContinueCallbackTest extends \PHPUnit_Framework_TestCase {
         $ee->on('foo', $bla);
 
         $continueCounter = 0;
-        $r = $ee->emit('foo',[],function() use (&$continueCounter) {
+        $r = $ee->emit('foo', [], function() use (&$continueCounter) {
             $continueCounter++;
             return false;
         });
@@ -64,7 +64,7 @@ class ContinueCallbackTest extends \PHPUnit_Framework_TestCase {
         $ee->on('foo', $bla);
 
         $continueCounter = 0;
-        $r = $ee->emit('foo',[],function() use (&$continueCounter) {
+        $r = $ee->emit('foo', [], function() use (&$continueCounter) {
             $continueCounter++;
             return false;
         });
