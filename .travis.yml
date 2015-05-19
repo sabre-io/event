@@ -12,7 +12,7 @@ matrix:
     - php: 7
 
 script:
-    - phpunit
+    - ./bin/phpunit
     - ./bin/sabre-cs-fixer fix . --dry-run --diff
 
 before_script: composer install --dev

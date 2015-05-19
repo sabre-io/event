@@ -32,7 +32,8 @@
         }
     },
     "require-dev": {
-        "sabre/cs": "~0.0.1"
+        "sabre/cs": "~0.0.1",
+        "phpunit/phpunit" : "*"
     },
     "config" : {
         "bin-dir" : "bin/"
