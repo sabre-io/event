@@ -2,6 +2,10 @@
 vendor
 composer.lock
 
+#binaries
+bin/sabre-cs-fixer
+bin/php-cs-fixer
+
 #vim lock files
 .*.swp
 
