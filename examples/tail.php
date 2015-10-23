@@ -10,6 +10,7 @@
  *
  * To stop this application, hit CTRL-C
  */
+
 if ($argc < 2) {
     echo "Usage: " . $argv[0] . " filename\n";
     exit(1);
@@ -21,7 +22,7 @@ $loop = new Sabre\Event\Loop();
 
 $tail = popen('tail -fn0 ' . escapeshellarg($argv[1]), 'r');
 
-$loop->addReadStream($tail, function() use ($tail, $loop) {
+$loop->addReadStream($tail, function() use ($tail) {
 
     echo fread($tail, 4096);
 
