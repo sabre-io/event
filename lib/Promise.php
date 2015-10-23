@@ -104,7 +104,7 @@ class Promise {
     function then(callable $onFulfilled = null, callable $onRejected = null) {
 
         $subPromise = new self();
-        switch($this->state) {
+        switch ($this->state) {
             case self::PENDING :
                 $this->subscribers[] = [$subPromise, $onFulfilled, $onRejected];
                 break;
@@ -146,7 +146,7 @@ class Promise {
         }
         $this->state = self::FULFILLED;
         $this->value = $value;
-        foreach($this->subscribers as $subscriber) {
+        foreach ($this->subscribers as $subscriber) {
             $this->invokeCallback($subscriber[0], $subscriber[1]);
         }
     }
@@ -163,7 +163,7 @@ class Promise {
         }
         $this->state = self::REJECTED;
         $this->value = $reason;
-        foreach($this->subscribers as $subscriber) {
+        foreach ($this->subscribers as $subscriber) {
             $this->invokeCallback($subscriber[0], $subscriber[2]);
         }
 
@@ -184,7 +184,7 @@ class Promise {
             $successCount = 0;
             $completeResult = [];
 
-            foreach($promises as $promiseIndex => $subPromise) {
+            foreach ($promises as $promiseIndex => $subPromise) {
 
                 $subPromise->then(
                     function($result) use ($promiseIndex, &$completeResult, &$successCount, $success, $promises) {

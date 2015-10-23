@@ -100,7 +100,7 @@ trait EventEmitterTrait {
 
         if (is_null($continueCallBack)) {
 
-            foreach($this->listeners($eventName) as $listener) {
+            foreach ($this->listeners($eventName) as $listener) {
 
                 $result = call_user_func_array($listener, $arguments);
                 if ($result === false) {
@@ -113,7 +113,7 @@ trait EventEmitterTrait {
             $listeners = $this->listeners($eventName);
             $counter = count($listeners);
 
-            foreach($listeners as $listener) {
+            foreach ($listeners as $listener) {
 
                 $counter--;
                 $result = call_user_func_array($listener, $arguments);
@@ -177,7 +177,7 @@ trait EventEmitterTrait {
         if (!isset($this->listeners[$eventName])) {
             return false;
         }
-        foreach($this->listeners[$eventName][2] as $index => $check) {
+        foreach ($this->listeners[$eventName][2] as $index => $check) {
             if ($check === $listener) {
                 unset($this->listeners[$eventName][1][$index]);
                 unset($this->listeners[$eventName][2][$index]);

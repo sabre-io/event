@@ -53,21 +53,21 @@ class LoopTest extends \PHPUnit_Framework_TestCase {
 
         $loop->run();
 
-        $this->assertEquals(['b','a'], $check);
+        $this->assertEquals(['b', 'a'], $check);
 
     }
 
     function testSetInterval() {
 
         $loop = new Loop();
-        $check  = 0;
+        $check = 0;
         $intervalId = null;
         $intervalId = $loop->setInterval(function() use (&$check, &$intervalId, $loop) {
 
             $check++;
             if ($check > 5) {
                 $loop->clearInterval($intervalId);
-            }    
+            }
 
         }, 20);
 
@@ -78,4 +78,3 @@ class LoopTest extends \PHPUnit_Framework_TestCase {
     }
 
 }
-

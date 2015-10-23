@@ -4,7 +4,7 @@ namespace Sabre\Event;
 
 class Loop {
 
-    protected $timers = []; 
+    protected $timers = [];
     protected $nextTick = [];
 
     protected $readStreams = [];
@@ -26,20 +26,20 @@ class Loop {
         // array must be in reverse-order of trigger times.
         //
         // So here we search the array for the insertion point.
-        $index = count($this->timers)-1;
-        while(true) { 
+        $index = count($this->timers) - 1;
+        while (true) {
             if ($time < $this->timers[$index][0]) {
                 array_splice(
                     $this->timers,
-                    $index+1,
+                    $index + 1,
                     0,
                     [[$time, $cb]]
                 );
                 break;
-            } elseif ($index===0) {
+            } elseif ($index === 0) {
                 array_unshift($this->timers, [$time, $cb]);
                 break;
-            } 
+            }
             $index--;
 
         }
@@ -78,13 +78,13 @@ class Loop {
     function runTimers() {
 
         $now = microtime(true);
-        while(($timer = array_pop($this->timers)) && $timer[0] < $now) {
+        while (($timer = array_pop($this->timers)) && $timer[0] < $now) {
             $timer[1]();
         }
         // Add the last timer back to the array.
         if ($timer) {
             $this->timers[] = $timer;
-            return $timer[0]-microtime(true);
+            return $timer[0] - microtime(true);
         }
 
     }
@@ -105,12 +105,12 @@ class Loop {
 
     function run() {
 
-        while(true) {
+        while (true) {
 
             $nextTick = $this->nextTick;
             $this->nextTick = [];
 
-            foreach($nextTick as $cb) {
+            foreach ($nextTick as $cb) {
                 $cb();
             }
 
@@ -122,18 +122,18 @@ class Loop {
                 $read = $this->readStreams;
                 $write = $this->writeStreams;
                 $except = null;
-                if(stream_select($read, $write, $except, 0, $pollTimeout)) {
-                    foreach($read as $readStream) {
+                if (stream_select($read, $write, $except, 0, $pollTimeout)) {
+                    foreach ($read as $readStream) {
                         $this->readCallbacks[(int)$readStream]();
                     }
-                    foreach($write as $writeStream) {
+                    foreach ($write as $writeStream) {
                         $this->writeCallbacks[(int)$writeStream]();
                     }
 
                 }
 
             } elseif ($this->nextTick || $this->timers) {
-                usleep($pollTimeout !== null ? $pollTimeout : 200000); 
+                usleep($pollTimeout !== null ? $pollTimeout : 200000);
             } else {
                 break;
             }
