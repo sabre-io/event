@@ -29,7 +29,10 @@
     "autoload": {
         "psr-4": {
             "Sabre\\Event\\": "lib/"
-        }
+        },
+        "files" : [
+            "lib/coroutine.php"
+        ]
     },
     "require-dev": {
         "sabre/cs": "~0.0.1",
