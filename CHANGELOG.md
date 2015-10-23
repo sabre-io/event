@@ -1,6 +1,12 @@
 ChangeLog
 =========
 
+3.0.0 (????-??-??)
+------------------
+
+* #26: Added an event loop implementation. Also knows as the Reactor Pattern.
+
+
 2.0.1 (2014-10-06)
 ------------------
 
