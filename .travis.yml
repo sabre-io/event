@@ -6,7 +6,7 @@ php:
   - hhvm
 
 matrix:
-  allow_failure:
+  allow_failures:
     - php: hhvm
 
 env:
