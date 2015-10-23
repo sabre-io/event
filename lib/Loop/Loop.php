@@ -18,31 +18,6 @@ namespace Sabre\Event\Loop;
 class Loop {
 
     /**
-     * Returns the global loop instance.
-     *
-     * @return Loop
-     */
-    static function getInstance() {
-
-        if (!isset(self::$instance)) {
-            self::$instance = new self();
-        }
-        return self::$instance;
-
-    }
-
-    /**
-     * Sets the global loop instance.
-     *
-     * @return Loop
-     */
-    static function setInstance(Loop $instance) {
-
-        self::$instance = $instance;
-
-    }
-
-    /**
      * Executes a function after x seconds.
      *
      * @param callable $cb
@@ -260,7 +235,7 @@ class Loop {
         } elseif ($this->nextTick) {
             // There's a pending 'nextTick'. Don't wait.
             $streamWait = 0;
-        } elseif (is_int($nextTimeout)) {
+        } elseif (is_numeric($nextTimeout)) {
             // Wait until the next Timeout should trigger.
             $streamWait = $nextTimeout;
         } else {
@@ -357,13 +332,6 @@ class Loop {
         }
 
     }
-
-    /**
-     * The global loop instance
-     *
-     * @var Loop
-     */
-    protected static $instance;
 
     /**
      * Is the main loop active

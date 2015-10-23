@@ -31,7 +31,8 @@
             "Sabre\\Event\\": "lib/"
         },
         "files" : [
-            "lib/coroutine.php"
+            "lib/coroutine.php",
+            "lib/Loop/functions.php"
         ]
     },
     "require-dev": {

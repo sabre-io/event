@@ -135,7 +135,7 @@ class LoopTest extends \PHPUnit_Framework_TestCase {
 
     }
 
-    function testRunOnce() {
+    function testTick() {
 
         $check = 0;
         $loop = new Loop();
@@ -149,6 +149,31 @@ class LoopTest extends \PHPUnit_Framework_TestCase {
         $loop->tick();
 
         $this->assertEquals(1, $check);
+
+    }
+
+    /**
+     * Here we add a new nextTick function as we're in the middle of a current
+     * nextTick.
+     */
+    function testNextTickStacking() {
+
+        $loop = new Loop();
+        $check  = 0;
+        $loop->nextTick(function() use (&$check, $loop) {
+
+            $loop->nextTick(function() use (&$check) {
+
+                $check++;
+
+            });
+            $check++;
+
+        });
+
+        $loop->run();
+
+        $this->assertEquals(2, $check);
 
     }
 

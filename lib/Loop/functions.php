@@ -11,7 +11,7 @@ namespace Sabre\Event\Loop;
  */
 function setTimeout(callable $cb, $timeout) {
 
-    Loop::getInstance()->setTimeout($cb, $timeout);
+    instance()->setTimeout($cb, $timeout);
 
 }
 
@@ -27,7 +27,7 @@ function setTimeout(callable $cb, $timeout) {
  */
 function setInterval(callable $cb, $timeout) {
 
-    return Loop::getInstance()->setInterval($cb, $timeout);
+    return instance()->setInterval($cb, $timeout);
 
 }
 
@@ -39,7 +39,7 @@ function setInterval(callable $cb, $timeout) {
  */
 function clearInterval($intervalId) {
 
-    Loop::getInstance()->setInterval($intervalId);
+    instance()->clearInterval($intervalId);
 
 }
 
@@ -51,7 +51,7 @@ function clearInterval($intervalId) {
  */
 function nextTick(callable $cb) {
 
-    Loop::getInstance()->nextTick($cb);
+    instance()->nextTick($cb);
 
 }
 
@@ -71,7 +71,7 @@ function nextTick(callable $cb) {
  */
 function addReadStream($stream, callable $cb) {
 
-    Loop::getInstance()->addReadStream($stream, $cb);
+    instance()->addReadStream($stream, $cb);
 
 }
 
@@ -90,7 +90,7 @@ function addReadStream($stream, callable $cb) {
  */
 function addWriteStream($stream, callable $cb) {
 
-    Loop::getInstance()->addWriteStream($stream, $cb);
+    instance()->addWriteStream($stream, $cb);
 
 }
 
@@ -102,7 +102,7 @@ function addWriteStream($stream, callable $cb) {
  */
 function removeReadStream($stream) {
 
-    Loop::getInstance()->removeReadStream($stream, $cb);
+    instance()->removeReadStream($stream);
 
 }
 
@@ -114,7 +114,7 @@ function removeReadStream($stream) {
  */
 function removeWriteStream($stream) {
 
-    Loop::getInstance()->removeWriteStream($stream, $cb);
+    instance()->removeWriteStream($stream);
 
 }
 
@@ -129,7 +129,7 @@ function removeWriteStream($stream) {
  */
 function run() {
 
-    Loop::getInstance()->run();
+    instance()->run();
 
 }
 
@@ -150,7 +150,7 @@ function run() {
  */
 function tick($block = false) {
 
-    return Loop::getInstance()->tick($block);
+    return instance()->tick($block);
 
 }
 
@@ -161,6 +161,23 @@ function tick($block = false) {
  */
 function stop() {
 
-    Loop::getInstance()->stop();
+    instance()->stop();
+
+}
+
+/**
+ * Retrieves or sets the global Loop object.
+ *
+ * @param Loop $newLoop
+ */
+function instance(Loop $newLoop = null) {
+
+    static $loop;
+    if ($newLoop) {
+        $loop = $newLoop;
+    } elseif (!$loop) {
+        $loop = new Loop();
+    }
+    return $loop;
 
 }
