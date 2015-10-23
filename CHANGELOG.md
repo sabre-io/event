@@ -5,6 +5,9 @@ ChangeLog
 ------------------
 
 * #26: Added an event loop implementation. Also knows as the Reactor Pattern.
+* Renamed `Promise::error` to `Promise::otherwise` to be consistent with
+  ReactPHP and Guzzle. The `error` method is kept for BC but will be removed
+  in a future version.
 
 
 2.0.1 (2014-10-06)

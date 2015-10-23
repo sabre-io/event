@@ -128,9 +128,24 @@ class Promise {
      * @param callable $onRejected
      * @return Promise
      */
-    function error(callable $onRejected) {
+    function otherwise(callable $onRejected) {
 
         return $this->then(null, $onRejected);
+
+    }
+
+
+    /**
+     * Alias for 'otherwise'.
+     *
+     * This function is now deprecated and will be removed in a future version.
+     *
+     * @param callable $onRejected
+     * @return Promise
+     */
+    function error(callable $onRejected) {
+
+        return $this->otherwise($onRejected);
 
     }
 

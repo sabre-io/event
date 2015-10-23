@@ -160,7 +160,7 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
 
         $ok = 0;
         $promise = new Promise();
-        $promise->error(function($reason) {
+        $promise->otherwise(function($reason) {
 
             $this->assertEquals('foo', $reason);
             throw new \Exception('hi');
