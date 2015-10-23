@@ -8,6 +8,8 @@ ChangeLog
 * Renamed `Promise::error` to `Promise::otherwise` to be consistent with
   ReactPHP and Guzzle. The `error` method is kept for BC but will be removed
   in a future version.
+* #27: Support for Promise-based coroutines via the `Sabre\Event\coroutine`
+  function.
 
 
 2.0.1 (2014-10-06)
