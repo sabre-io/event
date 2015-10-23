@@ -2,22 +2,22 @@
 
 namespace Sabre\Event;
 
-class FlowTest extends \PHPUnit_Framework_TestCase {
+class CoroutineTest extends \PHPUnit_Framework_TestCase {
 
     /**
      * @expectedException \InvalidArgumentException
      */
     function testNonGenerator() {
 
-        flow(function() {});
+        coroutine(function() {});
 
     }
 
-    function testBasicFlow() {
+    function testBasicCoroutine() {
 
         $start = 0;
 
-        flow(function() use (&$start) {
+        coroutine(function() use (&$start) {
 
             $start+=1;
             yield;
@@ -35,7 +35,7 @@ class FlowTest extends \PHPUnit_Framework_TestCase {
             $fulfill(2);
         });
 
-        flow(function() use (&$start, $promise) {
+        coroutine(function() use (&$start, $promise) {
 
             $start += 1;
             $start += (yield $promise);
@@ -53,7 +53,7 @@ class FlowTest extends \PHPUnit_Framework_TestCase {
             $reject(2);
         });
 
-        flow(function() use (&$start, $promise) {
+        coroutine(function() use (&$start, $promise) {
 
             $start += 1;
             try {
@@ -77,7 +77,7 @@ class FlowTest extends \PHPUnit_Framework_TestCase {
             $reject(new \LogicException('2'));
         });
 
-        flow(function() use (&$start, $promise) {
+        coroutine(function() use (&$start, $promise) {
 
             $start += 1;
             try {
@@ -101,7 +101,7 @@ class FlowTest extends \PHPUnit_Framework_TestCase {
             $reject(array());
         });
 
-        flow(function() use (&$start, $promise) {
+        coroutine(function() use (&$start, $promise) {
 
             $start += 1;
             try {
@@ -123,7 +123,7 @@ class FlowTest extends \PHPUnit_Framework_TestCase {
 
         $start = 0;
         $promise = new Promise();
-        flow(function() use (&$start, $promise) {
+        coroutine(function() use (&$start, $promise) {
 
             $start += 1;
             $start += (yield $promise);
@@ -141,7 +141,7 @@ class FlowTest extends \PHPUnit_Framework_TestCase {
 
         $start = 0;
         $promise = new Promise();
-        flow(function() use (&$start, $promise) {
+        coroutine(function() use (&$start, $promise) {
 
             $start += 1;
             try {
@@ -161,10 +161,10 @@ class FlowTest extends \PHPUnit_Framework_TestCase {
 
     }
 
-    function testFlowException() {
+    function testCoroutineException() {
 
         $start = 0;
-        flow(function() use (&$start) {
+        coroutine(function() use (&$start) {
 
             $start += 1;
             $start += (yield 2);
@@ -185,7 +185,7 @@ class FlowTest extends \PHPUnit_Framework_TestCase {
 
         $start = 0;
         $promise = new Promise();
-        flow(function() use (&$start, $promise) {
+        coroutine(function() use (&$start, $promise) {
 
             $start += 1;
             $start += (yield $promise);
@@ -206,7 +206,7 @@ class FlowTest extends \PHPUnit_Framework_TestCase {
     function testResolveToLastYield() {
 
         $ok = false;
-        flow(function() {
+        coroutine(function() {
 
             yield 1;
             yield 2;
@@ -228,7 +228,7 @@ class FlowTest extends \PHPUnit_Framework_TestCase {
 
         $promise = new Promise();
 
-        flow(function() use ($promise) {
+        coroutine(function() use ($promise) {
 
             yield 'fail';
             yield $promise;

@@ -9,7 +9,7 @@ use Exception;
  * Turn asynchronous promise-based code into something that looks synchronous
  * again, through the use of generators.
  *
- * Example without flow:
+ * Example without coroutines:
  *
  * $promise = $httpClient->request('GET', '/foo');
  * $promise->then(function($value) {
@@ -26,9 +26,9 @@ use Exception;
  *
  * });
  *
- * Example with flow:
+ * Example with coroutines:
  *
- * flow(function() {
+ * coroutine(function() {
  *
  *   try {
  *     yield $httpClient->request('GET', '/foo');
@@ -40,11 +40,11 @@ use Exception;
  *
  * });
  *
- * @copyright Copyright (C) 2013-2014 fruux GmbH. All rights reserved.
+ * @copyright Copyright (C) 2013-2015 fruux GmbH. All rights reserved.
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */
-function flow(callable $gen) {
+function coroutine(callable $gen) {
 
     $generator = $gen();
     if (!$generator instanceof Generator) {
