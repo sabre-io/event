@@ -1,6 +1,6 @@
 <?php
 
-namespace Sabre\Event;
+namespace Sabre\Event\Loop;
 
 /**
  * A simple eventloop implementation.
@@ -16,6 +16,31 @@ namespace Sabre\Event;
  * @license http://sabre.io/license/ Modified BSD License
  */
 class Loop {
+
+    /**
+     * Returns the global loop instance.
+     *
+     * @return Loop
+     */
+    static function getInstance() {
+        
+        if (!isset(self::$instance)) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+
+    }
+
+    /**
+     * Sets the global loop instance.
+     *
+     * @return Loop
+     */
+    static function setInstance(Loop $instance) {
+
+        self::$instance = $instance;
+
+    }
 
     /**
      * Executes a function after x seconds.
@@ -309,6 +334,13 @@ class Loop {
         }
 
     }
+
+    /**
+     * The global loop instance
+     *
+     * @var Loop
+     */
+    protected static $instance;
 
     /**
      * Is the main loop active

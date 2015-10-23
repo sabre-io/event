@@ -1,6 +1,6 @@
 <?php
 
-namespace Sabre\Event;
+namespace Sabre\Event\Loop;
 
 class LoopTest extends \PHPUnit_Framework_TestCase {
 
