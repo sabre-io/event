@@ -12,7 +12,7 @@ abstract class BenchMark {
 
     function setUp() {
 
-    } 
+    }
 
     abstract function test();
 
@@ -44,7 +44,7 @@ class OneCallBack extends BenchMark {
 
     function test() {
 
-        for($i=0;$i<$this->iterations;$i++) {
+        for ($i = 0;$i < $this->iterations;$i++) {
             $this->emitter->emit('foo', []);
         }
 
@@ -59,7 +59,7 @@ class ManyCallBacks extends BenchMark {
     function setUp() {
 
         $this->emitter = new EventEmitter();
-        for($i=0;$i<100;$i++) {
+        for ($i = 0;$i < 100;$i++) {
             $this->emitter->on('foo', function() {
                 // NOOP
             });
@@ -69,7 +69,7 @@ class ManyCallBacks extends BenchMark {
 
     function test() {
 
-        for($i=0;$i<$this->iterations;$i++) {
+        for ($i = 0;$i < $this->iterations;$i++) {
             $this->emitter->emit('foo', []);
         }
 
@@ -84,16 +84,16 @@ class ManyPrioritizedCallBacks extends BenchMark {
     function setUp() {
 
         $this->emitter = new EventEmitter();
-        for($i=0;$i<100;$i++) {
+        for ($i = 0;$i < 100;$i++) {
             $this->emitter->on('foo', function() {
-            }, 1000-$i);
+            }, 1000 - $i);
         }
 
     }
 
     function test() {
 
-        for($i=0;$i<$this->iterations;$i++) {
+        for ($i = 0;$i < $this->iterations;$i++) {
             $this->emitter->emit('foo', []);
         }
 
@@ -107,7 +107,7 @@ $tests = [
     'ManyPrioritizedCallBacks',
 ];
 
-foreach($tests as $test) {
+foreach ($tests as $test) {
 
     $testObj = new $test();
     $result = $testObj->go();

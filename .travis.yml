@@ -2,17 +2,21 @@ language: php
 php:
   - 5.5
   - 5.6
+  - 7
   - hhvm
-  - hhvm-nightly
 
-matrix:
-  fast_finish: true
-  allow_failures:
-    - php: hhvm
-    - php: hhvm-nightly
+env:
+  matrix:
+    - LOWEST_DEPS=""
+    - LOWEST_DEPS="--prefer-lowest"
+
+before_script:
+  - composer update --prefer-source $LOWEST_DEPS
 
 script:
-    - phpunit
-    - ./vendor/bin/phpcs  -v --standard=tests/phpcs/ruleset.xml lib/
+  - ./bin/phpunit
+  - ./bin/sabre-cs-fixer fix . --dry-run --diff
 
-before_script: composer install --dev
+sudo: false
+
+cache: vendor

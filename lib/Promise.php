@@ -10,7 +10,7 @@ use Exception;
  * Promises basically allow you to avoid what is commonly called 'callback
  * hell'. It allows for easily chaining of asynchronous operations.
  *
- * @copyright Copyright (C) 2013-2014 fruux GmbH. All rights reserved.
+ * @copyright Copyright (C) 2013-2015 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */
@@ -67,7 +67,7 @@ class Promise {
      *
      * @param callable $executor
      */
-    public function __construct(callable $executor = null) {
+    function __construct(callable $executor = null) {
 
         if ($executor) {
             $executor(
@@ -101,10 +101,10 @@ class Promise {
      * @param callable $onRejected
      * @return Promise
      */
-    public function then(callable $onFulfilled = null, callable $onRejected = null) {
+    function then(callable $onFulfilled = null, callable $onRejected = null) {
 
-        $subPromise = new Promise();
-        switch($this->state) {
+        $subPromise = new self();
+        switch ($this->state) {
             case self::PENDING :
                 $this->subscribers[] = [$subPromise, $onFulfilled, $onRejected];
                 break;
@@ -126,11 +126,26 @@ class Promise {
      * we're not allowed to call our function that.
      *
      * @param callable $onRejected
-     * @return void
+     * @return Promise
      */
-    public function error(callable $onRejected) {
+    function otherwise(callable $onRejected) {
 
         return $this->then(null, $onRejected);
+
+    }
+
+
+    /**
+     * Alias for 'otherwise'.
+     *
+     * This function is now deprecated and will be removed in a future version.
+     *
+     * @param callable $onRejected
+     * @return Promise
+     */
+    function error(callable $onRejected) {
+
+        return $this->otherwise($onRejected);
 
     }
 
@@ -140,13 +155,13 @@ class Promise {
      * @param mixed $value
      * @return void
      */
-    public function fulfill($value = null) {
+    function fulfill($value = null) {
         if ($this->state !== self::PENDING) {
             throw new PromiseAlreadyResolvedException('This promise is already resolved, and you\'re not allowed to resolve a promise more than once');
         }
         $this->state = self::FULFILLED;
         $this->value = $value;
-        foreach($this->subscribers as $subscriber) {
+        foreach ($this->subscribers as $subscriber) {
             $this->invokeCallback($subscriber[0], $subscriber[1]);
         }
     }
@@ -157,13 +172,13 @@ class Promise {
      * @param mixed $reason
      * @return void
      */
-    public function reject($reason = null) {
+    function reject($reason = null) {
         if ($this->state !== self::PENDING) {
             throw new PromiseAlreadyResolvedException('This promise is already resolved, and you\'re not allowed to resolve a promise more than once');
         }
         $this->state = self::REJECTED;
         $this->value = $reason;
-        foreach($this->subscribers as $subscriber) {
+        foreach ($this->subscribers as $subscriber) {
             $this->invokeCallback($subscriber[0], $subscriber[2]);
         }
 
@@ -177,20 +192,20 @@ class Promise {
      * @param Promise[] $promises
      * @return Promise
      */
-    static public function all(array $promises) {
+    static function all(array $promises) {
 
         return new self(function($success, $fail) use ($promises) {
 
             $successCount = 0;
             $completeResult = [];
 
-            foreach($promises as $promiseIndex => $subPromise) {
+            foreach ($promises as $promiseIndex => $subPromise) {
 
                 $subPromise->then(
                     function($result) use ($promiseIndex, &$completeResult, &$successCount, $success, $promises) {
                         $completeResult[$promiseIndex] = $result;
                         $successCount++;
-                        if ($successCount===count($promises)) {
+                        if ($successCount === count($promises)) {
                             $success($completeResult);
                         }
                         return $result;
@@ -222,7 +237,7 @@ class Promise {
         if (is_callable($callBack)) {
             try {
                 $result = $callBack($this->value);
-                if ($result instanceof Promise) {
+                if ($result instanceof self) {
                     $result->then([$subPromise, 'fulfill'], [$subPromise, 'reject']);
                 } else {
                     $subPromise->fulfill($result);

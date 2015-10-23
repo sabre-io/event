@@ -11,7 +11,7 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
 
     }
 
-    public function testListeners() {
+    function testListeners() {
 
         $ee = new EventEmitter();
 
@@ -44,7 +44,6 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertEquals('bar', $argResult);
 
-
     }
 
     /**
@@ -67,13 +66,11 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
 
         });
 
-
         $this->assertFalse(
             $ee->emit('foo', ['bar'])
         );
 
         $this->assertEquals(1, $argResult);
-
 
     }
 
@@ -97,7 +94,6 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
             return false;
 
         }, 1);
-
 
         $this->assertFalse(
             $ee->emit('foo', ['bar'])
@@ -137,7 +133,7 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
         });
 
         $ee->emit('foo');
-        $this->assertEquals(['b','d','a','c'], $result);
+        $this->assertEquals(['b', 'd', 'a', 'c'], $result);
 
     }
 
@@ -150,7 +146,6 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
             $result = true;
 
         };
-
 
         $ee = new EventEmitter();
 
@@ -204,7 +199,6 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
 
         };
 
-
         $ee = new EventEmitter();
 
         $ee->on('foo', $callBack);
@@ -228,16 +222,13 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
     function testRemoveAllListeners() {
 
         $result = false;
-
         $callBack = function() use (&$result) {
 
             $result = true;
 
         };
 
-
         $ee = new EventEmitter();
-
         $ee->on('foo', $callBack);
 
         $ee->emit('foo');
@@ -263,7 +254,6 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
 
 
         $ee = new EventEmitter();
-
         $ee->on('foo', $callBack);
 
         $ee->emit('foo');
@@ -297,4 +287,32 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
 
     }
 
+    /**
+     * @depends testCancelEvent
+     */
+    function testPriorityOnce() {
+
+        $argResult = 0;
+
+        $ee = new EventEmitter();
+        $ee->once('foo', function($arg) use (&$argResult) {
+
+            $argResult = 1;
+            return false;
+
+        });
+        $ee->once('foo', function($arg) use (&$argResult) {
+
+            $argResult = 2;
+            return false;
+
+        }, 1);
+
+        $this->assertFalse(
+            $ee->emit('foo', ['bar'])
+        );
+
+        $this->assertEquals(2, $argResult);
+
+    }
 }
