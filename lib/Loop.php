@@ -289,7 +289,7 @@ class Loop {
             $read = $this->readStreams;
             $write = $this->writeStreams;
             $except = null;
-            if (stream_select($read, $write, $except, 0, $timeout)) {
+            if (stream_select($read, $write, $except, null, $timeout)) {
 
                 // See PHP Bug https://bugs.php.net/bug.php?id=62452
                 // Fixed in PHP7
