@@ -62,7 +62,7 @@ function coroutine(callable $gen) {
      */
     $advanceGenerator = function() use (&$advanceGenerator, $generator, $promise, &$lastYieldResult) {
 
-        while($generator->valid()) {
+        while ($generator->valid()) {
 
             $yieldedValue = $generator->current();
             if ($yieldedValue instanceof Promise) {
@@ -78,7 +78,7 @@ function coroutine(callable $gen) {
                         } elseif (is_scalar($reason)) {
                             $generator->throw(new Exception($reason));
                         } else {
-                            $type = is_object($reason)?get_class($reason):gettype($reason);
+                            $type = is_object($reason) ? get_class($reason) : gettype($reason);
                             $generator->throw(new Exception('Promise was rejected with reason of type: ' . $type));
                         }
                         $advanceGenerator();
@@ -111,7 +111,7 @@ function coroutine(callable $gen) {
 
     try {
         $advanceGenerator();
-    } catch(Exception $e) {
+    } catch (Exception $e) {
         $promise->reject($e);
     }
 

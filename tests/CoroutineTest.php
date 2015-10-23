@@ -19,7 +19,7 @@ class CoroutineTest extends \PHPUnit_Framework_TestCase {
 
         coroutine(function() use (&$start) {
 
-            $start+=1;
+            $start += 1;
             yield;
 
         });
@@ -60,7 +60,7 @@ class CoroutineTest extends \PHPUnit_Framework_TestCase {
                 $start += (yield $promise);
                 // This line is unreachable, but it's our control
                 $start += 4;
-            } catch(\Exception $e) {
+            } catch (\Exception $e) {
                 $start += $e->getMessage();
             }
 
@@ -84,7 +84,7 @@ class CoroutineTest extends \PHPUnit_Framework_TestCase {
                 $start += (yield $promise);
                 // This line is unreachable, but it's our control
                 $start += 4;
-            } catch(\LogicException $e) {
+            } catch (\LogicException $e) {
                 $start += $e->getMessage();
             }
 
@@ -98,7 +98,7 @@ class CoroutineTest extends \PHPUnit_Framework_TestCase {
 
         $start = 0;
         $promise = new Promise(function($fulfill, $reject) {
-            $reject(array());
+            $reject([]);
         });
 
         coroutine(function() use (&$start, $promise) {
@@ -108,8 +108,8 @@ class CoroutineTest extends \PHPUnit_Framework_TestCase {
                 $start += (yield $promise);
                 // This line is unreachable, but it's our control
                 $start += 4;
-            } catch(\Exception $e) {
-                $this->assertTrue(strpos($e->getMessage(),'Promise was rejected with')===0);
+            } catch (\Exception $e) {
+                $this->assertTrue(strpos($e->getMessage(), 'Promise was rejected with') === 0);
                 $start += 2;
             }
 
@@ -148,7 +148,7 @@ class CoroutineTest extends \PHPUnit_Framework_TestCase {
                 $start += (yield $promise);
                 // This line is unreachable, but it's our control
                 $start += 4;
-            } catch(\Exception $e) {
+            } catch (\Exception $e) {
                 $start += $e->getMessage();
             }
 
@@ -213,7 +213,7 @@ class CoroutineTest extends \PHPUnit_Framework_TestCase {
             $hello = 'hi';
 
         })->then(function($value) use (&$ok) {
-            $this->assertEquals(2,$value);
+            $this->assertEquals(2, $value);
             $ok = true;
         })->error(function($reason) {
             $this->fail($reason);
