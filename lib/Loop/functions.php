@@ -134,14 +134,23 @@ function run() {
 }
 
 /**
- * Executes all pending events, and immediately exists if there were no
- * pending events.
+ * Executes all pending events.
  *
- * @return void
+ * If $block is turned true, this function will block until any event is
+ * triggered.
+ *
+ * If there are now timeouts, nextTick callbacks or events in the loop at
+ * all, this function will exit immediately.
+ *
+ * This function will return true if there are _any_ events left in the
+ * loop after the tick.
+ *
+ * @param bool $block
+ * @return bool
  */
-function runOnce() {
+function tick($block = false) {
 
-    Loop::getInstance()->runOnce();
+    return Loop::getInstance()->tick($block);
 
 }
 

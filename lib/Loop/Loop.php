@@ -23,7 +23,7 @@ class Loop {
      * @return Loop
      */
     static function getInstance() {
-        
+
         if (!isset(self::$instance)) {
             self::$instance = new self();
         }
@@ -226,28 +226,51 @@ class Loop {
 
         do {
 
-            $this->runNextTicks();
+            $hasEvents = $this->tick(true);
 
-            $nextTimeout = $this->runTimers();
-            $pollTimeout = $this->nextTick ? 0 : $nextTimeout;
-            $this->runStreams($pollTimeout);
-
-        } while ($this->running && ($this->readStreams || $this->writeStreams || $this->nextTick || $this->timers));
+        } while ($this->running && $hasEvents);
         $this->running = false;
 
     }
 
     /**
-     * Executes all pending events, and immediately exists if there were no
-     * pending events.
+     * Executes all pending events.
      *
-     * @return void
+     * If $block is turned true, this function will block until any event is
+     * triggered.
+     *
+     * If there are now timeouts, nextTick callbacks or events in the loop at
+     * all, this function will exit immediately.
+     *
+     * This function will return true if there are _any_ events left in the
+     * loop after the tick.
+     *
+     * @param bool $block
+     * @return bool
      */
-    function runOnce() {
+    function tick($block = false) {
 
         $this->runNextTicks();
-        $this->runTimers();
-        $this->runStreams(0);
+        $nextTimeout = $this->runTimers();
+
+        // Calculating how long runStreams should at most wait.
+        if (!$block) {
+            // Don't wait
+            $streamWait = 0;
+        } elseif ($this->nextTick) {
+            // There's a pending 'nextTick'. Don't wait.
+            $streamWait = 0;
+        } elseif (is_int($nextTimeout)) {
+            // Wait until the next Timeout should trigger.
+            $streamWait = $nextTimeout;
+        } else {
+            // Wait indefinitely
+            $streamWait = null;
+        }
+
+        $this->runStreams($streamWait);
+
+        return ($this->readStreams || $this->writeStreams || $this->nextTick || $this->timers);
 
     }
 

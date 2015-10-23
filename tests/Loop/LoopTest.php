@@ -146,7 +146,7 @@ class LoopTest extends \PHPUnit_Framework_TestCase {
         $loop->nextTick(function() use ($loop, &$check) {
             $check++;
         });
-        $loop->runOnce();
+        $loop->tick();
 
         $this->assertEquals(1, $check);
 
