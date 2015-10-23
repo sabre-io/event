@@ -5,6 +5,10 @@ php:
   - 7
   - hhvm
 
+matrix:
+  allow_failure:
+    - php: hhvm
+
 env:
   matrix:
     - LOWEST_DEPS=""
