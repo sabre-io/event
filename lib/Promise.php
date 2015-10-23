@@ -36,7 +36,7 @@ class Promise {
      *
      * @var int
      */
-    protected $state = self::PENDING;
+    public $state = self::PENDING;
 
     /**
      * A list of subscribers. Subscribers are the callbacks that want us to let
