@@ -10,7 +10,6 @@
  *
  * To stop this application, hit CTRL-C
  */
-
 if ($argc < 2) {
     echo "Usage: " . $argv[0] . " filename\n";
     exit(1);
