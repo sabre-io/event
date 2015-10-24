@@ -263,7 +263,7 @@ class Loop {
     /**
      * Executes all 'nextTick' callbacks.
      *
-     * return @void
+     * return void
      */
     protected function runNextTicks() {
 

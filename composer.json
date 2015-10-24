@@ -12,7 +12,7 @@
     "homepage": "http://sabre.io/event/",
     "license": "BSD-3-Clause",
     "require": {
-        "php": ">=5.4.1"
+        "php": ">=5.5"
     },
     "authors": [
         {
@@ -36,7 +36,7 @@
         ]
     },
     "require-dev": {
-        "sabre/cs": "~0.0.1",
+        "sabre/cs": "~0.0.4",
         "phpunit/phpunit" : "*"
     },
     "config" : {

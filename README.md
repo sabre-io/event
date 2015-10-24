@@ -3,10 +3,12 @@ sabre/event
 
 A lightweight library for event-based development in PHP.
 
-This library provides two patterns:
+This library provides the following event-based concepts:
 
 1. EventEmitter
 2. Promises
+3. An Event Loop using `stream_select()`.
+4. Co-routines.
 
 Full documentation can be found on [the website][1].
 
