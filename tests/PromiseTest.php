@@ -13,6 +13,7 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
         $promise->then(function($value) use (&$finalValue) {
             $finalValue = $value + 2;
         });
+        Loop\run();
 
         $this->assertEquals(3, $finalValue);
 
@@ -27,6 +28,7 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
         $promise->then(null, function($value) use (&$finalValue) {
             $finalValue = $value + 2;
         });
+        Loop\run();
 
         $this->assertEquals(3, $finalValue);
 
@@ -45,6 +47,7 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
             $finalValue = $value + 4;
             return $finalValue;
         });
+        Loop\run();
 
         $this->assertEquals(7, $finalValue);
 
@@ -65,6 +68,7 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
         });
 
         $subPromise->fulfill(2);
+        Loop\run();
 
         $this->assertEquals(6, $finalValue);
 
@@ -80,6 +84,8 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
         });
 
         $promise->fulfill(4);
+        Loop\run();
+
         $this->assertEquals(6, $finalValue);
 
     }
@@ -94,6 +100,8 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
         });
 
         $promise->reject(4);
+        Loop\run();
+
         $this->assertEquals(6, $finalValue);
 
     }
@@ -109,6 +117,7 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
             $realResult = $result;
 
         });
+        Loop\run();
 
         $this->assertEquals('hi', $realResult);
 
@@ -129,6 +138,7 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
             $realResult = $reason;
 
         });
+        Loop\run();
 
         $this->assertEquals('hi', $realResult);
 
@@ -177,6 +187,8 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertEquals(0, $ok);
         $promise->reject('foo');
+        Loop\run();
+
         $this->assertEquals(1, $ok);
 
     }
@@ -194,8 +206,11 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
         });
 
         $promise1->fulfill(1);
+        Loop\run();
         $this->assertEquals(0, $finalValue);
+
         $promise2->fulfill(2);
+        Loop\run();
         $this->assertEquals([1, 2], $finalValue);
 
     }
@@ -217,10 +232,82 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
         );
 
         $promise1->reject(1);
+        Loop\run();
         $this->assertEquals(1, $finalValue);
         $promise2->reject(2);
+        Loop\run();
         $this->assertEquals(1, $finalValue);
 
     }
 
+    function testWaitResolve() {
+
+        $promise = new Promise();
+        Loop\nextTick(function() use ($promise) {
+            $promise->fulfill(1);
+        });
+        $this->assertEquals(
+            1,
+            $promise->wait()
+        );
+
+    }
+
+    /**
+     * @expectedException \LogicException
+     */
+    function testWaitWillNeverResolve() {
+
+        $promise = new Promise();
+        $promise->wait();
+
+    }
+
+    function testWaitRejectedException() {
+
+        $promise = new Promise();
+        Loop\nextTick(function() use ($promise) {
+            $promise->reject(new \OutOfBoundsException('foo'));
+        });
+        try {
+            $promise->wait();
+            $this->fail('We did not get the expected exception');
+        } catch (\Exception $e) {
+            $this->assertInstanceOf('OutOfBoundsException', $e);
+            $this->assertEquals('foo', $e->getMessage());
+        }
+
+    }
+
+    function testWaitRejectedScalar() {
+
+        $promise = new Promise();
+        Loop\nextTick(function() use ($promise) {
+            $promise->reject('foo');
+        });
+        try {
+            $promise->wait();
+            $this->fail('We did not get the expected exception');
+        } catch (\Exception $e) {
+            $this->assertInstanceOf('Exception', $e);
+            $this->assertEquals('foo', $e->getMessage());
+        }
+
+    }
+
+    function testWaitRejectedNonScalar() {
+
+        $promise = new Promise();
+        Loop\nextTick(function() use ($promise) {
+            $promise->reject([]);
+        });
+        try {
+            $promise->wait();
+            $this->fail('We did not get the expected exception');
+        } catch (\Exception $e) {
+            $this->assertInstanceOf('Exception', $e);
+            $this->assertEquals('Promise was rejected with reason of type: array', $e->getMessage());
+        }
+
+    }
 }

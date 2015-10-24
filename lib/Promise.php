@@ -185,6 +185,46 @@ class Promise {
     }
 
     /**
+     * Stops execution until this promise is resolved.
+     *
+     * This method stops exection completely. If the promise is successful with
+     * a value, this method will return this value. If the promise was
+     * rejected, this method will throw an exception.
+     *
+     * @throws Exception
+     * @return mixed
+     */
+    function wait() {
+
+        $hasEvents = true;
+        while ($this->state === self::PENDING) {
+
+            if (!$hasEvents) {
+                throw new \LogicException('There were no more events in the loop. This promise will never be fulfilled.');
+            }
+            $hasEvents = Loop\tick(true);
+
+        }
+
+        if ($this->state === self::FULFILLED) {
+            return $this->value;
+        } else {
+            $reason = $this->value;
+            // Rejected
+            if ($reason instanceof Exception) {
+                throw $reason;
+            } elseif (is_scalar($reason)) {
+                throw new Exception($reason);
+            } else {
+                $type = is_object($reason) ? get_class($reason) : gettype($reason);
+                throw new Exception('Promise was rejected with reason of type: ' . $type);
+            }
+        }
+
+
+    }
+
+    /**
      * It's possible to send an array of promises to the all method. This
      * method returns a promise that will be fulfilled, only if all the passed
      * promises are fulfilled.
@@ -234,24 +274,26 @@ class Promise {
      */
     protected function invokeCallback(Promise $subPromise, callable $callBack = null) {
 
-        if (is_callable($callBack)) {
-            try {
-                $result = $callBack($this->value);
-                if ($result instanceof self) {
-                    $result->then([$subPromise, 'fulfill'], [$subPromise, 'reject']);
-                } else {
-                    $subPromise->fulfill($result);
+        Loop\nextTick(function() use ($callBack, $subPromise) {
+            if (is_callable($callBack)) {
+                try {
+                    $result = $callBack($this->value);
+                    if ($result instanceof self) {
+                        $result->then([$subPromise, 'fulfill'], [$subPromise, 'reject']);
+                    } else {
+                        $subPromise->fulfill($result);
+                    }
+                } catch (Exception $e) {
+                    $subPromise->reject($e);
                 }
-            } catch (Exception $e) {
-                $subPromise->reject($e);
-            }
-        } else {
-            if ($this->state === self::FULFILLED) {
-                $subPromise->fulfill($this->value);
             } else {
-                $subPromise->reject($this->value);
+                if ($this->state === self::FULFILLED) {
+                    $subPromise->fulfill($this->value);
+                } else {
+                    $subPromise->reject($this->value);
+                }
             }
-        }
+        });
     }
 
 

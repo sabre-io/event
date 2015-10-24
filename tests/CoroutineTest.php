@@ -42,6 +42,7 @@ class CoroutineTest extends \PHPUnit_Framework_TestCase {
 
         });
 
+        Loop\run();
         $this->assertEquals(3, $start);
 
     }
@@ -66,6 +67,7 @@ class CoroutineTest extends \PHPUnit_Framework_TestCase {
 
         });
 
+        Loop\run();
         $this->assertEquals(3, $start);
 
     }
@@ -90,6 +92,7 @@ class CoroutineTest extends \PHPUnit_Framework_TestCase {
 
         });
 
+        Loop\run();
         $this->assertEquals(3, $start);
 
     }
@@ -113,7 +116,7 @@ class CoroutineTest extends \PHPUnit_Framework_TestCase {
                 $start += 2;
             }
 
-        });
+        })->wait();
 
         $this->assertEquals(3, $start);
 
@@ -129,10 +132,13 @@ class CoroutineTest extends \PHPUnit_Framework_TestCase {
             $start += (yield $promise);
 
         });
+        Loop\run();
 
         $this->assertEquals(1, $start);
 
         $promise->fulfill(2);
+        Loop\run();
+
         $this->assertEquals(3, $start);
 
     }
@@ -157,6 +163,8 @@ class CoroutineTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $start);
 
         $promise->reject(new \Exception(2));
+        Loop\run();
+
         $this->assertEquals(3, $start);
 
     }
@@ -176,6 +184,7 @@ class CoroutineTest extends \PHPUnit_Framework_TestCase {
             $start += $e->getMessage();
 
         });
+        Loop\run();
 
         $this->assertEquals(7, $start);
 
@@ -199,6 +208,8 @@ class CoroutineTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $start);
 
         $promise->reject(new \Exception(2));
+        Loop\run();
+
         $this->assertEquals(3, $start);
 
     }
@@ -218,6 +229,8 @@ class CoroutineTest extends \PHPUnit_Framework_TestCase {
         })->error(function($reason) {
             $this->fail($reason);
         });
+        Loop\run();
+
         $this->assertTrue($ok);
 
     }
@@ -240,6 +253,8 @@ class CoroutineTest extends \PHPUnit_Framework_TestCase {
         });
 
         $promise->fulfill('omg it worked');
+        Loop\run();
+
         $this->assertEquals('omg it worked', $ok);
 
     }

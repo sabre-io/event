@@ -1,20 +1,33 @@
 <?php
 
-namespace Sabre\Event;
+namespace Sabre\Event\Loop;
 
-class LoopTest extends \PHPUnit_Framework_TestCase {
+class FunctionsTest extends \PHPUnit_Framework_TestCase {
+
+    function setUp() {
+
+        // Always creating a fresh loop object.
+        instance(new Loop());
+
+    }
+
+    function tearDown() {
+
+        // Removing the global loop object.
+        instance(null);
+
+    }
 
     function testNextTick() {
 
-        $loop = new Loop();
         $check  = 0;
-        $loop->nextTick(function() use (&$check) {
+        nextTick(function() use (&$check) {
 
             $check++;
 
         });
 
-        $loop->run();
+        run();
 
         $this->assertEquals(1, $check);
 
@@ -22,15 +35,14 @@ class LoopTest extends \PHPUnit_Framework_TestCase {
 
     function testTimeout() {
 
-        $loop = new Loop();
         $check  = 0;
-        $loop->setTimeout(function() use (&$check) {
+        setTimeout(function() use (&$check) {
 
             $check++;
 
         }, 0.02);
 
-        $loop->run();
+        run();
 
         $this->assertEquals(1, $check);
 
@@ -38,25 +50,24 @@ class LoopTest extends \PHPUnit_Framework_TestCase {
 
     function testTimeoutOrder() {
 
-        $loop = new Loop();
         $check  = [];
-        $loop->setTimeout(function() use (&$check) {
+        setTimeout(function() use (&$check) {
 
             $check[] = 'a';
 
         }, 0.2);
-        $loop->setTimeout(function() use (&$check) {
+        setTimeout(function() use (&$check) {
 
             $check[] = 'b';
 
         }, 0.1);
-        $loop->setTimeout(function() use (&$check) {
+        setTimeout(function() use (&$check) {
 
             $check[] = 'c';
 
         }, 0.3);
 
-        $loop->run();
+        run();
 
         $this->assertEquals(['b', 'a', 'c'], $check);
 
@@ -64,19 +75,18 @@ class LoopTest extends \PHPUnit_Framework_TestCase {
 
     function testSetInterval() {
 
-        $loop = new Loop();
         $check = 0;
         $intervalId = null;
-        $intervalId = $loop->setInterval(function() use (&$check, &$intervalId, $loop) {
+        $intervalId = setInterval(function() use (&$check, &$intervalId) {
 
             $check++;
             if ($check > 5) {
-                $loop->clearInterval($intervalId);
+                clearInterval($intervalId);
             }
 
         }, 0.02);
 
-        $loop->run();
+        run();
         $this->assertEquals(6, $check);
 
     }
@@ -84,14 +94,13 @@ class LoopTest extends \PHPUnit_Framework_TestCase {
     function testAddWriteStream() {
 
         $h = fopen('php://temp', 'r+');
-        $loop = new Loop();
-        $loop->addWriteStream($h, function() use ($h, $loop) {
+        addWriteStream($h, function() use ($h) {
 
             fwrite($h, 'hello world');
-            $loop->removeWriteStream($h);
+            removeWriteStream($h);
 
         });
-        $loop->run();
+        run();
         rewind($h);
         $this->assertEquals('hello world', stream_get_contents($h));
 
@@ -103,17 +112,15 @@ class LoopTest extends \PHPUnit_Framework_TestCase {
         fwrite($h, 'hello world');
         rewind($h);
 
-        $loop = new Loop();
-
         $result = null;
 
-        $loop->addReadStream($h, function() use ($h, $loop, &$result) {
+        addReadStream($h, function() use ($h, &$result) {
 
             $result = fgets($h);
-            $loop->removeReadStream($h);
+            removeReadStream($h);
 
         });
-        $loop->run();
+        run();
         $this->assertEquals('hello world', $result);
 
     }
@@ -121,32 +128,30 @@ class LoopTest extends \PHPUnit_Framework_TestCase {
     function testStop() {
 
         $check = 0;
-        $loop = new Loop();
-        $loop->setTimeout(function() use (&$check) {
+        setTimeout(function() use (&$check) {
             $check++;
         }, 200);
 
-        $loop->nextTick(function() use ($loop) {
-            $loop->stop();
+        nextTick(function() {
+            stop();
         });
-        $loop->run();
+        run();
 
         $this->assertEquals(0, $check);
 
     }
 
-    function testRunOnce() {
+    function testTick() {
 
         $check = 0;
-        $loop = new Loop();
-        $loop->setTimeout(function() use (&$check) {
+        setTimeout(function() use (&$check) {
             $check++;
         }, 1);
 
-        $loop->nextTick(function() use ($loop, &$check) {
+        nextTick(function() use (&$check) {
             $check++;
         });
-        $loop->runOnce();
+        tick();
 
         $this->assertEquals(1, $check);
 
