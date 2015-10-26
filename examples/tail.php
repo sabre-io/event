@@ -1,6 +1,8 @@
 #!/usr/bin/env php
 <?php
 
+namespace Sabre\Event\Loop;
+
 /**
  * This example can be used to logfile processing and basically wraps the tail
  * command.
@@ -17,7 +19,7 @@ if ($argc < 2) {
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$loop = new Sabre\Event\Loop();
+$loop = new Loop();
 
 $tail = popen('tail -fn0 ' . escapeshellarg($argv[1]), 'r');
 
