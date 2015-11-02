@@ -16,6 +16,7 @@ ChangeLog
   wait for any `then`/`otherwise` callbacks to trigger.
 * Promises now have a `wait()` method. Allowing you to make a promise
   synchronous and simply wait for a result (or exception) to happen.
+* Aside from the `Promise:all()` function, there's now also `Promise::race()`.
 
 
 2.0.1 (2014-10-06)

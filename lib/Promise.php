@@ -262,6 +262,46 @@ class Promise {
     }
 
     /**
+     * The race function returns a promise that resolves or rejects as soon as
+     * one of the promises in the argument resolves or rejects.
+     *
+     * The returned promise will resolve or reject with the value or reason of
+     * that first promise.
+     *
+     * @param Promise[] $promises
+     * @return Promise
+     */
+    static function race(array $promises) {
+
+        return new self(function($success, $fail) use ($promises) {
+
+            $alreadyDone = false;
+            foreach ($promises as $promise) {
+
+                $promise->then(
+                    function($result) use ($success, &$alreadyDone) {
+                        if ($alreadyDone) {
+                            return;
+                        }
+                        $alreadyDone = true;
+                        $success($result);
+                    },
+                    function($reason) use ($fail, &$alreadyDone) {
+                        if ($alreadyDone) {
+                            return;
+                        }
+                        $alreadyDone = true;
+                        $fail($reason);
+                    }
+                );
+
+            }
+
+        });
+
+    }
+
+    /**
      * This method is used to call either an onFulfilled or onRejected callback.
      *
      * This method makes sure that the result of these callbacks are handled

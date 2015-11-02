@@ -240,6 +240,79 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
 
     }
 
+    function testAllRejectThenResolve() {
+
+        $promise1 = new Promise();
+        $promise2 = new Promise();
+
+        $finalValue = 0;
+        Promise::all([$promise1, $promise2])->then(
+            function($value) use (&$finalValue) {
+                $finalValue = 'foo';
+                return 'test';
+            },
+            function($value) use (&$finalValue) {
+                $finalValue = $value;
+            }
+        );
+
+        $promise1->reject(1);
+        Loop\run();
+        $this->assertEquals(1, $finalValue);
+        $promise2->fulfill(2);
+        Loop\run();
+        $this->assertEquals(1, $finalValue);
+
+    }
+
+    function testRace() {
+
+        $promise1 = new Promise();
+        $promise2 = new Promise();
+
+        $finalValue = 0;
+        Promise::race([$promise1, $promise2])->then(
+            function($value) use (&$finalValue) {
+                $finalValue = $value;
+            },
+            function($value) use (&$finalValue) {
+                $finalValue = $value;
+            }
+        );
+
+        $promise1->fulfill(1);
+        Loop\run();
+        $this->assertEquals(1, $finalValue);
+        $promise2->fulfill(2);
+        Loop\run();
+        $this->assertEquals(1, $finalValue);
+
+    }
+
+    function testRaceReject() {
+
+        $promise1 = new Promise();
+        $promise2 = new Promise();
+
+        $finalValue = 0;
+        Promise::race([$promise1, $promise2])->then(
+            function($value) use (&$finalValue) {
+                $finalValue = $value;
+            },
+            function($value) use (&$finalValue) {
+                $finalValue = $value;
+            }
+        );
+
+        $promise1->reject(1);
+        Loop\run();
+        $this->assertEquals(1, $finalValue);
+        $promise2->reject(2);
+        Loop\run();
+        $this->assertEquals(1, $finalValue);
+
+    }
+
     function testWaitResolve() {
 
         $promise = new Promise();
