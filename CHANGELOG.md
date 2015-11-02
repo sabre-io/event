@@ -1,6 +1,13 @@
 ChangeLog
 =========
 
+3.0.0-alpha2 (2015-??-??)
+-------------------------
+
+* Now requires PHP 5.5!
+* Aside from the `Promise:all()` function, there's now also `Promise::race()`.
+
+
 3.0.0-alpha1 (2015-10-23)
 -------------------------
 
@@ -16,7 +23,6 @@ ChangeLog
   wait for any `then`/`otherwise` callbacks to trigger.
 * Promises now have a `wait()` method. Allowing you to make a promise
   synchronous and simply wait for a result (or exception) to happen.
-* Aside from the `Promise:all()` function, there's now also `Promise::race()`.
 
 
 2.0.1 (2014-10-06)
