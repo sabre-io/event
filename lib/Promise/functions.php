@@ -103,7 +103,7 @@ function race(array $promises) {
  * Returns a Promise that resolves with the given value.
  *
  * @param mixed $value
- * @return Promise 
+ * @return Promise
  */
 function resolve($value) {
 
@@ -119,7 +119,7 @@ function resolve($value) {
  * Returns a Promise that will reject with the given reason.
  *
  * @param mixed $reason
- * @return Promise 
+ * @return Promise
  */
 function reject($reason) {
 
