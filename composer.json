@@ -32,7 +32,8 @@
         },
         "files" : [
             "lib/coroutine.php",
-            "lib/Loop/functions.php"
+            "lib/Loop/functions.php",
+            "lib/Promise/functions.php"
         ]
     },
     "require-dev": {
