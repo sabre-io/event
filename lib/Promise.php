@@ -219,96 +219,6 @@ class Promise {
 
     }
 
-    /**
-     * Alias for 'otherwise'.
-     *
-     * This function is now deprecated and will be removed in a future version.
-     *
-     * @param callable $onRejected
-     * @return Promise
-     */
-    function error(callable $onRejected) {
-
-        return $this->otherwise($onRejected);
-
-    }
-
-    /**
-     * It's possible to send an array of promises to the all method. This
-     * method returns a promise that will be fulfilled, only if all the passed
-     * promises are fulfilled.
-     *
-     * @param Promise[] $promises
-     * @return Promise
-     */
-    static function all(array $promises) {
-
-        return new self(function($success, $fail) use ($promises) {
-
-            $successCount = 0;
-            $completeResult = [];
-
-            foreach ($promises as $promiseIndex => $subPromise) {
-
-                $subPromise->then(
-                    function($result) use ($promiseIndex, &$completeResult, &$successCount, $success, $promises) {
-                        $completeResult[$promiseIndex] = $result;
-                        $successCount++;
-                        if ($successCount === count($promises)) {
-                            $success($completeResult);
-                        }
-                        return $result;
-                    }
-                )->error(
-                    function($reason) use ($fail) {
-                        $fail($reason);
-                    }
-                );
-
-            }
-        });
-
-    }
-
-    /**
-     * The race function returns a promise that resolves or rejects as soon as
-     * one of the promises in the argument resolves or rejects.
-     *
-     * The returned promise will resolve or reject with the value or reason of
-     * that first promise.
-     *
-     * @param Promise[] $promises
-     * @return Promise
-     */
-    static function race(array $promises) {
-
-        return new self(function($success, $fail) use ($promises) {
-
-            $alreadyDone = false;
-            foreach ($promises as $promise) {
-
-                $promise->then(
-                    function($result) use ($success, &$alreadyDone) {
-                        if ($alreadyDone) {
-                            return;
-                        }
-                        $alreadyDone = true;
-                        $success($result);
-                    },
-                    function($reason) use ($fail, &$alreadyDone) {
-                        if ($alreadyDone) {
-                            return;
-                        }
-                        $alreadyDone = true;
-                        $fail($reason);
-                    }
-                );
-
-            }
-
-        });
-
-    }
 
     /**
      * A list of subscribers. Subscribers are the callbacks that want us to let
@@ -339,7 +249,7 @@ class Promise {
      * @param callable $callBack
      * @return void
      */
-    protected function invokeCallback(Promise $subPromise, callable $callBack = null) {
+    private function invokeCallback(Promise $subPromise, callable $callBack = null) {
 
         // We use 'nextTick' to ensure that the event handlers are always
         // triggered outside of the calling stack in which they were originally
@@ -377,5 +287,34 @@ class Promise {
         });
     }
 
+    /**
+     * Alias for 'otherwise'.
+     *
+     * This function is now deprecated and will be removed in a future version.
+     *
+     * @param callable $onRejected
+     * @deprecated
+     * @return Promise
+     */
+    function error(callable $onRejected) {
+
+        return $this->otherwise($onRejected);
+
+    }
+
+    /**
+     * Deprecated.
+     *
+     * Please use Sabre\Event\Promise::all
+     *
+     * @param Promise[] $promises
+     * @deprecated
+     * @return Promise
+     */
+    static function all(array $promises) {
+
+        return Promise\all($promises);
+
+    }
 
 }

@@ -5,7 +5,10 @@ ChangeLog
 -------------------------
 
 * Now requires PHP 5.5!
-* Aside from the `Promise:all()` function, there's now also `Promise::race()`.
+* `Promise::all()` is moved to `Promise\all()`.
+* Aside from the `Promise\all()` function, there's now also `Promise\race()`.
+* `Promise\reject()` and `Promise\resolve()` have also been added.
+* Now 100% compatible with the Ecmascript 6 Promise.
 
 
 3.0.0-alpha1 (2015-10-23)
