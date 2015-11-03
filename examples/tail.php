@@ -17,7 +17,7 @@ if ($argc < 2) {
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$loop = new Sabre\Event\Loop\Loop();
+$loop = Sabre\Event\Loop\instance();
 
 $tail = popen('tail -fn0 ' . escapeshellarg($argv[1]), 'r');
 
