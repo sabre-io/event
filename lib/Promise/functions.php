@@ -102,16 +102,21 @@ function race(array $promises) {
 /**
  * Returns a Promise that resolves with the given value.
  *
+ * If the value is a promise, the returned promise will attach itself to that
+ * promise and eventually get the same state as the followed promise.
+ *
  * @param mixed $value
  * @return Promise
  */
 function resolve($value) {
 
-    return new Promise(function($resolve, $reject) use ($value) {
-
-        $resolve($value);
-
-    });
+    if ($value instanceof Promise) {
+        return $value->then();
+    } else {
+        $promise = new Promise();
+        $promise->fulfill($value);
+        return $promise;
+    }
 
 }
 
@@ -123,10 +128,8 @@ function resolve($value) {
  */
 function reject($reason) {
 
-    return new Promise(function($resolve, $reject) use ($reason) {
-
-        $reject($reason);
-
-    });
+    $promise = new Promise();
+    $promise->reject($reason);
+    return $promise;
 
 }

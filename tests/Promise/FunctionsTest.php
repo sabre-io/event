@@ -144,6 +144,21 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase {
 
     }
 
+    /**
+     * @expectedException \Exception
+     */
+    function testResolvePromise() {
+
+        $finalValue = 0;
+
+        $promise = new Promise();
+        $promise->reject(new \Exception('uh oh'));
+
+        $newPromise = resolve($promise);
+        $newPromise->wait();
+
+    }
+
     function testReject() {
 
         $finalValue = 0;
