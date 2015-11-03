@@ -31,7 +31,7 @@ $result = $promise
 
         echo "Step 2\n";
         // Immediately returning a new value.
-        return $value . " world"; 
+        return $value . " world";
 
     })
     ->then(function($value) {
@@ -43,7 +43,7 @@ $result = $promise
         // Resolving after 2 seconds
         Loop\setTimeout(function() use ($promise, $value) {
 
-            $promise->fulfill($value. ", how are ya?");
+            $promise->fulfill($value . ", how are ya?");
 
         }, 2);
 
@@ -53,7 +53,7 @@ $result = $promise
 
         echo "Step 4\n";
         // This is the final event handler.
-        return $value. " you rock!";
+        return $value . " you rock!";
          
     })
     // Making all async calls synchronous by waiting for the final result.
@@ -78,15 +78,15 @@ $result = coroutine(function() {
     $value = (yield $promise);
 
     echo "Step 2\n";
-    $value.= ' world';
+    $value .= ' world';
 
     echo "Step 3\n";
     $promise = new Promise();
     Loop\setTimeout(function() use ($promise, $value) {
 
-        $promise->fulfill($value. ", how are ya?");
+        $promise->fulfill($value . ", how are ya?");
 
-    }, 2); 
+    }, 2);
 
     $value = (yield $promise);
 
