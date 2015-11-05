@@ -25,4 +25,4 @@ $tail = popen('tail -fn0 ' . escapeshellarg($argv[1]), 'r');
 
 });
 
-$loop->run();
+\Sabre\Event\Loop\run();
