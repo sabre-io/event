@@ -28,11 +28,19 @@ ChangeLog
   synchronous and simply wait for a result (or exception) to happen.
 
 
+2.0.2 (2015-05-19)
+------------------
+
+* This release has no functional changes. It's just been brought up to date
+  with the latest coding standards.
+
+
 2.0.1 (2014-10-06)
 ------------------
 
 * Fixed: `$priority` was ignored in `EventEmitter::once` method.
 * Fixed: Breaking the event chain was not possible in `EventEmitter::once`.
+
 
 2.0.0 (2014-06-21)
 ------------------
