@@ -8,7 +8,10 @@
         "Hooks",
         "Plugin",
         "Signal",
-        "Async"
+        "Async",
+        "EventLoop",
+        "Reactor",
+        "Coroutine"
     ],
     "homepage": "http://sabre.io/event/",
     "license": "BSD-3-Clause",
