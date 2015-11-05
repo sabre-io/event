@@ -17,11 +17,9 @@ if ($argc < 2) {
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$loop = Sabre\Event\Loop\instance();
-
 $tail = popen('tail -fn0 ' . escapeshellarg($argv[1]), 'r');
 
-$loop->addReadStream($tail, function() use ($tail) {
+\Sabre\Event\Loop\addReadStream($tail, function() use ($tail) {
 
     echo fread($tail, 4096);
 
