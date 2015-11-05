@@ -17,7 +17,7 @@ Installation
 
 Make sure you have [composer][3] installed, and then run:
 
-    composer require sabre/event "~3.0.0"
+    composer require sabre/event "^3.0"
 
 This package requires PHP 5.5. The 2.0 branch is still maintained as well, and
 supports PHP 5.4.
