@@ -5,9 +5,9 @@ A lightweight library for event-based development in PHP.
 
 This library provides the following event-based concepts:
 
-1. EventEmitter
-2. Promises
-3. An Event Loop using `stream_select()`.
+1. EventEmitter.
+2. Promises.
+3. An event loop.
 4. Co-routines.
 
 Full documentation can be found on [the website][1].
@@ -17,10 +17,10 @@ Installation
 
 Make sure you have [composer][3] installed, and then run:
 
-    composer require sabre/event "~2.0.0"
+    composer require sabre/event "~3.0.0"
 
-For legacy reasons, we also provide a unsupported [PHP 5.3 compatible version][6].
-We recommend that you update your servers and use the regular version instead, though.
+This package requires PHP 5.5. The 2.0 branch is still maintained as well, and
+supports PHP 5.4.
 
 Build status
 ------------
@@ -48,4 +48,3 @@ This library is being developed by [fruux](https://fruux.com/). Drop us a line f
 [3]: http://getcomposer.org/
 [4]: http://groups.google.com/group/sabredav-discuss
 [5]: https://github.com/fruux/sabre-event/issues/
-[6]: https://github.com/fruux/sabre-event/tree/php53

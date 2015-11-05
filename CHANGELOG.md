@@ -1,8 +1,8 @@
 ChangeLog
 =========
 
-3.0.0-alpha2 (2015-??-??)
--------------------------
+3.0.0 (2015-11-05)
+------------------
 
 * Now requires PHP 5.5!
 * `Promise::all()` is moved to `Promise\all()`.
