@@ -202,7 +202,7 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
         $promise2 = new Promise();
 
         $finalValue = 0;
-        Promise::all([$promise1, $promise2])->then(function($value) use (&$finalValue) {
+        Promise\all([$promise1, $promise2])->then(function($value) use (&$finalValue) {
 
             $finalValue = $value;
 
@@ -224,7 +224,7 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
         $promise2 = new Promise();
 
         $finalValue = 0;
-        Promise::all([$promise1, $promise2])->then(
+        Promise\all([$promise1, $promise2])->then(
             function($value) use (&$finalValue) {
                 $finalValue = 'foo';
                 return 'test';
@@ -249,7 +249,7 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
         $promise2 = new Promise();
 
         $finalValue = 0;
-        Promise::all([$promise1, $promise2])->then(
+        Promise\all([$promise1, $promise2])->then(
             function($value) use (&$finalValue) {
                 $finalValue = 'foo';
                 return 'test';

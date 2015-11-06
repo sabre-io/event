@@ -287,34 +287,4 @@ class Promise {
         });
     }
 
-    /**
-     * Alias for 'otherwise'.
-     *
-     * This function is now deprecated and will be removed in a future version.
-     *
-     * @param callable $onRejected
-     * @deprecated
-     * @return Promise
-     */
-    function error(callable $onRejected) {
-
-        return $this->otherwise($onRejected);
-
-    }
-
-    /**
-     * Deprecated.
-     *
-     * Please use Sabre\Event\Promise::all
-     *
-     * @param Promise[] $promises
-     * @deprecated
-     * @return Promise
-     */
-    static function all(array $promises) {
-
-        return Promise\all($promises);
-
-    }
-
 }
