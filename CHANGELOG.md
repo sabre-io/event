@@ -1,6 +1,17 @@
 ChangeLog
 =========
 
+4.0.0-alpha1 (????-??-??)
+-------------------------
+
+* Now requires PHP 7.
+* All method signatures have argument and return type hints where possible.
+* Both `Promise\all()` and `Promise\race()` now use the splat operator to
+  specify their arguments.
+* The `Promise::all()` and `Promise::error()` static methods have now been
+  removed.
+
+
 3.0.0 (2015-11-05)
 ------------------
 
