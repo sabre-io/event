@@ -29,6 +29,28 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase {
 
     }
 
+    function testAllSplat() {
+
+        $promise1 = new Promise();
+        $promise2 = new Promise();
+
+        $finalValue = 0;
+        Promise\all($promise1, $promise2)->then(function($value) use (&$finalValue) {
+
+            $finalValue = $value;
+
+        });
+
+        $promise1->fulfill(1);
+        Loop\run();
+        $this->assertEquals(0, $finalValue);
+
+        $promise2->fulfill(2);
+        Loop\run();
+        $this->assertEquals([1, 2], $finalValue);
+
+    }
+
     function testAllReject() {
 
         $promise1 = new Promise();
@@ -86,6 +108,30 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase {
 
         $finalValue = 0;
         Promise\race([$promise1, $promise2])->then(
+            function($value) use (&$finalValue) {
+                $finalValue = $value;
+            },
+            function($value) use (&$finalValue) {
+                $finalValue = $value;
+            }
+        );
+
+        $promise1->fulfill(1);
+        Loop\run();
+        $this->assertEquals(1, $finalValue);
+        $promise2->fulfill(2);
+        Loop\run();
+        $this->assertEquals(1, $finalValue);
+
+    }
+
+    function testRaceSplat() {
+
+        $promise1 = new Promise();
+        $promise2 = new Promise();
+
+        $finalValue = 0;
+        Promise\race($promise1, $promise2)->then(
             function($value) use (&$finalValue) {
                 $finalValue = $value;
             },

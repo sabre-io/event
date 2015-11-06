@@ -29,7 +29,12 @@ use Sabre\Event\Promise;
  * @param Promise[] $promises
  * @return Promise
  */
-function all(array $promises) {
+function all($promises, Promise ... $morePromises) {
+
+    $promises = array_merge(
+        is_array($promises)?$promises:[$promises],
+        $morePromises
+    );
 
     return new Promise(function($success, $fail) use ($promises) {
 
@@ -68,7 +73,12 @@ function all(array $promises) {
  * @param Promise[] $promises
  * @return Promise
  */
-function race(array $promises) {
+function race($promises, Promise ... $morePromises) {
+
+    $promises = array_merge(
+        is_array($promises)?$promises:[$promises],
+        $morePromises
+    );
 
     return new Promise(function($success, $fail) use ($promises) {
 
