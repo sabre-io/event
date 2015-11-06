@@ -22,7 +22,7 @@ interface EventEmitterInterface {
      * @param int $priority
      * @return void
      */
-    function on($eventName, callable $callBack, $priority = 100);
+    function on(string $eventName, callable $callBack, int $priority = 100);
 
     /**
      * Subscribe to an event exactly once.
@@ -32,7 +32,7 @@ interface EventEmitterInterface {
      * @param int $priority
      * @return void
      */
-    function once($eventName, callable $callBack, $priority = 100);
+    function once(string $eventName, callable $callBack, int $priority = 100);
 
     /**
      * Emits an event.
@@ -60,7 +60,7 @@ interface EventEmitterInterface {
      * @param callback $continueCallBack
      * @return bool
      */
-    function emit($eventName, array $arguments = [], callable $continueCallBack = null);
+    function emit(string $eventName, array $arguments = [], callable $continueCallBack = null) : bool;
 
     /**
      * Returns the list of listeners for an event.
@@ -71,7 +71,7 @@ interface EventEmitterInterface {
      * @param string $eventName
      * @return callable[]
      */
-    function listeners($eventName);
+    function listeners(string $eventName);
 
     /**
      * Removes a specific listener from an event.
@@ -83,7 +83,7 @@ interface EventEmitterInterface {
      * @param callable $listener
      * @return bool
      */
-    function removeListener($eventName, callable $listener);
+    function removeListener(string $eventName, callable $listener) : bool;
 
     /**
      * Removes all listeners.
@@ -95,6 +95,6 @@ interface EventEmitterInterface {
      * @param string $eventName
      * @return void
      */
-    function removeAllListeners($eventName = null);
+    function removeAllListeners(string $eventName = null);
 
 }

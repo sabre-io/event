@@ -89,7 +89,7 @@ class Promise {
      * @param callable $onRejected
      * @return Promise
      */
-    function then(callable $onFulfilled = null, callable $onRejected = null) {
+    function then(callable $onFulfilled = null, callable $onRejected = null) : Promise {
 
         // This new subPromise will be returned from this function, and will
         // be fulfilled with the result of the onFulfilled or onRejected event
@@ -126,7 +126,7 @@ class Promise {
      * @param callable $onRejected
      * @return Promise
      */
-    function otherwise(callable $onRejected) {
+    function otherwise(callable $onRejected) : Promise {
 
         return $this->then(null, $onRejected);
 

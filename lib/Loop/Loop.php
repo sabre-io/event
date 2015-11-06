@@ -24,7 +24,7 @@ class Loop {
      * @param float $timeout timeout in seconds
      * @return void
      */
-    function setTimeout(callable $cb, $timeout) {
+    function setTimeout(callable $cb, float $timeout) {
 
         $triggerTime = microtime(true) + ($timeout);
 
@@ -68,7 +68,7 @@ class Loop {
      * @param float $timeout
      * @return array
      */
-    function setInterval(callable $cb, $timeout) {
+    function setInterval(callable $cb, float $timeout) {
 
         $keepGoing = true;
         $f = null;
@@ -223,7 +223,7 @@ class Loop {
      * @param bool $block
      * @return bool
      */
-    function tick($block = false) {
+    function tick(bool $block = false) : bool {
 
         $this->runNextTicks();
         $nextTimeout = $this->runTimers();
@@ -284,7 +284,7 @@ class Loop {
      *
      * If there's no more pending timers, this function returns null.
      *
-     * @return float
+     * @return float|null
      */
     protected function runTimers() {
 
@@ -303,9 +303,9 @@ class Loop {
     /**
      * Runs all pending stream events.
      *
-     * @param float $timeout
+     * @param float|null $timeout
      */
-    protected function runStreams($timeout) {
+    protected function runStreams(float $timeout = null) {
 
         if ($this->readStreams || $this->writeStreams) {
 
@@ -381,6 +381,5 @@ class Loop {
      * @var callback[]
      */
     protected $writeCallbacks = [];
-
 
 }

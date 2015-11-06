@@ -9,7 +9,7 @@ namespace Sabre\Event\Loop;
  * @param float $timeout timeout in seconds
  * @return void
  */
-function setTimeout(callable $cb, $timeout) {
+function setTimeout(callable $cb, float $timeout) {
 
     instance()->setTimeout($cb, $timeout);
 
@@ -25,7 +25,7 @@ function setTimeout(callable $cb, $timeout) {
  * @param float $timeout
  * @return array
  */
-function setInterval(callable $cb, $timeout) {
+function setInterval(callable $cb, float $timeout) {
 
     return instance()->setInterval($cb, $timeout);
 
@@ -148,7 +148,7 @@ function run() {
  * @param bool $block
  * @return bool
  */
-function tick($block = false) {
+function tick(bool $block = false) : bool {
 
     return instance()->tick($block);
 
@@ -170,7 +170,7 @@ function stop() {
  *
  * @param Loop $newLoop
  */
-function instance(Loop $newLoop = null) {
+function instance(Loop $newLoop = null) : Loop {
 
     static $loop;
     if ($newLoop) {
