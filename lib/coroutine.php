@@ -83,7 +83,7 @@ function coroutine(callable $gen) {
                         }
                         $advanceGenerator();
                     }
-                )->error(function($reason) use ($promise) {
+                )->otherwise(function($reason) use ($promise) {
                     // This error handler would be called, if something in the
                     // generator throws an exception, and it's not caught
                     // locally.

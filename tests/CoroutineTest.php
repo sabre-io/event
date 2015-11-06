@@ -179,7 +179,7 @@ class CoroutineTest extends \PHPUnit_Framework_TestCase {
 
             throw new \Exception('4');
 
-        })->error(function($e) use (&$start) {
+        })->otherwise(function($e) use (&$start) {
 
             $start += $e->getMessage();
 
@@ -199,7 +199,7 @@ class CoroutineTest extends \PHPUnit_Framework_TestCase {
             $start += 1;
             $start += (yield $promise);
 
-        })->error(function($e) use (&$start) {
+        })->otherwise(function($e) use (&$start) {
 
             $start += $e->getMessage();
 
@@ -226,7 +226,7 @@ class CoroutineTest extends \PHPUnit_Framework_TestCase {
         })->then(function($value) use (&$ok) {
             $this->assertEquals(2, $value);
             $ok = true;
-        })->error(function($reason) {
+        })->otherwise(function($reason) {
             $this->fail($reason);
         });
         Loop\run();

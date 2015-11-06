@@ -47,7 +47,7 @@ function all(array $promises) {
                     }
                     return $result;
                 }
-            )->error(
+            )->otherwise(
                 function($reason) use ($fail) {
                     $fail($reason);
                 }
