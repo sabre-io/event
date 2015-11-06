@@ -32,7 +32,7 @@ use Sabre\Event\Promise;
 function all($promises, Promise ... $morePromises) {
 
     $promises = array_merge(
-        is_array($promises)?$promises:[$promises],
+        is_array($promises) ? $promises : [$promises],
         $morePromises
     );
 
@@ -76,7 +76,7 @@ function all($promises, Promise ... $morePromises) {
 function race($promises, Promise ... $morePromises) {
 
     $promises = array_merge(
-        is_array($promises)?$promises:[$promises],
+        is_array($promises) ? $promises : [$promises],
         $morePromises
     );
 
