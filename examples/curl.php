@@ -13,7 +13,6 @@
  * @author Evert Pot (http://evertpot.com/) 
  * @license http://sabre.io/license/ Modified BSD License
  */
-
 use Sabre\Event\Loop;
 use Sabre\Event\Promise;
 
@@ -31,8 +30,8 @@ curl_setopt_array($ch2, CURLOPT_URL, "http://httpbin.org/delay/5");
 $mh = curl_multi_init();
 
 //add the two handles
-curl_multi_add_handle($mh,$ch1);
-curl_multi_add_handle($mh,$ch2);
+curl_multi_add_handle($mh, $ch1);
+curl_multi_add_handle($mh, $ch2);
 
 
 
@@ -64,7 +63,7 @@ class CurlScheduler {
 
     function __construct() {
 
-        $this->curlMultiHandle = curl_multi_init(); 
+        $this->curlMultiHandle = curl_multi_init();
 
     }
 
@@ -81,7 +80,7 @@ $active = null;
 function curl_multi_loop_scheduler($mh, callable $done) {
 
     $mrc = curl_multi_exec($mh, $active);
-    switch($mrc) {
+    switch ($mrc) {
 
         /**
          * From the curl docs. If CURM_CALL_MULTI_PERFORM is returned, simply
@@ -112,7 +111,7 @@ function curl_multi_loop_scheduler($mh, callable $done) {
             break;
 
         default :
-            throw Exception('Curl error: ' . curl_multi_strerror($mrc)); 
+            throw Exception('Curl error: ' . curl_multi_strerror($mrc));
 
     }
 
@@ -130,4 +129,3 @@ Loop\run();
 curl_multi_remove_handle($mh, $ch1);
 curl_multi_remove_handle($mh, $ch2);
 curl_multi_close($mh);
-
