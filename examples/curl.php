@@ -10,7 +10,7 @@
  * might be able to use to create a better async http client.
  *
  * @copyright Copyright (C) 2007-2015 fruux GmbH. (https://fruux.com/)
- * @author Evert Pot (http://evertpot.com/) 
+ * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */
 use Sabre\Event\Loop;
@@ -40,9 +40,9 @@ curl_multi_add_handle($mh, $ch2);
  *
  * When the request is finished the Promise will resolve. Any curl errors will
  * cause the Promise to reject.
- * 
- * @param resource $curlHandle 
- * @return Promise 
+ *
+ * @param resource $curlHandle
+ * @return Promise
  */
 function curl_async_promise($curlHandle) {
 
@@ -52,9 +52,9 @@ function curl_async_promise($curlHandle) {
 /**
  * This class is used by curl_async_promise. It should generally only get
  * constructed once.
- * 
+ *
  * @copyright Copyright (C) 2007-2015 fruux GmbH. (https://fruux.com/)
- * @author Evert Pot (http://evertpot.com/) 
+ * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */
 class CurlScheduler {
@@ -86,7 +86,7 @@ function curl_multi_loop_scheduler($mh, callable $done) {
          * From the curl docs. If CURM_CALL_MULTI_PERFORM is returned, simply
          * call curl_multi_perform immediately again. In PHP this means we
          * actually call curl_multi_exec immediately again.
-         * 
+         *
          * We're doing this in the next tick.
          */
         case CURLM_CALL_MULTI_PERFORM :
