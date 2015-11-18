@@ -320,7 +320,7 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
 
         $argResult = 0;
 
-        $callback = function () use (&$argResult) {
+        $callback = function() use (&$argResult) {
             $argResult++;
         };
 
@@ -399,7 +399,7 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
         $result = false;
 
         $ee = new EventEmitter();
-        $ee->on('*', function () use (&$result) {
+        $ee->on('*', function() use (&$result) {
             $result = true;
         });
 
@@ -417,17 +417,17 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
 
         $ee = new EventEmitter();
 
-        $ee->on('*', function () use (&$fooSpy, &$barSpy, &$quxSpy) {
+        $ee->on('*', function() use (&$fooSpy, &$barSpy, &$quxSpy) {
             $fooSpy++;
             $barSpy++;
             $quxSpy++;
         });
 
-        $ee->on('foo', function () use (&$fooSpy) {
+        $ee->on('foo', function() use (&$fooSpy) {
             $fooSpy++;
         });
 
-        $ee->on('bar', function () use (&$barSpy) {
+        $ee->on('bar', function() use (&$barSpy) {
             $barSpy++;
         });
 
@@ -446,7 +446,7 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
         $argResult = 0;
         $ee = new EventEmitter();
 
-        $ee->on(['foo', 'bar'], function () use (&$argResult) {
+        $ee->on(['foo', 'bar'], function() use (&$argResult) {
             $argResult++;
         });
 
@@ -462,7 +462,7 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
 
         $argResult = 0;
 
-        $callback = function () use (&$argResult) {
+        $callback = function() use (&$argResult) {
             $argResult++;
         };
 
@@ -487,11 +487,11 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
 
         $ee = new EventEmitter();
 
-        $ee->on(['foo', 'bar', 'qux'], function () use (&$a) {
+        $ee->on(['foo', 'bar', 'qux'], function() use (&$a) {
             $a++;
         });
 
-        $ee->on(['bar', 'qux'], function () use (&$b) {
+        $ee->on(['bar', 'qux'], function() use (&$b) {
             $b++;
         });
 
