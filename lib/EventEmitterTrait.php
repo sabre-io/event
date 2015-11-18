@@ -139,6 +139,9 @@ trait EventEmitterTrait {
      * The list is returned as an array, and the list of events are sorted by
      * their priority.
      *
+     * If any wildcard listeners match the event, they are also returned. For example,
+     * "foo.bar.baz" is matched by "foo.bar.baz", "foo.bar.*", "foo.*" and "*"
+     *
      * @param string $eventName
      * @return callable[]
      */
@@ -149,15 +152,20 @@ trait EventEmitterTrait {
 
         $parts = explode(".", $eventName);
 
-        while ($eventName) {
+        while (true) {
             if (isset($this->listeners[$eventName])) {
                 $priorities = array_merge($priorities, $this->listeners[$eventName][1]);
                 $callbacks = array_merge($callbacks, $this->listeners[$eventName][2]);
             }
-            if (array_pop($parts)) {
-                $eventName = implode(".", $parts) . ".*";
+
+            if (!array_pop($parts)) {
+                break;
+            }
+
+            if (count($parts)) {
+                $eventName = implode('.', $parts) . '.*';
             } else {
-                $eventName = false;
+                $eventName = '*';
             }
         }
 

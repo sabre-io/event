@@ -366,7 +366,7 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
 
         $ee->emit('foo.bar');
         $ee->emit('foo.bar');
-        $ee->emit('foo.norf');
+        $ee->emit('foo.qux');
 
         $this->assertEquals(5, $argResult);
 
@@ -393,5 +393,53 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(['b', 'c', 'a'], $result);
 
     }
+
+    function testGlobalWildcard() {
+
+        $result = false;
+
+        $ee = new EventEmitter();
+        $ee->on('*', function () use (&$result) {
+            $result = true;
+        });
+
+        $ee->emit('foo');
+
+        $this->assertTrue($result);
+
+    }
+
+    function testUseWildcardToRegisterGlobalListener() {
+
+        $fooSpy = 0;
+        $barSpy = 0;
+        $quxSpy = 0;
+
+        $ee = new EventEmitter();
+
+        $ee->on('*', function () use (&$fooSpy, &$barSpy, &$quxSpy) {
+            $fooSpy++;
+            $barSpy++;
+            $quxSpy++;
+        });
+
+        $ee->on('foo', function () use (&$fooSpy) {
+            $fooSpy++;
+        });
+
+        $ee->on('bar', function () use (&$barSpy) {
+            $barSpy++;
+        });
+
+        $ee->emit('foo');
+        $ee->emit('bar');
+        $ee->emit('qux');
+
+        $this->assertEquals(4, $fooSpy);
+        $this->assertEquals(4, $barSpy);
+        $this->assertEquals(3, $quxSpy);
+
+    }
+
 
 }
