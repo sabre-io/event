@@ -187,23 +187,38 @@ trait EventEmitterTrait {
      * If the listener could not be found, this method will return false. If it
      * was removed it will return true.
      *
-     * @param string $eventName
+     * When unregistering multiple events at once, true will be returned if at least
+     * one of the events was associated with the listener
+     *
+     * @param string|string[] $eventNames
      * @param callable $listener
      * @return bool
      */
-    function removeListener($eventName, callable $listener) {
+    function removeListener($eventNames, callable $listener) {
 
-        if (!isset($this->listeners[$eventName])) {
-            return false;
+        if (!is_array($eventNames)) {
+            $eventNames = [$eventNames];
         }
-        foreach ($this->listeners[$eventName][2] as $index => $check) {
-            if ($check === $listener) {
-                unset($this->listeners[$eventName][1][$index]);
-                unset($this->listeners[$eventName][2][$index]);
-                return true;
+
+        $return = false;
+
+        foreach ($eventNames as $eventName) {
+            if (!isset($this->listeners[$eventName])) {
+                continue;
+            }
+
+            foreach ($this->listeners[$eventName][2] as $index => $check) {
+                if ($check === $listener) {
+                    unset($this->listeners[$eventName][1][$index]);
+                    unset($this->listeners[$eventName][2][$index]);
+
+                    $return = true;
+                    continue; // continue only this foreach
+                }
             }
         }
-        return false;
+
+        return $return;
 
     }
 

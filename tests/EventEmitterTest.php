@@ -441,7 +441,7 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
 
     }
 
-    function testRegisterSameListenerForMultipleEventsAtOnce() {
+    function testRegisterSameListenerForMultipleEvents() {
 
         $argResult = 0;
         $ee = new EventEmitter();
@@ -458,6 +458,26 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
 
     }
 
+    function testUnregisterMultipleEvents() {
 
+        $argResult = 0;
+
+        $callback = function () use (&$argResult) {
+            $argResult++;
+        };
+
+        $ee = new EventEmitter();
+
+        $ee->on(['foo', 'bar', 'qux'], $callback);
+
+        $ee->removeListener(['foo', 'bar'], $callback);
+
+        $ee->emit('foo');
+        $ee->emit('bar');
+        $ee->emit('qux');
+
+        $this->assertEquals(1, $argResult);
+
+    }
 
 }
