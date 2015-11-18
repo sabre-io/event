@@ -441,5 +441,23 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
 
     }
 
+    function testRegisterSameListenerForMultipleEventsAtOnce() {
+
+        $argResult = 0;
+        $ee = new EventEmitter();
+
+        $ee->on(['foo', 'bar'], function () use (&$argResult) {
+            $argResult++;
+        });
+
+        $ee->emit('foo');
+        $ee->emit('bar');
+        $ee->emit('qux');
+
+        $this->assertEquals(2, $argResult);
+
+    }
+
+
 
 }

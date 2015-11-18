@@ -27,23 +27,29 @@ trait EventEmitterTrait {
     /**
      * Subscribe to an event.
      *
-     * @param string $eventName
+     * @param string|string[] $eventNames
      * @param callable $callBack
      * @param int $priority
      * @return void
      */
-    function on($eventName, callable $callBack, $priority = 100) {
+    function on($eventNames, callable $callBack, $priority = 100) {
 
-        if (!isset($this->listeners[$eventName])) {
-            $this->listeners[$eventName] = [
-                true,  // If there's only one item, it's sorted
-                [$priority],
-                [$callBack]
-            ];
-        } else {
-            $this->listeners[$eventName][0] = false; // marked as unsorted
-            $this->listeners[$eventName][1][] = $priority;
-            $this->listeners[$eventName][2][] = $callBack;
+        if (!is_array($eventNames)) {
+            $eventNames = [$eventNames];
+        }
+
+        foreach ($eventNames as $eventName) {
+            if (!isset($this->listeners[$eventName])) {
+                $this->listeners[$eventName] = [
+                    true,  // If there's only one item, it's sorted
+                    [$priority],
+                    [$callBack]
+                ];
+            } else {
+                $this->listeners[$eventName][0] = false; // marked as unsorted
+                $this->listeners[$eventName][1][] = $priority;
+                $this->listeners[$eventName][2][] = $callBack;
+            }
         }
 
     }
