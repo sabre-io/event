@@ -315,4 +315,61 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(2, $argResult);
 
     }
+
+    function testRegisterSameListenerTwice() {
+
+        $argResult = 0;
+
+        $callback = function () use (&$argResult) {
+            $argResult++;
+        };
+
+        $ee = new EventEmitter();
+
+        $ee->on("foo", $callback);
+        $ee->on("foo", $callback);
+
+        $ee->emit("foo");
+        $this->assertEquals(2, $argResult);
+
+    }
+
+    function testWildcardListeners() {
+
+        $ee = new EventEmitter();
+
+        $callback1 = function () {};
+        $callback2 = function () {};
+        $callback3 = function () {};
+
+        $ee->on("foo.*", $callback1);
+        $ee->on("foo.bar", $callback2);
+        $ee->on("foo.qux", $callback3);
+
+        $this->assertEquals([$callback1, $callback2], $ee->listeners("foo.bar"));
+
+    }
+
+    function testWildcardCalls() {
+
+        $argResult = 0;
+
+        $ee = new EventEmitter();
+
+        $ee->on("foo.*", function() use (&$argResult) {
+            $argResult++;
+        });
+
+        $ee->on("foo.bar", function() use (&$argResult) {
+            $argResult++;
+        });
+
+        $ee->emit("foo.bar");
+        $ee->emit("foo.bar");
+        $ee->emit("foo.norf");
+
+        $this->assertEquals(5, $argResult);
+
+    }
+
 }

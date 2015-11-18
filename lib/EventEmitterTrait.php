@@ -144,21 +144,26 @@ trait EventEmitterTrait {
      */
     function listeners($eventName) {
 
-        if (!isset($this->listeners[$eventName])) {
-            return [];
+        $priorities = [];
+        $callbacks = [];
+
+        $parts = explode(".", $eventName);
+
+        while ($eventName) {
+            if (isset($this->listeners[$eventName])) {
+                $priorities = array_merge($priorities, $this->listeners[$eventName][1]);
+                $callbacks = array_merge($callbacks, $this->listeners[$eventName][2]);
+            }
+            if (array_pop($parts)) {
+                $eventName = implode(".", $parts) . ".*";
+            } else {
+                $eventName = false;
+            }
         }
 
-        // The list is not sorted
-        if (!$this->listeners[$eventName][0]) {
+        array_multisort($priorities, SORT_NUMERIC, $callbacks);
 
-            // Sorting
-            array_multisort($this->listeners[$eventName][1], SORT_NUMERIC, $this->listeners[$eventName][2]);
-
-            // Marking the listeners as sorted
-            $this->listeners[$eventName][0] = true;
-        }
-
-        return $this->listeners[$eventName][2];
+        return $callbacks;
 
     }
 
