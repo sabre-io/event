@@ -326,10 +326,10 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
 
         $ee = new EventEmitter();
 
-        $ee->on("foo", $callback);
-        $ee->on("foo", $callback);
+        $ee->on('foo', $callback);
+        $ee->on('foo', $callback);
 
-        $ee->emit("foo");
+        $ee->emit('foo');
         $this->assertEquals(2, $argResult);
 
     }
@@ -338,13 +338,13 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
 
         $ee = new EventEmitter();
 
-        $callback1 = function () {};
-        $callback2 = function () {};
-        $callback3 = function () {};
+        $callback1 = function() {};
+        $callback2 = function() {};
+        $callback3 = function() {};
 
-        $ee->on("foo.*", $callback1);
-        $ee->on("foo.bar", $callback2);
-        $ee->on("foo.qux", $callback3);
+        $ee->on('foo.*', $callback1);
+        $ee->on('foo.bar', $callback2);
+        $ee->on('foo.qux', $callback3);
 
         $this->assertEquals([$callback1, $callback2], $ee->listeners("foo.bar"));
 
@@ -356,19 +356,41 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
 
         $ee = new EventEmitter();
 
-        $ee->on("foo.*", function() use (&$argResult) {
+        $ee->on('foo.*', function() use (&$argResult) {
             $argResult++;
         });
 
-        $ee->on("foo.bar", function() use (&$argResult) {
+        $ee->on('foo.bar', function() use (&$argResult) {
             $argResult++;
         });
 
-        $ee->emit("foo.bar");
-        $ee->emit("foo.bar");
-        $ee->emit("foo.norf");
+        $ee->emit('foo.bar');
+        $ee->emit('foo.bar');
+        $ee->emit('foo.norf');
 
         $this->assertEquals(5, $argResult);
+
+    }
+
+    function testWildcardListenersRespectPriority() {
+
+        $result = [];
+        $ee = new EventEmitter();
+
+        $ee->on('foo.*', function() use (&$result) {
+            $result[] = 'a';
+        }, 30);
+
+        $ee->on('foo.bar', function() use (&$result) {
+            $result[] = 'b';
+        }, 10);
+
+        $ee->on('foo.bar', function() use (&$result) {
+            $result[] = 'c';
+        }, 20);
+
+        $ee->emit('foo.bar');
+        $this->assertEquals(['b', 'c', 'a'], $result);
 
     }
 
