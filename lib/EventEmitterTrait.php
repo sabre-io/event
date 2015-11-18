@@ -229,13 +229,19 @@ trait EventEmitterTrait {
      * removed. If it is not specified, every listener for every event is
      * removed.
      *
-     * @param string $eventName
+     * @param string|string[] $eventNames
      * @return void
      */
-    function removeAllListeners($eventName = null) {
+    function removeAllListeners($eventNames = []) {
 
-        if (!is_null($eventName)) {
-            unset($this->listeners[$eventName]);
+        if (is_string($eventNames)) {
+            $eventNames = [$eventNames];
+        }
+
+        if (count($eventNames)) {
+            foreach ($eventNames as $eventName) {
+                unset($this->listeners[$eventName]);
+            }
         } else {
             $this->listeners = [];
         }

@@ -480,4 +480,30 @@ class EventEmitterTest extends \PHPUnit_Framework_TestCase {
 
     }
 
+    function testUnregisterAllListenersForMultipleEvents() {
+
+        $a = 0;
+        $b = 0;
+
+        $ee = new EventEmitter();
+
+        $ee->on(['foo', 'bar', 'qux'], function () use (&$a) {
+            $a++;
+        });
+
+        $ee->on(['bar', 'qux'], function () use (&$b) {
+            $b++;
+        });
+
+        $ee->removeAllListeners(['foo', 'bar']);
+
+        $ee->emit('foo');
+        $ee->emit('bar');
+        $ee->emit('qux');
+
+        $this->assertEquals(1, $a);
+        $this->assertEquals(1, $b);
+
+    }
+
 }
