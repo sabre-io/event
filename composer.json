@@ -42,7 +42,8 @@
     },
     "require-dev": {
         "sabre/cs": "~0.0.4",
-        "phpunit/phpunit" : "*"
+        "phpunit/phpunit" : "*",
+        "hoa/bench": "2.15.10.21"
     },
     "config" : {
         "bin-dir" : "bin/"
