@@ -5,7 +5,6 @@
  *
  * Currently it just benchmarks EventEmitter.
  */
-
 use Hoa\Bench\Bench;
 use Sabre\Event\EventEmitter;
 
@@ -33,14 +32,14 @@ $em = new EventEmitter();
 $bench = new Bench();
 $bench->setup->start();
 
-for($i = 0; $i < $testSize; $i++) {
+for ($i = 0; $i < $testSize; $i++) {
 
     if ($i % 10 === 0) {
         // One out of 10 uses a different priority. 
         $em->on('event' . $i, function() { }, 90);
     } elseif ($i % 10 === 1) {
         // One out of 10 events have a lot of subscribers.
-        for($j = 0; $j < 10; $j++) {
+        for ($j = 0; $j < 10; $j++) {
             $em->on('event' . $i, function() { });
         }
     } else {
@@ -56,11 +55,11 @@ $bench->execution->start();
 
 $emitCount = round($testSize / 10);
 // We're only executing 10% of the defined events.
-for($i = 0; $i < $emitCount; $i++) {
+for ($i = 0; $i < $emitCount; $i++) {
 
     if ($i % 8 === 0) {
         // 1 out of 8 events get emitted 2000 times. 
-        for($j = 0; $j < 2000; $j++) {
+        for ($j = 0; $j < 2000; $j++) {
             $em->emit('event' . $i, ['arg1', 'arg2']);
         }
     } elseif ($i % 8 === 1) {
@@ -72,7 +71,7 @@ for($i = 0; $i < $emitCount; $i++) {
         // Emit again
         $em->emit('event' . $i, ['arg1', 'arg2']);
         // Remove listener again
-        $em->removeListener('event' . $i, $handler);       
+        $em->removeListener('event' . $i, $handler);
     } else {
         // 6 out of 8 events only get emitted once.
         $em->emit('event' . $i, ['arg1', 'arg2']);
