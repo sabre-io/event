@@ -8,7 +8,7 @@ use Sabre\Event\Promise;
  * This file contains a set of functions that are useful for dealing with the
  * Promise object.
  *
- * @copyright Copyright (C) 2013-2015 fruux GmbH (https://fruux.com/).
+ * @copyright Copyright (C) fruux GmbH (https://fruux.com/)
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */
