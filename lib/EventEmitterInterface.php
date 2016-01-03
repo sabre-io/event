@@ -17,12 +17,12 @@ interface EventEmitterInterface {
     /**
      * Subscribe to an event.
      *
-     * @param string $eventName
+     * @param string|string[] $eventNames
      * @param callable $callBack
      * @param int $priority
      * @return void
      */
-    function on($eventName, callable $callBack, $priority = 100);
+    function on($eventNames, callable $callBack, $priority = 100);
 
     /**
      * Subscribe to an event exactly once.
@@ -79,11 +79,11 @@ interface EventEmitterInterface {
      * If the listener could not be found, this method will return false. If it
      * was removed it will return true.
      *
-     * @param string $eventName
+     * @param string|string[] $eventNames
      * @param callable $listener
      * @return bool
      */
-    function removeListener($eventName, callable $listener);
+    function removeListener($eventNames, callable $listener);
 
     /**
      * Removes all listeners.
@@ -92,9 +92,9 @@ interface EventEmitterInterface {
      * removed. If it is not specified, every listener for every event is
      * removed.
      *
-     * @param string $eventName
+     * @param string|string[] $eventNames
      * @return void
      */
-    function removeAllListeners($eventName = null);
+    function removeAllListeners($eventNames = []);
 
 }
