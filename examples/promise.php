@@ -1,8 +1,8 @@
 #!/usr/bin/env php
 <?php
 
-use Sabre\Event\Promise;
 use Sabre\Event\Loop;
+use Sabre\Event\Promise;
 use function Sabre\Event\coroutine;
 
 require __DIR__ . '/../vendor/autoload.php';

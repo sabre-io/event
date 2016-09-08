@@ -20,7 +20,7 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase {
 
     function testNextTick() {
 
-        $check  = 0;
+        $check = 0;
         nextTick(function() use (&$check) {
 
             $check++;
@@ -35,7 +35,7 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase {
 
     function testTimeout() {
 
-        $check  = 0;
+        $check = 0;
         setTimeout(function() use (&$check) {
 
             $check++;
@@ -50,7 +50,7 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase {
 
     function testTimeoutOrder() {
 
-        $check  = [];
+        $check = [];
         setTimeout(function() use (&$check) {
 
             $check[] = 'a';

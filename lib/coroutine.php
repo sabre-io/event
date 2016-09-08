@@ -2,8 +2,8 @@
 
 namespace Sabre\Event;
 
-use Generator;
 use Exception;
+use Generator;
 
 /**
  * Turn asynchronous promise-based code into something that looks synchronous

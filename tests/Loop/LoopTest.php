@@ -7,7 +7,7 @@ class LoopTest extends \PHPUnit_Framework_TestCase {
     function testNextTick() {
 
         $loop = new Loop();
-        $check  = 0;
+        $check = 0;
         $loop->nextTick(function() use (&$check) {
 
             $check++;
@@ -23,7 +23,7 @@ class LoopTest extends \PHPUnit_Framework_TestCase {
     function testTimeout() {
 
         $loop = new Loop();
-        $check  = 0;
+        $check = 0;
         $loop->setTimeout(function() use (&$check) {
 
             $check++;
@@ -39,7 +39,7 @@ class LoopTest extends \PHPUnit_Framework_TestCase {
     function testTimeoutOrder() {
 
         $loop = new Loop();
-        $check  = [];
+        $check = [];
         $loop->setTimeout(function() use (&$check) {
 
             $check[] = 'a';
@@ -159,7 +159,7 @@ class LoopTest extends \PHPUnit_Framework_TestCase {
     function testNextTickStacking() {
 
         $loop = new Loop();
-        $check  = 0;
+        $check = 0;
         $loop->nextTick(function() use (&$check, $loop) {
 
             $loop->nextTick(function() use (&$check) {
