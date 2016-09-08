@@ -3,6 +3,7 @@
 namespace Sabre\Event\Promise;
 
 use Sabre\Event\Promise;
+use Throwable;
 
 /**
  * This file contains a set of functions that are useful for dealing with the
@@ -119,10 +120,8 @@ function resolve($value) : Promise {
 
 /**
  * Returns a Promise that will reject with the given reason.
- *
- * @param mixed $reason
  */
-function reject($reason) : Promise {
+function reject(Throwable $reason) : Promise {
 
     $promise = new Promise();
     $promise->reject($reason);

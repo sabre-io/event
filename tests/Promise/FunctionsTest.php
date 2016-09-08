@@ -2,6 +2,7 @@
 
 namespace Sabre\Event\Promise;
 
+use Exception;
 use Sabre\Event\Loop;
 use Sabre\Event\Promise;
 
@@ -45,12 +46,12 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase {
             }
         );
 
-        $promise1->reject(1);
+        $promise1->reject(new Exception("1"));
         Loop\run();
-        $this->assertEquals(1, $finalValue);
-        $promise2->reject(2);
+        $this->assertEquals("1", $finalValue->getMessage());
+        $promise2->reject(new Exception("2"));
         Loop\run();
-        $this->assertEquals(1, $finalValue);
+        $this->assertEquals(1, $finalValue->getMessage());
 
     }
 
@@ -70,12 +71,12 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase {
             }
         );
 
-        $promise1->reject(1);
+        $promise1->reject(new Exception("1"));
         Loop\run();
-        $this->assertEquals(1, $finalValue);
-        $promise2->fulfill(2);
+        $this->assertEquals(1, $finalValue->getMessage());
+        $promise2->fulfill(new Exception("2"));
         Loop\run();
-        $this->assertEquals(1, $finalValue);
+        $this->assertEquals(1, $finalValue->getMessage());
 
     }
 
@@ -118,12 +119,12 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase {
             }
         );
 
-        $promise1->reject(1);
+        $promise1->reject(new Exception("1"));
         Loop\run();
-        $this->assertEquals(1, $finalValue);
-        $promise2->reject(2);
+        $this->assertEquals(1, $finalValue->getMessage());
+        $promise2->reject(new Exception("2"));
         Loop\run();
-        $this->assertEquals(1, $finalValue);
+        $this->assertEquals(1, $finalValue->getMessage());
 
     }
 
@@ -163,7 +164,7 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase {
 
         $finalValue = 0;
 
-        $promise = reject(1);
+        $promise = reject(new Exception("1"));
         $promise->then(function($value) use (&$finalValue) {
 
             $finalValue = 'im broken';
@@ -176,7 +177,7 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertEquals(0, $finalValue);
         Loop\run();
-        $this->assertEquals(1, $finalValue);
+        $this->assertEquals(1, $finalValue->getMessage());
 
     }
 

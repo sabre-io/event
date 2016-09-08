@@ -2,6 +2,7 @@
 
 namespace Sabre\Event\Promise;
 
+use Exception;
 use Sabre\Event\Loop;
 use Sabre\Event\Promise;
 
@@ -26,10 +27,10 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
 
         $finalValue = 0;
         $promise = new Promise();
-        $promise->reject(1);
+        $promise->reject(new Exception("1"));
 
         $promise->then(null, function($value) use (&$finalValue) {
-            $finalValue = $value + 2;
+            $finalValue = $value->getMessage() + 2;
         });
         Loop\run();
 
@@ -98,11 +99,11 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
         $finalValue = 0;
         $promise = new Promise();
 
-        $promise->then(null, function($value) use (&$finalValue) {
-            $finalValue = $value + 2;
+        $promise->otherwise(function($value) use (&$finalValue) {
+            $finalValue = $value->getMessage() + 2;
         });
 
-        $promise->reject(4);
+        $promise->reject(new Exception("4"));
         Loop\run();
 
         $this->assertEquals(6, $finalValue);
@@ -130,15 +131,15 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
 
         $promise = (new Promise(function($success, $fail) {
 
-            $fail('hi');
+            $fail(new Exception('hi'));
 
         }))->then(function($result) use (&$realResult) {
 
             $realResult = 'incorrect';
 
-        }, function($reason) use (&$realResult) {
+        })->otherwise(function($reason) use (&$realResult) {
 
-            $realResult = $reason;
+            $realResult = $reason->getMessage();
 
         });
         Loop\run();
@@ -164,8 +165,8 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
     function testRejectTwice() {
 
         $promise = new Promise();
-        $promise->reject(1);
-        $promise->reject(1);
+        $promise->reject(new Exception("1"));
+        $promise->reject(new Exception("1"));
 
     }
 
@@ -189,7 +190,7 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
         });
 
         $this->assertEquals(0, $ok);
-        $promise->reject('foo');
+        $promise->reject(new Exception('foo'));
         Loop\run();
 
         $this->assertEquals(1, $ok);
@@ -239,7 +240,7 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
 
         $promise = new Promise();
         Loop\nextTick(function() use ($promise) {
-            $promise->reject('foo');
+            $promise->reject(new Exception('foo'));
         });
         try {
             $promise->wait();
@@ -251,19 +252,4 @@ class PromiseTest extends \PHPUnit_Framework_TestCase {
 
     }
 
-    function testWaitRejectedNonScalar() {
-
-        $promise = new Promise();
-        Loop\nextTick(function() use ($promise) {
-            $promise->reject([]);
-        });
-        try {
-            $promise->wait();
-            $this->fail('We did not get the expected exception');
-        } catch (\Exception $e) {
-            $this->assertInstanceOf('Exception', $e);
-            $this->assertEquals('Promise was rejected with reason of type: array', $e->getMessage());
-        }
-
-    }
 }

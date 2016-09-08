@@ -3,6 +3,7 @@
 namespace Sabre\Event;
 
 use Exception;
+use Throwable;
 
 /**
  * An implementation of the Promise pattern.
@@ -143,13 +144,9 @@ class Promise {
     /**
      * Marks this promise as rejected, and set it's rejection reason.
      *
-     * While it's possible to use any PHP value as the reason, it's highly
-     * recommended to use an Exception for this.
-     *
-     * @param mixed $reason
      * @return void
      */
-    function reject($reason = null) {
+    function reject(Throwable $reason) {
         if ($this->state !== self::PENDING) {
             throw new PromiseAlreadyResolvedException('This promise is already resolved, and you\'re not allowed to resolve a promise more than once');
         }
@@ -172,7 +169,6 @@ class Promise {
      * one. In PHP it might be useful to call this on the last promise in a
      * chain.
      *
-     * @throws Exception
      * @return mixed
      */
     function wait() {
@@ -196,15 +192,7 @@ class Promise {
         } else {
             // If we got here, it means that the asynchronous operation
             // errored. Therefore we need to throw an exception.
-            $reason = $this->value;
-            if ($reason instanceof Exception) {
-                throw $reason;
-            } elseif (is_scalar($reason)) {
-                throw new Exception($reason);
-            } else {
-                $type = is_object($reason) ? get_class($reason) : gettype($reason);
-                throw new Exception('Promise was rejected with reason of type: ' . $type);
-            }
+            throw $this->value;
         }
 
 
@@ -263,7 +251,7 @@ class Promise {
                         // immediately fulfill the chained promise.
                         $subPromise->fulfill($result);
                     }
-                } catch (Exception $e) {
+                } catch (Throwable $e) {
                     // If the event handler threw an exception, we need to make sure that
                     // the chained promise is rejected as well.
                     $subPromise->reject($e);

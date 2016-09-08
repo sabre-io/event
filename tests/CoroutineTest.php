@@ -2,6 +2,8 @@
 
 namespace Sabre\Event;
 
+use Exception;
+
 class CoroutineTest extends \PHPUnit_Framework_TestCase {
 
     /**
@@ -51,7 +53,7 @@ class CoroutineTest extends \PHPUnit_Framework_TestCase {
 
         $start = 0;
         $promise = new Promise(function($fulfill, $reject) {
-            $reject(2);
+            $reject(new Exception("2"));
         });
 
         coroutine(function() use (&$start, $promise) {
@@ -93,31 +95,6 @@ class CoroutineTest extends \PHPUnit_Framework_TestCase {
         });
 
         Loop\run();
-        $this->assertEquals(3, $start);
-
-    }
-
-    function testRejectedPromiseArray() {
-
-        $start = 0;
-        $promise = new Promise(function($fulfill, $reject) {
-            $reject([]);
-        });
-
-        coroutine(function() use (&$start, $promise) {
-
-            $start += 1;
-            try {
-                $start += (yield $promise);
-                // This line is unreachable, but it's our control
-                $start += 4;
-            } catch (\Exception $e) {
-                $this->assertTrue(strpos($e->getMessage(), 'Promise was rejected with') === 0);
-                $start += 2;
-            }
-
-        })->wait();
-
         $this->assertEquals(3, $start);
 
     }
