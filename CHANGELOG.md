@@ -7,13 +7,14 @@ ChangeLog
 * sabre/event now requires PHP 7. If you need PHP 5.5 support, just keep
   using 3.0.0.
 * PHP 7 type hints are now used everywhere. We're also using strict_types.
+* Support for a new `WildcardEmitter` which allows you to listen for events
+  using the `*` wildcard.
 * Removed deprecated functions `Promise::error` and `Promise::all`. Instead,
   use `Promise::otherwise` and `Promise\all()`.
 * `EventEmitter`, `EventEmitterTrait` and `EventEmitterInterface` are now just
   called `Emitter`, `EmitterTrait`, and `EmitterInterface`.
 * When rejecting Promises, it's now _required_ to use an `Exception` or
   `Throwable`. This makes the typical case simpler and reduces special cases.
-
 
 3.0.0 (2015-11-05)
 ------------------
