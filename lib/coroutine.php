@@ -2,8 +2,8 @@
 
 namespace Sabre\Event;
 
-use Exception;
 use Generator;
+use Throwable;
 
 /**
  * Turn asynchronous promise-based code into something that looks synchronous
@@ -34,7 +34,7 @@ use Generator;
  *     yield $httpClient->request('GET', '/foo');
  *     yield $httpClient->request('DELETE', /foo');
  *     yield $httpClient->request('PUT', '/foo');
- *   } catch(\Exception $reason) {
+ *   } catch(\Throwable $reason) {
  *     echo "Failed because: $reason\n";
  *   }
  *
@@ -73,18 +73,11 @@ function coroutine(callable $gen) : Promise {
                         $generator->send($value);
                         $advanceGenerator();
                     },
-                    function($reason) use ($generator, $advanceGenerator) {
-                        if ($reason instanceof Exception) {
-                            $generator->throw($reason);
-                        } elseif (is_scalar($reason)) {
-                            $generator->throw(new Exception((string)$reason));
-                        } else {
-                            $type = is_object($reason) ? get_class($reason) : gettype($reason);
-                            $generator->throw(new Exception('Promise was rejected with reason of type: ' . $type));
-                        }
+                    function(Throwable $reason) use ($generator, $advanceGenerator) {
+                        $generator->throw($reason);
                         $advanceGenerator();
                     }
-                )->otherwise(function($reason) use ($promise) {
+                )->otherwise(function(Throwable $reason) use ($promise) {
                     // This error handler would be called, if something in the
                     // generator throws an exception, and it's not caught
                     // locally.
@@ -112,7 +105,7 @@ function coroutine(callable $gen) : Promise {
 
     try {
         $advanceGenerator();
-    } catch (Exception $e) {
+    } catch (Throwable $e) {
         $promise->reject($e);
     }
 
