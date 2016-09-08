@@ -11,6 +11,8 @@ ChangeLog
   use `Promise::otherwise` and `Promise\all()`.
 * `EventEmitter`, `EventEmitterTrait` and `EventEmitterInterface` are now just
   called `Emitter`, `EmitterTrait`, and `EmitterInterface`.
+* When rejecting Promises, it's now _required_ to use an `Exception` or
+  `Throwable`. This makes the typical case simpler and reduces special cases.
 
 
 3.0.0 (2015-11-05)
