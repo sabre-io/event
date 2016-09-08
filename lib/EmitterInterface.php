@@ -12,7 +12,7 @@ namespace Sabre\Event;
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */
-interface EventEmitterInterface {
+interface EmitterInterface {
 
     /**
      * Subscribe to an event.
