@@ -9,6 +9,8 @@ ChangeLog
 * PHP 7 type hints are now used everywhere. We're also using strict_types.
 * Removed deprecated functions `Promise::error` and `Promise::all`. Instead,
   use `Promise::otherwise` and `Promise\all()`.
+* `EventEmitter`, `EventEmitterTrait` and `EventEmitterInterface` are now just
+  called `Emitter`, `EmitterTrait`, and `EmitterInterface`.
 
 
 3.0.0 (2015-11-05)
