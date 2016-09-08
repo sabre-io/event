@@ -1,5 +1,5 @@
 #!/usr/bin/env php
-<?php
+<?php declare (strict_types=1);
 
 /**
  * This example can be used to logfile processing and basically wraps the tail

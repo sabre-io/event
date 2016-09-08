@@ -1,4 +1,4 @@
-<?php
+<?php declare (strict_types=1);
 
 namespace Sabre\Event;
 
@@ -162,7 +162,7 @@ class CoroutineTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertEquals(1, $start);
 
-        $promise->reject(new \Exception(2));
+        $promise->reject(new \Exception((string)2));
         Loop\run();
 
         $this->assertEquals(3, $start);
@@ -207,7 +207,7 @@ class CoroutineTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertEquals(1, $start);
 
-        $promise->reject(new \Exception(2));
+        $promise->reject(new \Exception((string)2));
         Loop\run();
 
         $this->assertEquals(3, $start);

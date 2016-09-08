@@ -1,5 +1,5 @@
 #!/usr/bin/env php
-<?php
+<?php declare (strict_types=1);
 
 /**
  * The following example demonstrates doing asynchronous HTTP requests with

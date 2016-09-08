@@ -1,9 +1,9 @@
-<?php
+<?php declare (strict_types=1);
 
 namespace Sabre\Event;
 
-use Generator;
 use Exception;
+use Generator;
 
 /**
  * Turn asynchronous promise-based code into something that looks synchronous
@@ -45,7 +45,7 @@ use Exception;
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */
-function coroutine(callable $gen) {
+function coroutine(callable $gen) : Promise {
 
     $generator = $gen();
     if (!$generator instanceof Generator) {
@@ -77,7 +77,7 @@ function coroutine(callable $gen) {
                         if ($reason instanceof Exception) {
                             $generator->throw($reason);
                         } elseif (is_scalar($reason)) {
-                            $generator->throw(new Exception($reason));
+                            $generator->throw(new Exception((string)$reason));
                         } else {
                             $type = is_object($reason) ? get_class($reason) : gettype($reason);
                             $generator->throw(new Exception('Promise was rejected with reason of type: ' . $type));

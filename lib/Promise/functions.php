@@ -1,4 +1,4 @@
-<?php
+<?php declare (strict_types=1);
 
 namespace Sabre\Event\Promise;
 
@@ -27,9 +27,8 @@ use Sabre\Event\Promise;
  * fail with the first Promise that fails, and its reason.
  *
  * @param Promise[] $promises
- * @return Promise
  */
-function all(array $promises) {
+function all(array $promises) : Promise {
 
     return new Promise(function($success, $fail) use ($promises) {
 
@@ -66,9 +65,8 @@ function all(array $promises) {
  * that first promise.
  *
  * @param Promise[] $promises
- * @return Promise
  */
-function race(array $promises) {
+function race(array $promises) : Promise {
 
     return new Promise(function($success, $fail) use ($promises) {
 
@@ -106,9 +104,8 @@ function race(array $promises) {
  * promise and eventually get the same state as the followed promise.
  *
  * @param mixed $value
- * @return Promise
  */
-function resolve($value) {
+function resolve($value) : Promise {
 
     if ($value instanceof Promise) {
         return $value->then();
@@ -124,9 +121,8 @@ function resolve($value) {
  * Returns a Promise that will reject with the given reason.
  *
  * @param mixed $reason
- * @return Promise
  */
-function reject($reason) {
+function reject($reason) : Promise {
 
     $promise = new Promise();
     $promise->reject($reason);

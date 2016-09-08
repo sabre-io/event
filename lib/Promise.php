@@ -1,4 +1,4 @@
-<?php
+<?php declare (strict_types=1);
 
 namespace Sabre\Event;
 
@@ -52,8 +52,6 @@ class Promise {
      *
      * Each are callbacks that map to $this->fulfill and $this->reject.
      * Using the executor is optional.
-     *
-     * @param callable $executor
      */
     function __construct(callable $executor = null) {
 
@@ -84,12 +82,8 @@ class Promise {
      *
      * If either of the callbacks throw an exception, the returned promise will
      * be rejected and the exception will be passed back.
-     *
-     * @param callable $onFulfilled
-     * @param callable $onRejected
-     * @return Promise
      */
-    function then(callable $onFulfilled = null, callable $onRejected = null) {
+    function then(callable $onFulfilled = null, callable $onRejected = null) : Promise {
 
         // This new subPromise will be returned from this function, and will
         // be fulfilled with the result of the onFulfilled or onRejected event
@@ -122,11 +116,8 @@ class Promise {
      *
      * Its usage is identical to then(). However, the otherwise() function is
      * preferred.
-     *
-     * @param callable $onRejected
-     * @return Promise
      */
-    function otherwise(callable $onRejected) {
+    function otherwise(callable $onRejected) : Promise {
 
         return $this->then(null, $onRejected);
 
@@ -292,11 +283,9 @@ class Promise {
      *
      * This function is now deprecated and will be removed in a future version.
      *
-     * @param callable $onRejected
      * @deprecated
-     * @return Promise
      */
-    function error(callable $onRejected) {
+    function error(callable $onRejected) : Promise {
 
         return $this->otherwise($onRejected);
 
@@ -309,9 +298,8 @@ class Promise {
      *
      * @param Promise[] $promises
      * @deprecated
-     * @return Promise
      */
-    static function all(array $promises) {
+    static function all(array $promises) : Promise {
 
         return Promise\all($promises);
 
