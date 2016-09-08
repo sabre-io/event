@@ -28,6 +28,7 @@ Build status
 | branch | status |
 | ------ | ------ |
 | master | [![Build Status](https://travis-ci.org/fruux/sabre-event.svg?branch=master)](https://travis-ci.org/fruux/sabre-event) |
+| 3.0    | [![Build Status](https://travis-ci.org/fruux/sabre-event.svg?branch=2.0)](https://travis-ci.org/fruux/sabre-event) |
 | 2.0    | [![Build Status](https://travis-ci.org/fruux/sabre-event.svg?branch=2.0)](https://travis-ci.org/fruux/sabre-event) |
 | 1.0    | [![Build Status](https://travis-ci.org/fruux/sabre-event.svg?branch=1.0)](https://travis-ci.org/fruux/sabre-event) |
 | php53  | [![Build Status](https://travis-ci.org/fruux/sabre-event.svg?branch=php53)](https://travis-ci.org/fruux/sabre-event) |
