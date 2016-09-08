@@ -1,6 +1,13 @@
 ChangeLog
 =========
 
+4.0.0 (????-??-??)
+------------------
+
+* sabre/event now requires PHP 7. If you need PHP 5.5 support, just keep
+  using 3.0.0.
+
+
 3.0.0 (2015-11-05)
 ------------------
 
