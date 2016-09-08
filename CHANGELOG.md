@@ -6,6 +6,9 @@ ChangeLog
 
 * sabre/event now requires PHP 7. If you need PHP 5.5 support, just keep
   using 3.0.0.
+* PHP 7 type hints are now used everywhere. We're also using strict_types.
+* Removed deprecated functions `Promise::error` and `Promise::all`. Instead,
+  use `Promise::otherwise` and `Promise\all()`.
 
 
 3.0.0 (2015-11-05)
