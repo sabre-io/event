@@ -282,7 +282,7 @@ class Loop {
         // Add the last timer back to the array.
         if ($timer) {
             $this->timers[] = $timer;
-            return $timer[0] - microtime(true);
+            return max(0, $timer[0] - microtime(true));
         }
 
     }
@@ -302,7 +302,7 @@ class Loop {
             $read = $this->readStreams;
             $write = $this->writeStreams;
             $except = null;
-            if (stream_select($read, $write, $except, $timeout ? 0 : null, $timeout ? $timeout : 0)) {
+            if (stream_select($read, $write, $except, ($timeout === null) ? null : 0, $timeout ? $timeout * 1000000 : 0)) {
 
                 // See PHP Bug https://bugs.php.net/bug.php?id=62452
                 // Fixed in PHP7
