@@ -282,7 +282,7 @@ class Loop {
         // Add the last timer back to the array.
         if ($timer) {
             $this->timers[] = $timer;
-            return $timer[0] - microtime(true);
+            return max(0, $timer[0] - microtime(true));
         }
 
     }
