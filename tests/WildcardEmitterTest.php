@@ -288,6 +288,29 @@ class WildcardEmitterTest extends \PHPUnit_Framework_TestCase {
 
     }
 
+    function testRemoveAllListenersWildcard() {
+
+        $result = false;
+        $callBack = function() use (&$result) {
+
+            $result = true;
+
+        };
+
+        $ee = new WildcardEmitter();
+        $ee->on('foo:*', $callBack);
+
+        $ee->emit('foo:bar');
+        $this->assertTrue($result);
+        $result = false;
+
+        $ee->removeAllListeners('foo:*');
+
+        $ee->emit('foo:bar');
+        $this->assertFalse($result);
+
+    }
+
     function testOnce() {
 
         $result = 0;
@@ -336,4 +359,75 @@ class WildcardEmitterTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(2, $argResult);
 
     }
+
+    function testContinueCallBack() {
+
+        $ee = new WildcardEmitter();
+
+        $handlerCounter = 0;
+        $bla = function() use (&$handlerCounter) {
+            $handlerCounter++;
+        };
+        $ee->on('foo', $bla);
+        $ee->on('foo', $bla);
+        $ee->on('foo', $bla);
+
+        $continueCounter = 0;
+        $r = $ee->emit('foo', [], function() use (&$continueCounter) {
+            $continueCounter++;
+            return true;
+        });
+        $this->assertTrue($r);
+        $this->assertEquals(3, $handlerCounter);
+        $this->assertEquals(2, $continueCounter);
+
+    }
+
+    function testContinueCallBackBreak() {
+
+        $ee = new WildcardEmitter();
+
+        $handlerCounter = 0;
+        $bla = function() use (&$handlerCounter) {
+            $handlerCounter++;
+        };
+        $ee->on('foo', $bla);
+        $ee->on('foo', $bla);
+        $ee->on('foo', $bla);
+
+        $continueCounter = 0;
+        $r = $ee->emit('foo', [], function() use (&$continueCounter) {
+            $continueCounter++;
+            return false;
+        });
+        $this->assertTrue($r);
+        $this->assertEquals(1, $handlerCounter);
+        $this->assertEquals(1, $continueCounter);
+
+    }
+
+    function testContinueCallBackBreakByHandler() {
+
+        $ee = new WildcardEmitter();
+
+        $handlerCounter = 0;
+        $bla = function() use (&$handlerCounter) {
+            $handlerCounter++;
+            return false;
+        };
+        $ee->on('foo', $bla);
+        $ee->on('foo', $bla);
+        $ee->on('foo', $bla);
+
+        $continueCounter = 0;
+        $r = $ee->emit('foo', [], function() use (&$continueCounter) {
+            $continueCounter++;
+            return false;
+        });
+        $this->assertFalse($r);
+        $this->assertEquals(1, $handlerCounter);
+        $this->assertEquals(0, $continueCounter);
+
+    }
+
 }
