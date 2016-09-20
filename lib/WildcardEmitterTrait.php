@@ -3,20 +3,21 @@
 namespace Sabre\Event;
 
 /**
- * Event Emitter Trait
+ * Wildcard Emitter Trait
  *
- * This trait contains all the basic functions to implement an
- * EventEmitterInterface.
+ * This trait provides the implementation for WildCardEmitter
+ * Refer to that class for the full documentation about this
+ * trait.
  *
- * Using the trait + interface allows you to add EventEmitter capabilities
- * without having to change your base-class.
+ * Normally you can just instantiate that class, but if you want to add
+ * emitter functionality to existing classes, using the trait might be a
+ * better way to do this.
  *
  * @copyright Copyright (C) fruux GmbH (https://fruux.com/)
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */
-trait EmitterTrait {
-
+trait WildcardEmitterTrait {
 
     /**
      * Subscribe to an event.
@@ -25,17 +26,24 @@ trait EmitterTrait {
      */
     function on(string $eventName, callable $callBack, int $priority = 100) {
 
-        if (!isset($this->listeners[$eventName])) {
-            $this->listeners[$eventName] = [
-                true,  // If there's only one item, it's sorted
-                [$priority],
-                [$callBack]
-            ];
+        // If it ends with a wildcard, we use the wildcardListeners array 
+        if ($eventName[strlen($eventName) - 1] === '*') {
+            $eventName = substr($eventName, 0, -1);
+            $listeners = & $this->wildcardListeners;
         } else {
-            $this->listeners[$eventName][0] = false; // marked as unsorted
-            $this->listeners[$eventName][1][] = $priority;
-            $this->listeners[$eventName][2][] = $callBack;
+            $listeners = & $this->listeners;
         }
+
+        // Always fully reset the listener index. This is fairly sane for most
+        // applications, because there's a clear "event registering" and "event
+        // emitting" phase, but can be slow if there's a lot adding and removing
+        // of listeners during emitting of events.
+        $this->listenerIndex = [];
+
+        if (!isset($listeners[$eventName])) {
+            $listeners[$eventName] = [];
+        }
+        $listeners[$eventName][] = [$priority, $callBack];
 
     }
 
@@ -114,6 +122,7 @@ trait EmitterTrait {
 
         return true;
 
+
     }
 
     /**
@@ -126,21 +135,43 @@ trait EmitterTrait {
      */
     function listeners(string $eventName) : array {
 
-        if (!isset($this->listeners[$eventName])) {
-            return [];
+        if (!array_key_exists($eventName, $this->listenerIndex)) {
+
+            // Create a new index.
+            $listeners = [];
+            $listenersPriority = [];
+            if (isset($this->listeners[$eventName])) foreach ($this->listeners[$eventName] as $listener) {
+
+                $listenersPriority[] = $listener[0];
+                $listeners[] = $listener[1];
+
+            }
+
+            foreach ($this->wildcardListeners as $wcEvent => $wcListeners) {
+
+                // Wildcard match
+                if (substr($eventName, 0, strlen($wcEvent)) === $wcEvent) {
+
+                    foreach ($wcListeners as $listener) {
+
+                        $listenersPriority[] = $listener[0];
+                        $listeners[] = $listener[1];
+
+                    }
+
+                }
+
+            }
+
+            // Sorting by priority
+            array_multisort($listenersPriority, SORT_NUMERIC, $listeners);
+
+            // Creating index
+            $this->listenersIndex[$eventName] = $listeners;
+
         }
 
-        // The list is not sorted
-        if (!$this->listeners[$eventName][0]) {
-
-            // Sorting
-            array_multisort($this->listeners[$eventName][1], SORT_NUMERIC, $this->listeners[$eventName][2]);
-
-            // Marking the listeners as sorted
-            $this->listeners[$eventName][0] = true;
-        }
-
-        return $this->listeners[$eventName][2];
+        return $this->listenersIndex[$eventName];
 
     }
 
@@ -152,16 +183,32 @@ trait EmitterTrait {
      */
     function removeListener(string $eventName, callable $listener) : bool {
 
-        if (!isset($this->listeners[$eventName])) {
+        // If it ends with a wildcard, we use the wildcardListeners array 
+        if ($eventName[strlen($eventName) - 1] === '*') {
+            $eventName = substr($eventName, 0, -1);
+            $listeners = & $this->wildcardListeners;
+        } else {
+            $listeners = & $this->listeners;
+        }
+
+        if (!isset($listeners[$eventName])) {
             return false;
         }
-        foreach ($this->listeners[$eventName][2] as $index => $check) {
-            if ($check === $listener) {
-                unset($this->listeners[$eventName][1][$index]);
-                unset($this->listeners[$eventName][2][$index]);
+
+        foreach ($listeners[$eventName] as $index => $check) {
+
+            if ($check[1] === $listener) {
+
+                // Remove listener
+                unset($listeners[$eventName][$index]);
+                // Reset index
+                $this->listenerIndex = [];
                 return true;
+
             }
+
         }
+
         return false;
 
     }
@@ -177,19 +224,41 @@ trait EmitterTrait {
      */
     function removeAllListeners(string $eventName = null) {
 
-        if (!is_null($eventName)) {
-            unset($this->listeners[$eventName]);
-        } else {
+        if (is_null($eventName)) {
             $this->listeners = [];
+            $this->wildcardListeners = [];
+
+        } else {
+
+            if ($eventName[strlen($eventName) - 1] === '*') {
+                // Wildcard event
+                unset($this->wildcardListeners[substr($eventName, 0, -1)]);
+            } else {
+                unset($this->listeners[$eventName]);
+            }
+
         }
+
+        // Reset index
+        $this->listenerIndex = [];
 
     }
 
     /**
      * The list of listeners
-     *
-     * @var array
      */
     protected $listeners = [];
 
+    /**
+     * The list of "wildcard listeners". 
+     */
+    protected $wildcardListeners = [];
+
+    /**
+     * An index of listeners for a specific event name. This helps speeding
+     * up emitting events after all listeners have been set.
+     *
+     * If the list of listeners changes though, the index clears.
+     */
+    protected $listenerIndex = [];
 }
