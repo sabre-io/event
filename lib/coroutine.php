@@ -55,8 +55,6 @@ function coroutine(callable $gen) : Promise {
     // This is the value we're returning.
     $promise = new Promise();
 
-    $lastYieldResult = null;
-
     /**
      * So tempted to use the mythical y-combinator here, but it's not needed in
      * PHP.
@@ -69,7 +67,6 @@ function coroutine(callable $gen) : Promise {
             if ($yieldedValue instanceof Promise) {
                 $yieldedValue->then(
                     function($value) use ($generator, &$advanceGenerator, &$lastYieldResult) {
-                        $lastYieldResult = $value;
                         $generator->send($value);
                         $advanceGenerator();
                     },
@@ -88,17 +85,31 @@ function coroutine(callable $gen) : Promise {
                 break;
             } else {
                 // If the value was not a promise, we'll just let it pass through.
-                $lastYieldResult = $yieldedValue;
                 $generator->send($yieldedValue);
             }
 
         }
 
         // If the generator is at the end, and we didn't run into an exception,
-        // we can fullfill the promise with the last thing that was yielded to
-        // us.
-        if (!$generator->valid() && $promise->state === Promise::PENDING) {
-            $promise->fulfill($lastYieldResult);
+        // We're grabbing the "return" value and fulfilling our top-level
+        // promise with its value.
+         if (!$generator->valid() && $promise->state === Promise::PENDING) {
+             $returnValue = $generator->getReturn();
+
+             // The return value is a promise.
+             if ($returnValue instanceof Promise) {
+                 $returnValue->then(function($value) use ($promise) {
+                     $promise->fulfill($value);
+                 }, function(Throwable $reason) {
+                     $promise->reject($reason);
+                 });
+             } else {
+
+                 $promise->fulfill($returnValue);
+
+             }
+
+
         }
 
     };

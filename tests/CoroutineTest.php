@@ -191,7 +191,7 @@ class CoroutineTest extends \PHPUnit_Framework_TestCase {
 
     }
 
-    function testResolveToLastYield() {
+    function testReturn() {
 
         $ok = false;
         coroutine(function() {
@@ -199,9 +199,10 @@ class CoroutineTest extends \PHPUnit_Framework_TestCase {
             yield 1;
             yield 2;
             $hello = 'hi';
+            return 3;
 
         })->then(function($value) use (&$ok) {
-            $this->assertEquals(2, $value);
+            $this->assertEquals(3, $value);
             $ok = true;
         })->otherwise(function($reason) {
             $this->fail($reason);
@@ -212,7 +213,7 @@ class CoroutineTest extends \PHPUnit_Framework_TestCase {
 
     }
 
-    function testResolveToLastYieldPromise() {
+    function testReturnPromise() {
 
         $ok = false;
 
@@ -221,11 +222,11 @@ class CoroutineTest extends \PHPUnit_Framework_TestCase {
         coroutine(function() use ($promise) {
 
             yield 'fail';
-            yield $promise;
-            $hello = 'hi';
+            return $promise;
 
         })->then(function($value) use (&$ok) {
             $ok = $value;
+        })->otherwise(function($reason) {
             $this->fail($reason);
         });
 
