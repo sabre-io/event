@@ -1,6 +1,17 @@
 ChangeLog
 =========
 
+5.0.0 (????-??-??)
+------------------
+
+* #42: The `coroutine` function now supports `return` in the passed generator
+  function. This allows you to more generally return a value. This is a BC
+  break as this is a feature that was only made possible with PHP 7, and
+  before the coroutine function would only ever return the last thing that
+  was yielded. If you depended on that feature, replace your last `yield` with
+  a `return`.
+
+
 4.0.0 (2016-09-19)
 ------------------
 
