@@ -1,7 +1,7 @@
 ChangeLog
 =========
 
-5.0.0 (????-??-??)
+5.0.0 (2016-10-23)
 ------------------
 
 * #42: The `coroutine` function now supports `return` in the passed generator
