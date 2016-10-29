@@ -6,7 +6,7 @@ class ContinueCallbackTest extends \PHPUnit_Framework_TestCase {
 
     function testContinueCallBack() {
 
-        $ee = new EventEmitter();
+        $ee = new Emitter();
 
         $handlerCounter = 0;
         $bla = function() use (&$handlerCounter) {
@@ -29,7 +29,7 @@ class ContinueCallbackTest extends \PHPUnit_Framework_TestCase {
 
     function testContinueCallBackBreak() {
 
-        $ee = new EventEmitter();
+        $ee = new Emitter();
 
         $handlerCounter = 0;
         $bla = function() use (&$handlerCounter) {
@@ -52,7 +52,7 @@ class ContinueCallbackTest extends \PHPUnit_Framework_TestCase {
 
     function testContinueCallBackBreakByHandler() {
 
-        $ee = new EventEmitter();
+        $ee = new Emitter();
 
         $handlerCounter = 0;
         $bla = function() use (&$handlerCounter) {

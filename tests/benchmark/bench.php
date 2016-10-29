@@ -1,6 +1,6 @@
 <?php declare (strict_types=1);
 
-use Sabre\Event\EventEmitter;
+use Sabre\Event\Emitter;
 
 include __DIR__ . '/../../vendor/autoload.php';
 
@@ -35,7 +35,7 @@ class OneCallBack extends BenchMark {
 
     function setUp() {
 
-        $this->emitter = new EventEmitter();
+        $this->emitter = new Emitter();
         $this->emitter->on('foo', function() {
             // NOOP
         });
@@ -58,7 +58,7 @@ class ManyCallBacks extends BenchMark {
 
     function setUp() {
 
-        $this->emitter = new EventEmitter();
+        $this->emitter = new Emitter();
         for ($i = 0;$i < 100;$i++) {
             $this->emitter->on('foo', function() {
                 // NOOP
@@ -83,7 +83,7 @@ class ManyPrioritizedCallBacks extends BenchMark {
 
     function setUp() {
 
-        $this->emitter = new EventEmitter();
+        $this->emitter = new Emitter();
         for ($i = 0;$i < 100;$i++) {
             $this->emitter->on('foo', function() {
             }, 1000 - $i);

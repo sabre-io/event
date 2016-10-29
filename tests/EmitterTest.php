@@ -6,14 +6,14 @@ class EmitterTest extends \PHPUnit_Framework_TestCase {
 
     function testInit() {
 
-        $ee = new EventEmitter();
-        $this->assertInstanceOf('Sabre\\Event\\EventEmitter', $ee);
+        $ee = new Emitter();
+        $this->assertInstanceOf('Sabre\\Event\\Emitter', $ee);
 
     }
 
     function testListeners() {
 
-        $ee = new EventEmitter();
+        $ee = new Emitter();
 
         $callback1 = function() { };
         $callback2 = function() { };
@@ -31,7 +31,7 @@ class EmitterTest extends \PHPUnit_Framework_TestCase {
 
         $argResult = null;
 
-        $ee = new EventEmitter();
+        $ee = new Emitter();
         $ee->on('foo', function($arg) use (&$argResult) {
 
             $argResult = $arg;
@@ -53,7 +53,7 @@ class EmitterTest extends \PHPUnit_Framework_TestCase {
 
         $argResult = 0;
 
-        $ee = new EventEmitter();
+        $ee = new Emitter();
         $ee->on('foo', function($arg) use (&$argResult) {
 
             $argResult = 1;
@@ -81,7 +81,7 @@ class EmitterTest extends \PHPUnit_Framework_TestCase {
 
         $argResult = 0;
 
-        $ee = new EventEmitter();
+        $ee = new Emitter();
         $ee->on('foo', function($arg) use (&$argResult) {
 
             $argResult = 1;
@@ -109,7 +109,7 @@ class EmitterTest extends \PHPUnit_Framework_TestCase {
     function testPriority2() {
 
         $result = [];
-        $ee = new EventEmitter();
+        $ee = new Emitter();
 
         $ee->on('foo', function() use (&$result) {
 
@@ -147,7 +147,7 @@ class EmitterTest extends \PHPUnit_Framework_TestCase {
 
         };
 
-        $ee = new EventEmitter();
+        $ee = new Emitter();
 
         $ee->on('foo', $callBack);
 
@@ -174,7 +174,7 @@ class EmitterTest extends \PHPUnit_Framework_TestCase {
 
         };
 
-        $ee = new EventEmitter();
+        $ee = new Emitter();
 
         $ee->on('foo', $callBack);
 
@@ -199,7 +199,7 @@ class EmitterTest extends \PHPUnit_Framework_TestCase {
 
         };
 
-        $ee = new EventEmitter();
+        $ee = new Emitter();
 
         $ee->on('foo', $callBack);
 
@@ -228,7 +228,7 @@ class EmitterTest extends \PHPUnit_Framework_TestCase {
 
         };
 
-        $ee = new EventEmitter();
+        $ee = new Emitter();
         $ee->on('foo', $callBack);
 
         $ee->emit('foo');
@@ -253,7 +253,7 @@ class EmitterTest extends \PHPUnit_Framework_TestCase {
         };
 
 
-        $ee = new EventEmitter();
+        $ee = new Emitter();
         $ee->on('foo', $callBack);
 
         $ee->emit('foo');
@@ -277,7 +277,7 @@ class EmitterTest extends \PHPUnit_Framework_TestCase {
 
         };
 
-        $ee = new EventEmitter();
+        $ee = new Emitter();
         $ee->once('foo', $callBack);
 
         $ee->emit('foo');
@@ -294,7 +294,7 @@ class EmitterTest extends \PHPUnit_Framework_TestCase {
 
         $argResult = 0;
 
-        $ee = new EventEmitter();
+        $ee = new Emitter();
         $ee->once('foo', function($arg) use (&$argResult) {
 
             $argResult = 1;
