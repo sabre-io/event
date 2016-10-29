@@ -1,6 +1,12 @@
 ChangeLog
 =========
 
+5.0.1 (2016-10-29)
+------------------
+
+* #45: Fixed `Emitter` class to use the correct interface. (@felixfbecker).
+
+
 5.0.0 (2016-10-23)
 ------------------
 
