@@ -40,7 +40,7 @@ class CoroutineTest extends \PHPUnit_Framework_TestCase {
         coroutine(function() use (&$start, $promise) {
 
             $start += 1;
-            $start += (yield $promise);
+            $start += yield $promise;
 
         });
 
@@ -60,7 +60,7 @@ class CoroutineTest extends \PHPUnit_Framework_TestCase {
 
             $start += 1;
             try {
-                $start += (yield $promise);
+                $start += yield $promise;
                 // This line is unreachable, but it's our control
                 $start += 4;
             } catch (\Exception $e) {
@@ -85,7 +85,7 @@ class CoroutineTest extends \PHPUnit_Framework_TestCase {
 
             $start += 1;
             try {
-                $start += (yield $promise);
+                $start += yield $promise;
                 // This line is unreachable, but it's our control
                 $start += 4;
             } catch (\LogicException $e) {
@@ -106,7 +106,7 @@ class CoroutineTest extends \PHPUnit_Framework_TestCase {
         coroutine(function() use (&$start, $promise) {
 
             $start += 1;
-            $start += (yield $promise);
+            $start += yield $promise;
 
         });
         Loop\run();
@@ -128,7 +128,7 @@ class CoroutineTest extends \PHPUnit_Framework_TestCase {
 
             $start += 1;
             try {
-                $start += (yield $promise);
+                $start += yield $promise;
                 // This line is unreachable, but it's our control
                 $start += 4;
             } catch (\Exception $e) {
@@ -152,7 +152,7 @@ class CoroutineTest extends \PHPUnit_Framework_TestCase {
         coroutine(function() use (&$start) {
 
             $start += 1;
-            $start += (yield 2);
+            $start += yield 2;
 
             throw new \Exception('4');
 
@@ -174,7 +174,7 @@ class CoroutineTest extends \PHPUnit_Framework_TestCase {
         coroutine(function() use (&$start, $promise) {
 
             $start += 1;
-            $start += (yield $promise);
+            $start += yield $promise;
 
         })->otherwise(function($e) use (&$start) {
 
