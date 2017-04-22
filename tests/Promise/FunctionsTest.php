@@ -6,7 +6,7 @@ use Exception;
 use Sabre\Event\Loop;
 use Sabre\Event\Promise;
 
-class FunctionsTest extends \PHPUnit_Framework_TestCase {
+class FunctionsTest extends \PHPUnit\Framework\TestCase {
 
     function testAll() {
 

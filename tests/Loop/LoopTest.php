@@ -2,7 +2,7 @@
 
 namespace Sabre\Event\Loop;
 
-class LoopTest extends \PHPUnit_Framework_TestCase {
+class LoopTest extends \PHPUnit\Framework\TestCase {
 
     function testNextTick() {
 

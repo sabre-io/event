@@ -4,7 +4,7 @@ namespace Sabre\Event;
 
 use Exception;
 
-class CoroutineTest extends \PHPUnit_Framework_TestCase {
+class CoroutineTest extends \PHPUnit\Framework\TestCase {
 
     /**
      * @expectedException \InvalidArgumentException

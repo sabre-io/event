@@ -2,7 +2,7 @@
 
 namespace Sabre\Event;
 
-class EmitterTest extends \PHPUnit_Framework_TestCase {
+class EmitterTest extends \PHPUnit\Framework\TestCase {
 
     function testInit() {
 

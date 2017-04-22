@@ -6,7 +6,7 @@ use Exception;
 use Sabre\Event\Loop;
 use Sabre\Event\Promise;
 
-class PromiseTest extends \PHPUnit_Framework_TestCase {
+class PromiseTest extends \PHPUnit\Framework\TestCase {
 
     function testSuccess() {
 

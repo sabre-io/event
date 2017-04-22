@@ -2,7 +2,7 @@
 
 namespace Sabre\Event;
 
-class WildcardEmitterTest extends \PHPUnit_Framework_TestCase {
+class WildcardEmitterTest extends \PHPUnit\Framework\TestCase {
 
     function testInit() {
 
