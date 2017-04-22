@@ -50,7 +50,7 @@ trait EmitterTrait {
         $wrapper = function() use ($eventName, $callBack, &$wrapper) {
 
             $this->removeListener($eventName, $wrapper);
-            return call_user_func_array($callBack, func_get_args());
+            return \call_user_func_array($callBack, \func_get_args());
 
         };
 
@@ -81,11 +81,11 @@ trait EmitterTrait {
      */
     function emit(string $eventName, array $arguments = [], callable $continueCallBack = null) : bool {
 
-        if (is_null($continueCallBack)) {
+        if (\is_null($continueCallBack)) {
 
             foreach ($this->listeners($eventName) as $listener) {
 
-                $result = call_user_func_array($listener, $arguments);
+                $result = \call_user_func_array($listener, $arguments);
                 if ($result === false) {
                     return false;
                 }
@@ -94,12 +94,12 @@ trait EmitterTrait {
         } else {
 
             $listeners = $this->listeners($eventName);
-            $counter = count($listeners);
+            $counter = \count($listeners);
 
             foreach ($listeners as $listener) {
 
                 $counter--;
-                $result = call_user_func_array($listener, $arguments);
+                $result = \call_user_func_array($listener, $arguments);
                 if ($result === false) {
                     return false;
                 }
@@ -134,7 +134,7 @@ trait EmitterTrait {
         if (!$this->listeners[$eventName][0]) {
 
             // Sorting
-            array_multisort($this->listeners[$eventName][1], SORT_NUMERIC, $this->listeners[$eventName][2]);
+            \array_multisort($this->listeners[$eventName][1], SORT_NUMERIC, $this->listeners[$eventName][2]);
 
             // Marking the listeners as sorted
             $this->listeners[$eventName][0] = true;
@@ -177,7 +177,7 @@ trait EmitterTrait {
      */
     function removeAllListeners(string $eventName = null) {
 
-        if (!is_null($eventName)) {
+        if (!\is_null($eventName)) {
             unset($this->listeners[$eventName]);
         } else {
             $this->listeners = [];
