@@ -33,6 +33,11 @@ function all(array $promises) : Promise {
 
     return new Promise(function($success, $fail) use ($promises) {
 
+        if (empty($promises)) {
+            $success([]);
+            return;
+        }
+
         $successCount = 0;
         $completeResult = [];
 
