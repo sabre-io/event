@@ -2,7 +2,8 @@ ChangeLog
 =========
 5.0.2 (2017-04-29)
 
-* optimisation for EmitterTrait and WildcardEmitterTrait (@lunixyacht).
+* #50: Fixed Promise\all to resolve immediately for empty arrays (@MadHed)
+* #48, #49: Performance optimisations for EmitterTrait and WildcardEmitterTrait (@lunixyacht).
 
 5.0.1 (2016-10-29)
 ------------------
