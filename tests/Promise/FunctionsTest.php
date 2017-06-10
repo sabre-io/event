@@ -30,6 +30,14 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase {
 
     }
 
+    function testAllEmptyArray() {
+
+        $finalValue = Promise\all([])->wait();
+
+        $this->assertEquals([], $finalValue);
+
+    }
+
     function testAllReject() {
 
         $promise1 = new Promise();
