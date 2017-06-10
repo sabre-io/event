@@ -27,8 +27,8 @@ trait WildcardEmitterTrait {
     function on(string $eventName, callable $callBack, int $priority = 100) {
 
         // If it ends with a wildcard, we use the wildcardListeners array 
-        if ($eventName[strlen($eventName) - 1] === '*') {
-            $eventName = substr($eventName, 0, -1);
+        if ($eventName[\strlen($eventName) - 1] === '*') {
+            $eventName = \substr($eventName, 0, -1);
             $listeners = & $this->wildcardListeners;
         } else {
             $listeners = & $this->listeners;
@@ -58,7 +58,7 @@ trait WildcardEmitterTrait {
         $wrapper = function() use ($eventName, $callBack, &$wrapper) {
 
             $this->removeListener($eventName, $wrapper);
-            return call_user_func_array($callBack, func_get_args());
+            return \call_user_func_array($callBack, \func_get_args());
 
         };
 
@@ -89,11 +89,11 @@ trait WildcardEmitterTrait {
      */
     function emit(string $eventName, array $arguments = [], callable $continueCallBack = null) : bool {
 
-        if (is_null($continueCallBack)) {
+        if (\is_null($continueCallBack)) {
 
             foreach ($this->listeners($eventName) as $listener) {
 
-                $result = call_user_func_array($listener, $arguments);
+                $result = \call_user_func_array($listener, $arguments);
                 if ($result === false) {
                     return false;
                 }
@@ -102,12 +102,12 @@ trait WildcardEmitterTrait {
         } else {
 
             $listeners = $this->listeners($eventName);
-            $counter = count($listeners);
+            $counter = \count($listeners);
 
             foreach ($listeners as $listener) {
 
                 $counter--;
-                $result = call_user_func_array($listener, $arguments);
+                $result = \call_user_func_array($listener, $arguments);
                 if ($result === false) {
                     return false;
                 }
@@ -135,7 +135,7 @@ trait WildcardEmitterTrait {
      */
     function listeners(string $eventName) : array {
 
-        if (!array_key_exists($eventName, $this->listenerIndex)) {
+        if (!\array_key_exists($eventName, $this->listenerIndex)) {
 
             // Create a new index.
             $listeners = [];
@@ -150,7 +150,7 @@ trait WildcardEmitterTrait {
             foreach ($this->wildcardListeners as $wcEvent => $wcListeners) {
 
                 // Wildcard match
-                if (substr($eventName, 0, strlen($wcEvent)) === $wcEvent) {
+                if (\substr($eventName, 0, \strlen($wcEvent)) === $wcEvent) {
 
                     foreach ($wcListeners as $listener) {
 
@@ -164,7 +164,7 @@ trait WildcardEmitterTrait {
             }
 
             // Sorting by priority
-            array_multisort($listenersPriority, SORT_NUMERIC, $listeners);
+            \array_multisort($listenersPriority, SORT_NUMERIC, $listeners);
 
             // Creating index
             $this->listenersIndex[$eventName] = $listeners;
@@ -184,8 +184,8 @@ trait WildcardEmitterTrait {
     function removeListener(string $eventName, callable $listener) : bool {
 
         // If it ends with a wildcard, we use the wildcardListeners array 
-        if ($eventName[strlen($eventName) - 1] === '*') {
-            $eventName = substr($eventName, 0, -1);
+        if ($eventName[\strlen($eventName) - 1] === '*') {
+            $eventName = \substr($eventName, 0, -1);
             $listeners = & $this->wildcardListeners;
         } else {
             $listeners = & $this->listeners;
@@ -224,15 +224,15 @@ trait WildcardEmitterTrait {
      */
     function removeAllListeners(string $eventName = null) {
 
-        if (is_null($eventName)) {
+        if (\is_null($eventName)) {
             $this->listeners = [];
             $this->wildcardListeners = [];
 
         } else {
 
-            if ($eventName[strlen($eventName) - 1] === '*') {
+            if ($eventName[\strlen($eventName) - 1] === '*') {
                 // Wildcard event
-                unset($this->wildcardListeners[substr($eventName, 0, -1)]);
+                unset($this->wildcardListeners[\substr($eventName, 0, -1)]);
             } else {
                 unset($this->listeners[$eventName]);
             }
