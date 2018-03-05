@@ -1,6 +1,14 @@
 ChangeLog
 =========
+5.0.3 (2018-05-03)
+------------------
+
+* Dropped remaining hhvm leftovers.
+* #55: Fixed typo in WildcardEmitterTrait (@SamMousa)
+* #54: export-ignore examples & tests in distribution (@staabm)
+
 5.0.2 (2017-04-29)
+------------------
 
 * #50: Fixed Promise\all to resolve immediately for empty arrays (@MadHed)
 * #48, #49: Performance optimisations for EmitterTrait and WildcardEmitterTrait (@lunixyacht).
