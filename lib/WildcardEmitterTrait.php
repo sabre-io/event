@@ -167,11 +167,11 @@ trait WildcardEmitterTrait {
             \array_multisort($listenersPriority, SORT_NUMERIC, $listeners);
 
             // Creating index
-            $this->listenersIndex[$eventName] = $listeners;
+            $this->listenerIndex[$eventName] = $listeners;
 
         }
 
-        return $this->listenersIndex[$eventName];
+        return $this->listenerIndex[$eventName];
 
     }
 
