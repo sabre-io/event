@@ -26,7 +26,7 @@ trait WildcardEmitterTrait {
      */
     function on(string $eventName, callable $callBack, int $priority = 100) {
 
-        // If it ends with a wildcard, we use the wildcardListeners array 
+        // If it ends with a wildcard, we use the wildcardListeners array
         if ($eventName[\strlen($eventName) - 1] === '*') {
             $eventName = \substr($eventName, 0, -1);
             $listeners = & $this->wildcardListeners;
@@ -69,7 +69,7 @@ trait WildcardEmitterTrait {
     /**
      * Emits an event.
      *
-     * This method will return true if 0 or more listeners were succesfully
+     * This method will return true if 0 or more listeners were successfully
      * handled. false is returned if one of the events broke the event chain.
      *
      * If the continueCallBack is specified, this callback will be called every
@@ -183,7 +183,7 @@ trait WildcardEmitterTrait {
      */
     function removeListener(string $eventName, callable $listener) : bool {
 
-        // If it ends with a wildcard, we use the wildcardListeners array 
+        // If it ends with a wildcard, we use the wildcardListeners array
         if ($eventName[\strlen($eventName) - 1] === '*') {
             $eventName = \substr($eventName, 0, -1);
             $listeners = & $this->wildcardListeners;
@@ -250,7 +250,7 @@ trait WildcardEmitterTrait {
     protected $listeners = [];
 
     /**
-     * The list of "wildcard listeners". 
+     * The list of "wildcard listeners".
      */
     protected $wildcardListeners = [];
 

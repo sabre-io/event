@@ -112,7 +112,7 @@ function removeWriteStream($stream) {
 /**
  * Runs the loop.
  *
- * This function will run continiously, until there's no more events to
+ * This function will run continuously, until there's no more events to
  * handle.
  *
  * @return void
