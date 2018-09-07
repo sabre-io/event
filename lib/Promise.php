@@ -103,7 +103,7 @@ class Promise {
                 $this->invokeCallback($subPromise, $onFulfilled);
                 break;
             case self::REJECTED :
-                // The async operation failed, so we call teh onRejected
+                // The async operation failed, so we call the onRejected
                 // callback asap.
                 $this->invokeCallback($subPromise, $onRejected);
                 break;
@@ -161,7 +161,7 @@ class Promise {
     /**
      * Stops execution until this promise is resolved.
      *
-     * This method stops exection completely. If the promise is successful with
+     * This method stops execution completely. If the promise is successful with
      * a value, this method will return this value. If the promise was
      * rejected, this method will throw an exception.
      *

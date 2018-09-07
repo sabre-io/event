@@ -24,7 +24,7 @@ use Throwable;
  *
  * This array will be in the exact same order as the array of input promises.
  *
- * If any of the given Promises fails, the returned promise will immidiately
+ * If any of the given Promises fails, the returned promise will immediately
  * fail with the first Promise that fails, and its reason.
  *
  * @param Promise[] $promises
