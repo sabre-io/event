@@ -1,13 +1,21 @@
 language: php
+sudo: required
+dist: xenial
 php:
   - 7.0
   - 7.1
   - 7.2
+  - 7.3snapshot
 
 env:
   matrix:
     - LOWEST_DEPS=""
     - LOWEST_DEPS="--prefer-lowest"
+
+addons:
+  apt:
+    packages:
+    - libzip4
 
 before_script:
   - composer update --prefer-source $LOWEST_DEPS
@@ -15,7 +23,5 @@ before_script:
 script:
   - ./bin/phpunit
   - ./bin/sabre-cs-fixer fix . --dry-run --diff
-
-sudo: false
 
 cache: vendor
