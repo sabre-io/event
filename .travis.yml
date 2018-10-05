@@ -21,7 +21,11 @@ before_script:
   - composer update --prefer-source $LOWEST_DEPS
 
 script:
-  - ./bin/phpunit
+  - ./bin/phpunit --coverage-clover=coverage.xml
   - ./bin/sabre-cs-fixer fix . --dry-run --diff
+
+after_success:
+- bash <(curl -s https://codecov.io/bash)
+
 
 cache: vendor
