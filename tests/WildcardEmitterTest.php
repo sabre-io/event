@@ -1,55 +1,52 @@
-<?php declare (strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Sabre\Event;
 
-class WildcardEmitterTest extends \PHPUnit\Framework\TestCase {
-
-    function testInit() {
-
+class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
+{
+    public function testInit()
+    {
         $ee = new WildcardEmitter();
         $this->assertInstanceOf('Sabre\\Event\\WildcardEmitter', $ee);
-
     }
 
-    function testListeners() {
-
+    public function testListeners()
+    {
         $ee = new WildcardEmitter();
 
-        $callback1 = function() { };
-        $callback2 = function() { };
+        $callback1 = function () { };
+        $callback2 = function () { };
         $ee->on('foo', $callback1, 200);
         $ee->on('foo', $callback2, 100);
 
         $this->assertEquals([$callback2, $callback1], $ee->listeners('foo'));
-
     }
 
-    function testWildcardListeners() {
-
+    public function testWildcardListeners()
+    {
         $ee = new WildcardEmitter();
 
-        $callback1 = function() { };
-        $callback2 = function() { };
+        $callback1 = function () { };
+        $callback2 = function () { };
         $ee->on('foo:*', $callback1, 200);
         $ee->on('foo:bar', $callback2, 100);
 
         $this->assertEquals([$callback2, $callback1], $ee->listeners('foo:bar'));
         $this->assertEquals([$callback1], $ee->listeners('foo:baz'));
-
     }
 
     /**
      * @depends testInit
      */
-    function testHandleEvent() {
-
+    public function testHandleEvent()
+    {
         $argResult = null;
 
         $ee = new WildcardEmitter();
-        $ee->on('foo:*', function($arg) use (&$argResult) {
-
+        $ee->on('foo:*', function ($arg) use (&$argResult) {
             $argResult = $arg;
-
         });
 
         $this->assertTrue(
@@ -57,27 +54,23 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase {
         );
 
         $this->assertEquals('bar', $argResult);
-
     }
 
     /**
      * @depends testHandleEvent
      */
-    function testCancelEvent() {
-
+    public function testCancelEvent()
+    {
         $argResult = 0;
 
         $ee = new WildcardEmitter();
-        $ee->on('foo:BAR', function($arg) use (&$argResult) {
-
+        $ee->on('foo:BAR', function ($arg) use (&$argResult) {
             $argResult = 1;
+
             return false;
-
         }, 10);
-        $ee->on('foo:*', function($arg) use (&$argResult) {
-
+        $ee->on('foo:*', function ($arg) use (&$argResult) {
             $argResult = 2;
-
         }, 20);
 
         $this->assertFalse(
@@ -91,28 +84,25 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase {
             $ee->emit('foo:NOTBAR', ['bar'])
         );
         $this->assertEquals(2, $argResult);
-
     }
 
     /**
      * @depends testCancelEvent
      */
-    function testPriority() {
-
+    public function testPriority()
+    {
         $argResult = 0;
 
         $ee = new WildcardEmitter();
-        $ee->on('foo:bar:*', function($arg) use (&$argResult) {
-
+        $ee->on('foo:bar:*', function ($arg) use (&$argResult) {
             $argResult = 1;
-            return false;
 
+            return false;
         });
-        $ee->on('foo:bar:baz', function($arg) use (&$argResult) {
-
+        $ee->on('foo:bar:baz', function ($arg) use (&$argResult) {
             $argResult = 2;
-            return false;
 
+            return false;
         }, 1);
 
         $this->assertFalse(
@@ -120,51 +110,39 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase {
         );
 
         $this->assertEquals(2, $argResult);
-
     }
 
     /**
      * @depends testPriority
      */
-    function testPriority2() {
-
+    public function testPriority2()
+    {
         $result = [];
         $ee = new WildcardEmitter();
 
-        $ee->on('foo:bar:baz', function() use (&$result) {
-
+        $ee->on('foo:bar:baz', function () use (&$result) {
             $result[] = 'a';
-
         }, 200);
-        $ee->on('foo:bar:*', function() use (&$result) {
-
+        $ee->on('foo:bar:*', function () use (&$result) {
             $result[] = 'b';
-
         }, 50);
-        $ee->on('foo:bar:baz', function() use (&$result) {
-
+        $ee->on('foo:bar:baz', function () use (&$result) {
             $result[] = 'c';
-
         }, 300);
-        $ee->on('foo:bar:*', function() use (&$result) {
-
+        $ee->on('foo:bar:*', function () use (&$result) {
             $result[] = 'd';
-
         });
 
         $ee->emit('foo:bar:baz');
         $this->assertEquals(['b', 'd', 'a', 'c'], $result);
-
     }
 
-    function testRemoveListener() {
-
+    public function testRemoveListener()
+    {
         $result = false;
 
-        $callBack = function() use (&$result) {
-
+        $callBack = function () use (&$result) {
             $result = true;
-
         };
 
         $ee = new WildcardEmitter();
@@ -182,17 +160,14 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase {
 
         $ee->emit('foo');
         $this->assertFalse($result);
-
     }
 
-    function testRemoveUnknownListener() {
-
+    public function testRemoveUnknownListener()
+    {
         $result = false;
 
-        $callBack = function() use (&$result) {
-
+        $callBack = function () use (&$result) {
             $result = true;
-
         };
 
         $ee = new WildcardEmitter();
@@ -207,17 +182,14 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase {
 
         $ee->emit('foo');
         $this->assertTrue($result);
-
     }
 
-    function testRemoveListenerTwice() {
-
+    public function testRemoveListenerTwice()
+    {
         $result = false;
 
-        $callBack = function() use (&$result) {
-
+        $callBack = function () use (&$result) {
             $result = true;
-
         };
 
         $ee = new WildcardEmitter();
@@ -237,16 +209,13 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase {
 
         $ee->emit('foo');
         $this->assertFalse($result);
-
     }
 
-    function testRemoveAllListeners() {
-
+    public function testRemoveAllListeners()
+    {
         $result = false;
-        $callBack = function() use (&$result) {
-
+        $callBack = function () use (&$result) {
             $result = true;
-
         };
 
         $ee = new WildcardEmitter();
@@ -260,19 +229,15 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase {
 
         $ee->emit('foo');
         $this->assertFalse($result);
-
     }
 
-    function testRemoveAllListenersNoArg() {
-
+    public function testRemoveAllListenersNoArg()
+    {
         $result = false;
 
-        $callBack = function() use (&$result) {
-
+        $callBack = function () use (&$result) {
             $result = true;
-
         };
-
 
         $ee = new WildcardEmitter();
         $ee->on('foo', $callBack);
@@ -285,16 +250,13 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase {
 
         $ee->emit('foo');
         $this->assertFalse($result);
-
     }
 
-    function testRemoveAllListenersWildcard() {
-
+    public function testRemoveAllListenersWildcard()
+    {
         $result = false;
-        $callBack = function() use (&$result) {
-
+        $callBack = function () use (&$result) {
             $result = true;
-
         };
 
         $ee = new WildcardEmitter();
@@ -308,17 +270,14 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase {
 
         $ee->emit('foo:bar');
         $this->assertFalse($result);
-
     }
 
-    function testOnce() {
-
+    public function testOnce()
+    {
         $result = 0;
 
-        $callBack = function() use (&$result) {
-
-            $result++;
-
+        $callBack = function () use (&$result) {
+            ++$result;
         };
 
         $ee = new WildcardEmitter();
@@ -328,28 +287,25 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase {
         $ee->emit('foo:baz');
 
         $this->assertEquals(1, $result);
-
     }
 
     /**
      * @depends testCancelEvent
      */
-    function testPriorityOnce() {
-
+    public function testPriorityOnce()
+    {
         $argResult = 0;
 
         $ee = new WildcardEmitter();
-        $ee->once('foo:*', function($arg) use (&$argResult) {
-
+        $ee->once('foo:*', function ($arg) use (&$argResult) {
             $argResult = 1;
-            return false;
 
+            return false;
         });
-        $ee->once('foo:bar', function($arg) use (&$argResult) {
-
+        $ee->once('foo:bar', function ($arg) use (&$argResult) {
             $argResult = 2;
-            return false;
 
+            return false;
         }, 1);
 
         $this->assertFalse(
@@ -357,62 +313,62 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase {
         );
 
         $this->assertEquals(2, $argResult);
-
     }
 
-    function testContinueCallBack() {
-
+    public function testContinueCallBack()
+    {
         $ee = new WildcardEmitter();
 
         $handlerCounter = 0;
-        $bla = function() use (&$handlerCounter) {
-            $handlerCounter++;
+        $bla = function () use (&$handlerCounter) {
+            ++$handlerCounter;
         };
         $ee->on('foo', $bla);
         $ee->on('foo', $bla);
         $ee->on('foo', $bla);
 
         $continueCounter = 0;
-        $r = $ee->emit('foo', [], function() use (&$continueCounter) {
-            $continueCounter++;
+        $r = $ee->emit('foo', [], function () use (&$continueCounter) {
+            ++$continueCounter;
+
             return true;
         });
         $this->assertTrue($r);
         $this->assertEquals(3, $handlerCounter);
         $this->assertEquals(2, $continueCounter);
-
     }
 
-    function testContinueCallBackBreak() {
-
+    public function testContinueCallBackBreak()
+    {
         $ee = new WildcardEmitter();
 
         $handlerCounter = 0;
-        $bla = function() use (&$handlerCounter) {
-            $handlerCounter++;
+        $bla = function () use (&$handlerCounter) {
+            ++$handlerCounter;
         };
         $ee->on('foo', $bla);
         $ee->on('foo', $bla);
         $ee->on('foo', $bla);
 
         $continueCounter = 0;
-        $r = $ee->emit('foo', [], function() use (&$continueCounter) {
-            $continueCounter++;
+        $r = $ee->emit('foo', [], function () use (&$continueCounter) {
+            ++$continueCounter;
+
             return false;
         });
         $this->assertTrue($r);
         $this->assertEquals(1, $handlerCounter);
         $this->assertEquals(1, $continueCounter);
-
     }
 
-    function testContinueCallBackBreakByHandler() {
-
+    public function testContinueCallBackBreakByHandler()
+    {
         $ee = new WildcardEmitter();
 
         $handlerCounter = 0;
-        $bla = function() use (&$handlerCounter) {
-            $handlerCounter++;
+        $bla = function () use (&$handlerCounter) {
+            ++$handlerCounter;
+
             return false;
         };
         $ee->on('foo', $bla);
@@ -420,14 +376,13 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase {
         $ee->on('foo', $bla);
 
         $continueCounter = 0;
-        $r = $ee->emit('foo', [], function() use (&$continueCounter) {
-            $continueCounter++;
+        $r = $ee->emit('foo', [], function () use (&$continueCounter) {
+            ++$continueCounter;
+
             return false;
         });
         $this->assertFalse($r);
         $this->assertEquals(1, $handlerCounter);
         $this->assertEquals(0, $continueCounter);
-
     }
-
 }

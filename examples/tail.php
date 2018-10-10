@@ -1,7 +1,7 @@
 #!/usr/bin/env php
-<?php declare (strict_types=1);
+<?php declare(strict_types=1);
 
-/**
+/*
  * This example can be used to logfile processing and basically wraps the tail
  * command.
  *
@@ -11,18 +11,16 @@
  * To stop this application, hit CTRL-C
  */
 if ($argc < 2) {
-    echo "Usage: " . $argv[0] . " filename\n";
+    echo 'Usage: '.$argv[0]." filename\n";
     exit(1);
 }
 
-require __DIR__ . '/../vendor/autoload.php';
+require __DIR__.'/../vendor/autoload.php';
 
-$tail = popen('tail -fn0 ' . escapeshellarg($argv[1]), 'r');
+$tail = popen('tail -fn0 '.escapeshellarg($argv[1]), 'r');
 
-\Sabre\Event\Loop\addReadStream($tail, function() use ($tail) {
-
+\Sabre\Event\Loop\addReadStream($tail, function () use ($tail) {
     echo fread($tail, 4096);
-
 });
 
 \Sabre\Event\Loop\run();

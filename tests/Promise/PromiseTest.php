@@ -1,4 +1,6 @@
-<?php declare (strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Sabre\Event\Promise;
 
@@ -6,68 +8,69 @@ use Exception;
 use Sabre\Event\Loop;
 use Sabre\Event\Promise;
 
-class PromiseTest extends \PHPUnit\Framework\TestCase {
-
-    function testSuccess() {
-
+class PromiseTest extends \PHPUnit\Framework\TestCase
+{
+    public function testSuccess()
+    {
         $finalValue = 0;
         $promise = new Promise();
         $promise->fulfill(1);
 
-        $promise->then(function($value) use (&$finalValue) {
+        $promise->then(function ($value) use (&$finalValue) {
             $finalValue = $value + 2;
         });
         Loop\run();
 
         $this->assertEquals(3, $finalValue);
-
     }
 
-    function testFail() {
-
+    public function testFail()
+    {
         $finalValue = 0;
         $promise = new Promise();
-        $promise->reject(new Exception("1"));
+        $promise->reject(new Exception('1'));
 
-        $promise->then(null, function($value) use (&$finalValue) {
+        $promise->then(null, function ($value) use (&$finalValue) {
             $finalValue = $value->getMessage() + 2;
         });
         Loop\run();
 
         $this->assertEquals(3, $finalValue);
-
     }
 
-    function testChain() {
-
+    public function testChain()
+    {
         $finalValue = 0;
         $promise = new Promise();
         $promise->fulfill(1);
 
-        $promise->then(function($value) use (&$finalValue) {
+        $promise->then(function ($value) use (&$finalValue) {
             $finalValue = $value + 2;
+
             return $finalValue;
-        })->then(function($value) use (&$finalValue) {
+        })->then(function ($value) use (&$finalValue) {
             $finalValue = $value + 4;
+
             return $finalValue;
         });
         Loop\run();
 
         $this->assertEquals(7, $finalValue);
-
     }
-    function testChainPromise() {
 
+    public function testChainPromise()
+    {
         $finalValue = 0;
         $promise = new Promise();
         $promise->fulfill(1);
 
         $subPromise = new Promise();
 
-        $promise->then(function($value) use ($subPromise) {
+        $promise->then(function ($value) use ($subPromise) {
             return $subPromise;
-        })->then(function($value) use (&$finalValue) {
+        })->then(function ($value) use (&$finalValue) {
             $finalValue = $value + 4;
+
             return $finalValue;
         });
 
@@ -75,15 +78,14 @@ class PromiseTest extends \PHPUnit\Framework\TestCase {
         Loop\run();
 
         $this->assertEquals(6, $finalValue);
-
     }
 
-    function testPendingResult() {
-
+    public function testPendingResult()
+    {
         $finalValue = 0;
         $promise = new Promise();
 
-        $promise->then(function($value) use (&$finalValue) {
+        $promise->then(function ($value) use (&$finalValue) {
             $finalValue = $value + 2;
         });
 
@@ -91,102 +93,80 @@ class PromiseTest extends \PHPUnit\Framework\TestCase {
         Loop\run();
 
         $this->assertEquals(6, $finalValue);
-
     }
 
-    function testPendingFail() {
-
+    public function testPendingFail()
+    {
         $finalValue = 0;
         $promise = new Promise();
 
-        $promise->otherwise(function($value) use (&$finalValue) {
+        $promise->otherwise(function ($value) use (&$finalValue) {
             $finalValue = $value->getMessage() + 2;
         });
 
-        $promise->reject(new Exception("4"));
+        $promise->reject(new Exception('4'));
         Loop\run();
 
         $this->assertEquals(6, $finalValue);
-
     }
 
-    function testExecutorSuccess() {
-
-        $promise = (new Promise(function($success, $fail) {
-
+    public function testExecutorSuccess()
+    {
+        $promise = (new Promise(function ($success, $fail) {
             $success('hi');
-
-        }))->then(function($result) use (&$realResult) {
-
+        }))->then(function ($result) use (&$realResult) {
             $realResult = $result;
-
         });
         Loop\run();
 
         $this->assertEquals('hi', $realResult);
-
     }
 
-    function testExecutorFail() {
-
-        $promise = (new Promise(function($success, $fail) {
-
+    public function testExecutorFail()
+    {
+        $promise = (new Promise(function ($success, $fail) {
             $fail(new Exception('hi'));
-
-        }))->then(function($result) use (&$realResult) {
-
+        }))->then(function ($result) use (&$realResult) {
             $realResult = 'incorrect';
-
-        })->otherwise(function($reason) use (&$realResult) {
-
+        })->otherwise(function ($reason) use (&$realResult) {
             $realResult = $reason->getMessage();
-
         });
         Loop\run();
 
         $this->assertEquals('hi', $realResult);
-
     }
 
     /**
      * @expectedException \Sabre\Event\PromiseAlreadyResolvedException
      */
-    function testFulfillTwice() {
-
+    public function testFulfillTwice()
+    {
         $promise = new Promise();
         $promise->fulfill(1);
         $promise->fulfill(1);
-
     }
 
     /**
      * @expectedException \Sabre\Event\PromiseAlreadyResolvedException
      */
-    function testRejectTwice() {
-
+    public function testRejectTwice()
+    {
         $promise = new Promise();
-        $promise->reject(new Exception("1"));
-        $promise->reject(new Exception("1"));
-
+        $promise->reject(new Exception('1'));
+        $promise->reject(new Exception('1'));
     }
 
-    function testFromFailureHandler() {
-
+    public function testFromFailureHandler()
+    {
         $ok = 0;
         $promise = new Promise();
-        $promise->otherwise(function($reason) {
-
+        $promise->otherwise(function ($reason) {
             $this->assertEquals('foo', $reason);
             throw new \Exception('hi');
-
-        })->then(function() use (&$ok) {
-
+        })->then(function () use (&$ok) {
             $ok = -1;
-
-        }, function() use (&$ok) {
-
+        }, function () use (&$ok) {
             $ok = 1;
-
         });
 
         $this->assertEquals(0, $ok);
@@ -194,36 +174,33 @@ class PromiseTest extends \PHPUnit\Framework\TestCase {
         Loop\run();
 
         $this->assertEquals(1, $ok);
-
     }
 
-    function testWaitResolve() {
-
+    public function testWaitResolve()
+    {
         $promise = new Promise();
-        Loop\nextTick(function() use ($promise) {
+        Loop\nextTick(function () use ($promise) {
             $promise->fulfill(1);
         });
         $this->assertEquals(
             1,
             $promise->wait()
         );
-
     }
 
     /**
      * @expectedException \LogicException
      */
-    function testWaitWillNeverResolve() {
-
+    public function testWaitWillNeverResolve()
+    {
         $promise = new Promise();
         $promise->wait();
-
     }
 
-    function testWaitRejectedException() {
-
+    public function testWaitRejectedException()
+    {
         $promise = new Promise();
-        Loop\nextTick(function() use ($promise) {
+        Loop\nextTick(function () use ($promise) {
             $promise->reject(new \OutOfBoundsException('foo'));
         });
         try {
@@ -233,13 +210,12 @@ class PromiseTest extends \PHPUnit\Framework\TestCase {
             $this->assertInstanceOf('OutOfBoundsException', $e);
             $this->assertEquals('foo', $e->getMessage());
         }
-
     }
 
-    function testWaitRejectedScalar() {
-
+    public function testWaitRejectedScalar()
+    {
         $promise = new Promise();
-        Loop\nextTick(function() use ($promise) {
+        Loop\nextTick(function () use ($promise) {
             $promise->reject(new Exception('foo'));
         });
         try {
@@ -249,7 +225,5 @@ class PromiseTest extends \PHPUnit\Framework\TestCase {
             $this->assertInstanceOf('Exception', $e);
             $this->assertEquals('foo', $e->getMessage());
         }
-
     }
-
 }
