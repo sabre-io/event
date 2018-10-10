@@ -12,3 +12,4 @@ bin/phpunit
 
 #development stuff
 tests/cov
+.php_cs.cache
