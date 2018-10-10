@@ -1,4 +1,6 @@
-<?php declare (strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Sabre\Event;
 
@@ -14,7 +16,7 @@ namespace Sabre\Event;
  *   on('change:*')
  *
  * A few notes:
- * 
+ *
  * - Wildcards only work at the end of an event name.
  * - Currently you can only use 1 wildcard.
  * - Using ":" as a separator is optional, but it's highly recommended to use
@@ -28,10 +30,7 @@ namespace Sabre\Event;
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */
-class WildcardEmitter implements EmitterInterface {
-
+class WildcardEmitter implements EmitterInterface
+{
     use WildcardEmitterTrait;
-
-
-
 }

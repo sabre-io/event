@@ -1,41 +1,39 @@
-<?php declare (strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Sabre\Event;
 
-class EmitterTest extends \PHPUnit\Framework\TestCase {
-
-    function testInit() {
-
+class EmitterTest extends \PHPUnit\Framework\TestCase
+{
+    public function testInit()
+    {
         $ee = new Emitter();
         $this->assertInstanceOf('Sabre\\Event\\Emitter', $ee);
-
     }
 
-    function testListeners() {
-
+    public function testListeners()
+    {
         $ee = new Emitter();
 
-        $callback1 = function() { };
-        $callback2 = function() { };
+        $callback1 = function () { };
+        $callback2 = function () { };
         $ee->on('foo', $callback1, 200);
         $ee->on('foo', $callback2, 100);
 
         $this->assertEquals([$callback2, $callback1], $ee->listeners('foo'));
-
     }
 
     /**
      * @depends testInit
      */
-    function testHandleEvent() {
-
+    public function testHandleEvent()
+    {
         $argResult = null;
 
         $ee = new Emitter();
-        $ee->on('foo', function($arg) use (&$argResult) {
-
+        $ee->on('foo', function ($arg) use (&$argResult) {
             $argResult = $arg;
-
         });
 
         $this->assertTrue(
@@ -43,27 +41,23 @@ class EmitterTest extends \PHPUnit\Framework\TestCase {
         );
 
         $this->assertEquals('bar', $argResult);
-
     }
 
     /**
      * @depends testHandleEvent
      */
-    function testCancelEvent() {
-
+    public function testCancelEvent()
+    {
         $argResult = 0;
 
         $ee = new Emitter();
-        $ee->on('foo', function($arg) use (&$argResult) {
-
+        $ee->on('foo', function ($arg) use (&$argResult) {
             $argResult = 1;
+
             return false;
-
         });
-        $ee->on('foo', function($arg) use (&$argResult) {
-
+        $ee->on('foo', function ($arg) use (&$argResult) {
             $argResult = 2;
-
         });
 
         $this->assertFalse(
@@ -71,28 +65,25 @@ class EmitterTest extends \PHPUnit\Framework\TestCase {
         );
 
         $this->assertEquals(1, $argResult);
-
     }
 
     /**
      * @depends testCancelEvent
      */
-    function testPriority() {
-
+    public function testPriority()
+    {
         $argResult = 0;
 
         $ee = new Emitter();
-        $ee->on('foo', function($arg) use (&$argResult) {
-
+        $ee->on('foo', function ($arg) use (&$argResult) {
             $argResult = 1;
-            return false;
 
+            return false;
         });
-        $ee->on('foo', function($arg) use (&$argResult) {
-
+        $ee->on('foo', function ($arg) use (&$argResult) {
             $argResult = 2;
-            return false;
 
+            return false;
         }, 1);
 
         $this->assertFalse(
@@ -100,51 +91,39 @@ class EmitterTest extends \PHPUnit\Framework\TestCase {
         );
 
         $this->assertEquals(2, $argResult);
-
     }
 
     /**
      * @depends testPriority
      */
-    function testPriority2() {
-
+    public function testPriority2()
+    {
         $result = [];
         $ee = new Emitter();
 
-        $ee->on('foo', function() use (&$result) {
-
+        $ee->on('foo', function () use (&$result) {
             $result[] = 'a';
-
         }, 200);
-        $ee->on('foo', function() use (&$result) {
-
+        $ee->on('foo', function () use (&$result) {
             $result[] = 'b';
-
         }, 50);
-        $ee->on('foo', function() use (&$result) {
-
+        $ee->on('foo', function () use (&$result) {
             $result[] = 'c';
-
         }, 300);
-        $ee->on('foo', function() use (&$result) {
-
+        $ee->on('foo', function () use (&$result) {
             $result[] = 'd';
-
         });
 
         $ee->emit('foo');
         $this->assertEquals(['b', 'd', 'a', 'c'], $result);
-
     }
 
-    function testRemoveListener() {
-
+    public function testRemoveListener()
+    {
         $result = false;
 
-        $callBack = function() use (&$result) {
-
+        $callBack = function () use (&$result) {
             $result = true;
-
         };
 
         $ee = new Emitter();
@@ -161,17 +140,14 @@ class EmitterTest extends \PHPUnit\Framework\TestCase {
 
         $ee->emit('foo');
         $this->assertFalse($result);
-
     }
 
-    function testRemoveUnknownListener() {
-
+    public function testRemoveUnknownListener()
+    {
         $result = false;
 
-        $callBack = function() use (&$result) {
-
+        $callBack = function () use (&$result) {
             $result = true;
-
         };
 
         $ee = new Emitter();
@@ -186,17 +162,14 @@ class EmitterTest extends \PHPUnit\Framework\TestCase {
 
         $ee->emit('foo');
         $this->assertTrue($result);
-
     }
 
-    function testRemoveListenerTwice() {
-
+    public function testRemoveListenerTwice()
+    {
         $result = false;
 
-        $callBack = function() use (&$result) {
-
+        $callBack = function () use (&$result) {
             $result = true;
-
         };
 
         $ee = new Emitter();
@@ -216,16 +189,13 @@ class EmitterTest extends \PHPUnit\Framework\TestCase {
 
         $ee->emit('foo');
         $this->assertFalse($result);
-
     }
 
-    function testRemoveAllListeners() {
-
+    public function testRemoveAllListeners()
+    {
         $result = false;
-        $callBack = function() use (&$result) {
-
+        $callBack = function () use (&$result) {
             $result = true;
-
         };
 
         $ee = new Emitter();
@@ -239,19 +209,15 @@ class EmitterTest extends \PHPUnit\Framework\TestCase {
 
         $ee->emit('foo');
         $this->assertFalse($result);
-
     }
 
-    function testRemoveAllListenersNoArg() {
-
+    public function testRemoveAllListenersNoArg()
+    {
         $result = false;
 
-        $callBack = function() use (&$result) {
-
+        $callBack = function () use (&$result) {
             $result = true;
-
         };
-
 
         $ee = new Emitter();
         $ee->on('foo', $callBack);
@@ -264,17 +230,14 @@ class EmitterTest extends \PHPUnit\Framework\TestCase {
 
         $ee->emit('foo');
         $this->assertFalse($result);
-
     }
 
-    function testOnce() {
-
+    public function testOnce()
+    {
         $result = 0;
 
-        $callBack = function() use (&$result) {
-
-            $result++;
-
+        $callBack = function () use (&$result) {
+            ++$result;
         };
 
         $ee = new Emitter();
@@ -284,28 +247,25 @@ class EmitterTest extends \PHPUnit\Framework\TestCase {
         $ee->emit('foo');
 
         $this->assertEquals(1, $result);
-
     }
 
     /**
      * @depends testCancelEvent
      */
-    function testPriorityOnce() {
-
+    public function testPriorityOnce()
+    {
         $argResult = 0;
 
         $ee = new Emitter();
-        $ee->once('foo', function($arg) use (&$argResult) {
-
+        $ee->once('foo', function ($arg) use (&$argResult) {
             $argResult = 1;
-            return false;
 
+            return false;
         });
-        $ee->once('foo', function($arg) use (&$argResult) {
-
+        $ee->once('foo', function ($arg) use (&$argResult) {
             $argResult = 2;
-            return false;
 
+            return false;
         }, 1);
 
         $this->assertFalse(
@@ -313,6 +273,5 @@ class EmitterTest extends \PHPUnit\Framework\TestCase {
         );
 
         $this->assertEquals(2, $argResult);
-
     }
 }

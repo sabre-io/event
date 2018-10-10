@@ -1,64 +1,58 @@
-<?php declare (strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Sabre\Event;
 
 use Exception;
 
-class CoroutineTest extends \PHPUnit\Framework\TestCase {
-
+class CoroutineTest extends \PHPUnit\Framework\TestCase
+{
     /**
      * @expectedException \InvalidArgumentException
      */
-    function testNonGenerator() {
-
-        coroutine(function() {});
-
+    public function testNonGenerator()
+    {
+        coroutine(function () {});
     }
 
-    function testBasicCoroutine() {
-
+    public function testBasicCoroutine()
+    {
         $start = 0;
 
-        coroutine(function() use (&$start) {
-
-            $start += 1;
+        coroutine(function () use (&$start) {
+            ++$start;
             yield;
-
         });
 
         $this->assertEquals(1, $start);
-
     }
 
-    function testFulfilledPromise() {
-
+    public function testFulfilledPromise()
+    {
         $start = 0;
-        $promise = new Promise(function($fulfill, $reject) {
+        $promise = new Promise(function ($fulfill, $reject) {
             $fulfill(2);
         });
 
-        coroutine(function() use (&$start, $promise) {
-
-            $start += 1;
+        coroutine(function () use (&$start, $promise) {
+            ++$start;
             $start += yield $promise;
-
         });
 
         Loop\run();
         $this->assertEquals(3, $start);
-
     }
 
-    function testRejectedPromise() {
-
+    public function testRejectedPromise()
+    {
         $start = 0;
-        $promise = new Promise(function($fulfill, $reject) {
-            $reject(new Exception("2"));
+        $promise = new Promise(function ($fulfill, $reject) {
+            $reject(new Exception('2'));
         });
 
-        coroutine(function() use (&$start, $promise) {
-
-            $start += 1;
+        coroutine(function () use (&$start, $promise) {
+            ++$start;
             try {
                 $start += yield $promise;
                 // This line is unreachable, but it's our control
@@ -66,24 +60,21 @@ class CoroutineTest extends \PHPUnit\Framework\TestCase {
             } catch (\Exception $e) {
                 $start += $e->getMessage();
             }
-
         });
 
         Loop\run();
         $this->assertEquals(3, $start);
-
     }
 
-    function testRejectedPromiseException() {
-
+    public function testRejectedPromiseException()
+    {
         $start = 0;
-        $promise = new Promise(function($fulfill, $reject) {
+        $promise = new Promise(function ($fulfill, $reject) {
             $reject(new \LogicException('2'));
         });
 
-        coroutine(function() use (&$start, $promise) {
-
-            $start += 1;
+        coroutine(function () use (&$start, $promise) {
+            ++$start;
             try {
                 $start += yield $promise;
                 // This line is unreachable, but it's our control
@@ -91,23 +82,19 @@ class CoroutineTest extends \PHPUnit\Framework\TestCase {
             } catch (\LogicException $e) {
                 $start += $e->getMessage();
             }
-
         });
 
         Loop\run();
         $this->assertEquals(3, $start);
-
     }
 
-    function testFulfilledPromiseAsync() {
-
+    public function testFulfilledPromiseAsync()
+    {
         $start = 0;
         $promise = new Promise();
-        coroutine(function() use (&$start, $promise) {
-
-            $start += 1;
+        coroutine(function () use (&$start, $promise) {
+            ++$start;
             $start += yield $promise;
-
         });
         Loop\run();
 
@@ -117,16 +104,14 @@ class CoroutineTest extends \PHPUnit\Framework\TestCase {
         Loop\run();
 
         $this->assertEquals(3, $start);
-
     }
 
-    function testRejectedPromiseAsync() {
-
+    public function testRejectedPromiseAsync()
+    {
         $start = 0;
         $promise = new Promise();
-        coroutine(function() use (&$start, $promise) {
-
-            $start += 1;
+        coroutine(function () use (&$start, $promise) {
+            ++$start;
             try {
                 $start += yield $promise;
                 // This line is unreachable, but it's our control
@@ -134,99 +119,84 @@ class CoroutineTest extends \PHPUnit\Framework\TestCase {
             } catch (\Exception $e) {
                 $start += $e->getMessage();
             }
-
         });
 
         $this->assertEquals(1, $start);
 
-        $promise->reject(new \Exception((string)2));
+        $promise->reject(new \Exception((string) 2));
         Loop\run();
 
         $this->assertEquals(3, $start);
-
     }
 
-    function testCoroutineException() {
-
+    public function testCoroutineException()
+    {
         $start = 0;
-        coroutine(function() use (&$start) {
-
-            $start += 1;
+        coroutine(function () use (&$start) {
+            ++$start;
             $start += yield 2;
 
             throw new \Exception('4');
-
-        })->otherwise(function($e) use (&$start) {
-
+        })->otherwise(function ($e) use (&$start) {
             $start += $e->getMessage();
-
         });
         Loop\run();
 
         $this->assertEquals(7, $start);
-
     }
 
-    function testDeepException() {
-
+    public function testDeepException()
+    {
         $start = 0;
         $promise = new Promise();
-        coroutine(function() use (&$start, $promise) {
-
-            $start += 1;
+        coroutine(function () use (&$start, $promise) {
+            ++$start;
             $start += yield $promise;
-
-        })->otherwise(function($e) use (&$start) {
-
+        })->otherwise(function ($e) use (&$start) {
             $start += $e->getMessage();
-
         });
 
         $this->assertEquals(1, $start);
 
-        $promise->reject(new \Exception((string)2));
+        $promise->reject(new \Exception((string) 2));
         Loop\run();
 
         $this->assertEquals(3, $start);
-
     }
 
-    function testReturn() {
-
+    public function testReturn()
+    {
         $ok = false;
-        coroutine(function() {
-
+        coroutine(function () {
             yield 1;
             yield 2;
             $hello = 'hi';
-            return 3;
 
-        })->then(function($value) use (&$ok) {
+            return 3;
+        })->then(function ($value) use (&$ok) {
             $this->assertEquals(3, $value);
             $ok = true;
-        })->otherwise(function($reason) {
+        })->otherwise(function ($reason) {
             $this->fail($reason);
         });
         Loop\run();
 
         $this->assertTrue($ok);
-
     }
 
-    function testReturnPromise() {
-
+    public function testReturnPromise()
+    {
         $ok = false;
 
         $promise = new Promise();
 
-        coroutine(function() use ($promise) {
-
+        coroutine(function () use ($promise) {
             yield 'fail';
-            return $promise;
 
-        })->then(function($value) use (&$ok) {
+            return $promise;
+        })->then(function ($value) use (&$ok) {
             $ok = $value;
-        })->otherwise(function($reason) {
+        })->otherwise(function ($reason) {
             $this->fail($reason);
         });
 
@@ -234,7 +204,5 @@ class CoroutineTest extends \PHPUnit\Framework\TestCase {
         Loop\run();
 
         $this->assertEquals('omg it worked', $ok);
-
     }
-
 }

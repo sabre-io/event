@@ -1,4 +1,6 @@
-<?php declare (strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Sabre\Event\Promise;
 
@@ -6,18 +8,16 @@ use Exception;
 use Sabre\Event\Loop;
 use Sabre\Event\Promise;
 
-class FunctionsTest extends \PHPUnit\Framework\TestCase {
-
-    function testAll() {
-
+class FunctionsTest extends \PHPUnit\Framework\TestCase
+{
+    public function testAll()
+    {
         $promise1 = new Promise();
         $promise2 = new Promise();
 
         $finalValue = 0;
-        Promise\all([$promise1, $promise2])->then(function($value) use (&$finalValue) {
-
+        Promise\all([$promise1, $promise2])->then(function ($value) use (&$finalValue) {
             $finalValue = $value;
-
         });
 
         $promise1->fulfill(1);
@@ -27,78 +27,76 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase {
         $promise2->fulfill(2);
         Loop\run();
         $this->assertEquals([1, 2], $finalValue);
-
     }
 
-    function testAllEmptyArray() {
-
+    public function testAllEmptyArray()
+    {
         $finalValue = Promise\all([])->wait();
 
         $this->assertEquals([], $finalValue);
-
     }
 
-    function testAllReject() {
-
+    public function testAllReject()
+    {
         $promise1 = new Promise();
         $promise2 = new Promise();
 
         $finalValue = 0;
         Promise\all([$promise1, $promise2])->then(
-            function($value) use (&$finalValue) {
+            function ($value) use (&$finalValue) {
                 $finalValue = 'foo';
+
                 return 'test';
             },
-            function($value) use (&$finalValue) {
+            function ($value) use (&$finalValue) {
                 $finalValue = $value;
             }
         );
 
-        $promise1->reject(new Exception("1"));
+        $promise1->reject(new Exception('1'));
         Loop\run();
-        $this->assertEquals("1", $finalValue->getMessage());
-        $promise2->reject(new Exception("2"));
+        $this->assertEquals('1', $finalValue->getMessage());
+        $promise2->reject(new Exception('2'));
         Loop\run();
         $this->assertEquals(1, $finalValue->getMessage());
-
     }
 
-    function testAllRejectThenResolve() {
-
+    public function testAllRejectThenResolve()
+    {
         $promise1 = new Promise();
         $promise2 = new Promise();
 
         $finalValue = 0;
         Promise\all([$promise1, $promise2])->then(
-            function($value) use (&$finalValue) {
+            function ($value) use (&$finalValue) {
                 $finalValue = 'foo';
+
                 return 'test';
             },
-            function($value) use (&$finalValue) {
+            function ($value) use (&$finalValue) {
                 $finalValue = $value;
             }
         );
 
-        $promise1->reject(new Exception("1"));
+        $promise1->reject(new Exception('1'));
         Loop\run();
         $this->assertEquals(1, $finalValue->getMessage());
-        $promise2->fulfill(new Exception("2"));
+        $promise2->fulfill(new Exception('2'));
         Loop\run();
         $this->assertEquals(1, $finalValue->getMessage());
-
     }
 
-    function testRace() {
-
+    public function testRace()
+    {
         $promise1 = new Promise();
         $promise2 = new Promise();
 
         $finalValue = 0;
         Promise\race([$promise1, $promise2])->then(
-            function($value) use (&$finalValue) {
+            function ($value) use (&$finalValue) {
                 $finalValue = $value;
             },
-            function($value) use (&$finalValue) {
+            function ($value) use (&$finalValue) {
                 $finalValue = $value;
             }
         );
@@ -109,55 +107,50 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase {
         $promise2->fulfill(2);
         Loop\run();
         $this->assertEquals(1, $finalValue);
-
     }
 
-    function testRaceReject() {
-
+    public function testRaceReject()
+    {
         $promise1 = new Promise();
         $promise2 = new Promise();
 
         $finalValue = 0;
         Promise\race([$promise1, $promise2])->then(
-            function($value) use (&$finalValue) {
+            function ($value) use (&$finalValue) {
                 $finalValue = $value;
             },
-            function($value) use (&$finalValue) {
+            function ($value) use (&$finalValue) {
                 $finalValue = $value;
             }
         );
 
-        $promise1->reject(new Exception("1"));
+        $promise1->reject(new Exception('1'));
         Loop\run();
         $this->assertEquals(1, $finalValue->getMessage());
-        $promise2->reject(new Exception("2"));
+        $promise2->reject(new Exception('2'));
         Loop\run();
         $this->assertEquals(1, $finalValue->getMessage());
-
     }
 
-    function testResolve() {
-
+    public function testResolve()
+    {
         $finalValue = 0;
 
         $promise = resolve(1);
-        $promise->then(function($value) use (&$finalValue) {
-
+        $promise->then(function ($value) use (&$finalValue) {
             $finalValue = $value;
-
         });
 
         $this->assertEquals(0, $finalValue);
         Loop\run();
         $this->assertEquals(1, $finalValue);
-
     }
 
     /**
      * @expectedException \Exception
      */
-    function testResolvePromise() {
-
+    public function testResolvePromise()
+    {
         $finalValue = 0;
 
         $promise = new Promise();
@@ -165,29 +158,21 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase {
 
         $newPromise = resolve($promise);
         $newPromise->wait();
-
     }
 
-    function testReject() {
-
+    public function testReject()
+    {
         $finalValue = 0;
 
-        $promise = reject(new Exception("1"));
-        $promise->then(function($value) use (&$finalValue) {
-
+        $promise = reject(new Exception('1'));
+        $promise->then(function ($value) use (&$finalValue) {
             $finalValue = 'im broken';
-
-        }, function($reason) use (&$finalValue) {
-
+        }, function ($reason) use (&$finalValue) {
             $finalValue = $reason;
-        
         });
 
         $this->assertEquals(0, $finalValue);
         Loop\run();
         $this->assertEquals(1, $finalValue->getMessage());
-
     }
-
-
 }
