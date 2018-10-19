@@ -328,14 +328,14 @@ class Loop
     /**
      * List of read callbacks, indexed by stream id.
      *
-     * @var callback[]
+     * @var callable[]
      */
     protected $readCallbacks = [];
 
     /**
      * List of write callbacks, indexed by stream id.
      *
-     * @var callback[]
+     * @var callable[]
      */
     protected $writeCallbacks = [];
 }
