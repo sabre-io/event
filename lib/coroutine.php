@@ -62,12 +62,12 @@ function coroutine(callable $gen): Promise
      * So tempted to use the mythical y-combinator here, but it's not needed in
      * PHP.
      */
-    $advanceGenerator = function () use (&$advanceGenerator, $generator, $promise, &$lastYieldResult) {
+    $advanceGenerator = function () use (&$advanceGenerator, $generator, $promise) {
         while ($generator->valid()) {
             $yieldedValue = $generator->current();
             if ($yieldedValue instanceof Promise) {
                 $yieldedValue->then(
-                    function ($value) use ($generator, &$advanceGenerator, &$lastYieldResult) {
+                    function ($value) use ($generator, &$advanceGenerator) {
                         $generator->send($value);
                         $advanceGenerator();
                     },
@@ -100,7 +100,7 @@ function coroutine(callable $gen): Promise
             if ($returnValue instanceof Promise) {
                 $returnValue->then(function ($value) use ($promise) {
                     $promise->fulfill($value);
-                }, function (Throwable $reason) {
+                }, function (Throwable $reason) use ($promise) {
                     $promise->reject($reason);
                 });
             } else {
