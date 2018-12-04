@@ -226,4 +226,49 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
             $this->assertEquals('foo', $e->getMessage());
         }
     }
+	
+	//////////////////////////////////
+    public function testForwardsFulfilledDownChainBetweenGaps()
+    {
+        $p = new Promise();
+        $r = $r2 = null;
+        $p->then(null, null)
+            ->then(function ($v) use (&$r) {$r = $v; return $v . '2'; })
+            ->then(function ($v) use (&$r2) { $r2 = $v; });
+        $p->fulfill('foo');
+        Loop\run();
+        $this->assertEquals('foo', $r);
+        $this->assertEquals('foo2', $r2);
+    }
+	
+    public function testForwardsHandlersToNextPromise()
+    {		
+        $p = new Promise();
+        $p2 = new Promise();
+        $resolved = null;
+        $p
+            ->then(function ($v) use ($p2) { return $p2; })
+            ->then(function ($value) use (&$resolved) { $resolved = $value; });
+        $p->fulfill('a');
+        $p2->fulfill('b');
+        Loop\run();
+        $this->assertEquals('b', $resolved);
+    }
+	
+    public function testForwardsHandlersWhenFulfilledPromiseIsReturned()
+    {		
+        $res = [];
+        $p = new Promise();
+        $p2 = new Promise();
+        $p2->fulfill('foo');
+        $p2->then(function ($v) use (&$res) { $res[] = 'A:' . $v; });
+        // $res is A:foo
+        $p
+            ->then(function () use ($p2, &$res) { $res[] = 'B'; return $p2; })
+            ->then(function ($v) use (&$res) { $res[] = 'C:' . $v; });
+        $p->fulfill('a');
+        $p->then(function ($v) use (&$res) { $res[] = 'D:' . $v; });
+        Loop\run();
+        $this->assertEquals(['A:foo', 'B', 'D:a', 'C:foo'], $res);
+    }	
 }
