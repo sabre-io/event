@@ -56,14 +56,32 @@ class Promise
      * Each are callbacks that map to $this->fulfill and $this->reject.
      * Using the executor is optional.
      */
-    public function __construct(callable $executor = null)
+    public function __construct( ...$executor)
     {
-        if ($executor) {
-            $executor(
+		$callDone = isset($executor[0]) ? $executor[0] : null;	
+		$callFail = isset($executor[1]) ? $executor[1] : null;	
+		
+		$this->waitFn = is_callable($callDone) ? $callDone : null;
+		$this->cancelFn = is_callable($callFail) 
+			? function($reason = null) use($callFail) {
+				try
+				{
+					return $callFail && ($result = $callFail($reason)) instanceof self ? $result : $this;
+				}
+				catch (Error $ex)
+				{}
+				catch (Exception $ex)
+				{}
+				return $this;
+			} 
+			: null;
+		
+		if (is_callable($callDone)) {
+			$callDone(
                 [$this, 'fulfill'],
                 [$this, 'reject']
-            );
-        }
+			);
+		}
     }
 
     /**
@@ -90,7 +108,7 @@ class Promise
         // This new subPromise will be returned from this function, and will
         // be fulfilled with the result of the onFulfilled or onRejected event
         // handlers.
-        $subPromise = new self();
+        $subPromise = new Promise(null, [$this, 'cancel']);
 
         switch ($this->state) {
             case self::PENDING:
@@ -124,6 +142,18 @@ class Promise
         return $this->then(null, $onRejected);
     }
 
+	public function resolve($value): Promise
+	{
+		if ($value instanceof Promise) {
+			return $value->then();
+		} else {
+			$promise = new Promise();
+			$promise->fulfill($value);
+
+			return $promise;
+		}
+	}
+
     /**
      * Marks this promise as fulfilled and sets its return value.
      *
@@ -144,7 +174,7 @@ class Promise
     /**
      * Marks this promise as rejected, and set it's rejection reason.
      */
-    public function reject(Throwable $reason)
+    public function reject($reason)
     {
         if (self::PENDING !== $this->state) {
             throw new PromiseAlreadyResolvedException('This promise is already resolved, and you\'re not allowed to resolve a promise more than once');
@@ -156,6 +186,29 @@ class Promise
         }
     }
 
+    public function cancel()
+    {
+        if (self::PENDING !== $this->state) {
+            return;
+        }
+
+        if ($this->cancelFn) {
+            $fn = $this->cancelFn;
+            $this->cancelFn = null;
+            try {
+                $fn($this->value);
+            } catch (\Throwable $e) {
+                $this->reject($e);
+            } catch (\Exception $e) {
+                $this->reject($e);
+            }
+        }
+
+        // Reject the promise only if it wasn't rejected in a then callback.
+        if (self::PENDING === $this->state) {
+            $this->reject(new \Exception('Promise has been cancelled'));
+        }
+    }
     /**
      * Stops execution until this promise is resolved.
      *
@@ -209,6 +262,7 @@ class Promise
      * @var mixed
      */
     protected $value = null;
+    protected $cancelFn = null;
 
     /**
      * This method is used to call either an onFulfilled or onRejected callback.
