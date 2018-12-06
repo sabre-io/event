@@ -6,6 +6,7 @@ namespace Sabre\Event;
 
 use Exception;
 use Throwable;
+use Sabre\Event\Loop;
 
 /**
  * An implementation of the Promise pattern.
@@ -46,6 +47,8 @@ class Promise
      * @var int
      */
     public $state = self::PENDING;
+	
+    public $loop = null;
 
     /**
      * Creates the promise.
@@ -57,21 +60,43 @@ class Promise
      * Using the executor is optional.
      */
     public function __construct( ...$executor)
-    {
-		$callDone = isset($executor[0]) ? $executor[0] : null;	
-		$callFail = isset($executor[1]) ? $executor[1] : null;	
+    {		
+		$callExecutor = isset($executor[0]) ? $executor[0] : null;		
+		$childLoop = $this->checkLoopInstance($callExecutor) ? $callExecutor : null;
+		$callExecutor = $this->checkLoopInstance($callExecutor) ? null : $callExecutor;	
 		
-		$this->waitFn = is_callable($callDone) ? $callDone : null;
-		$this->cancelFn = is_callable($callFail) ? $callFail : null;
+		$callCanceller = isset($executor[1]) ? $executor[1] : null;
+		$childLoop = $this->checkLoopInstance($callCanceller) ? $callCanceller : $childLoop;
+		$callCanceller = $this->checkLoopInstance($callCanceller) ? null : $callCanceller;	
+				
+		$loop = isset($executor[2]) ? $executor[2] : null;		
+		$childLoop = $this->checkLoopInstance($loop) ? $loop : $childLoop;		
+		$this->loop = $this->checkLoopInstance($childLoop) ? $childLoop : Loop\instance();
 		
-		if (is_callable($callDone)) {
-			$callDone(
+		$this->waitFn = is_callable($callExecutor) ? $callExecutor : null;
+		$this->cancelFn = is_callable($callCanceller) ? $callCanceller : null;
+		
+		if (is_callable($callExecutor) && $this->loop) {
+			$callExecutor(
                 [$this, 'fulfill'],
                 [$this, 'reject']
 			);
 		}
     }
 
+	private function checkLoopInstance($instance = null): bool
+	{
+		$isInstanceiable = false;
+		if ($instance instanceof TaskQueueInterface)
+			$isInstanceiable = true;
+		elseif ($instance instanceof LoopInterface)
+			$isInstanceiable = true;
+		elseif ($instance instanceof Loop)
+			$isInstanceiable = true;
+			
+		return $isInstanceiable;
+	}
+	
     /**
      * This method allows you to specify the callback that will be called after
      * the promise has been fulfilled or rejected.
@@ -177,6 +202,7 @@ class Promise
             return;
         }
 		
+		$this->waitFn = null;
 		$this->subscribers = [];
 
         if ($this->cancelFn) {
@@ -250,6 +276,7 @@ class Promise
      */
     protected $value = null;
     protected $cancelFn = null;
+    protected $waitFn = null;
 
     /**
      * This method is used to call either an onFulfilled or onRejected callback.
@@ -268,7 +295,7 @@ class Promise
         // passed to 'then'.
         //
         // This makes the order of execution more predictable.
-        Loop\nextTick(function () use ($callBack, $subPromise) {
+        $promiseFunction = function() use ($callBack, $subPromise) {
             if (is_callable($callBack)) {
                 try {
                     $result = $callBack($this->value);
@@ -295,6 +322,30 @@ class Promise
                     $subPromise->reject($this->value);
                 }
             }
-        });
+        };
+		
+		$this->implement($promiseFunction, $subPromise);
     }
+	
+	public function implement(callable $function, Promise $promise = null)
+	{		
+        if ($this->loop) {
+			$loop = $this->loop;
+			
+			$othersLoop = method_exists($loop, 'futureTick') ? [$loop, 'futureTick'] : null;
+			$othersLoop = method_exists($loop, 'addTick') ? [$loop, 'addTick'] : $othersLoop;
+			$othersLoop = method_exists($loop, 'onTick') ? [$loop, 'onTick'] : $othersLoop;
+			$othersLoop = method_exists($loop, 'enqueue') ? [$loop, 'enqueue'] : $othersLoop;
+			$othersLoop = method_exists($loop, 'add') ? [$loop, 'add'] : $othersLoop;
+			
+			if ($othersLoop)
+				call_user_func_array($othersLoop, $function); 
+			else 	
+				$loop->nextTick($function);
+        } else {
+            return $function();
+        } 
+		
+		return $promise;
+	}
 }
