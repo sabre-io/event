@@ -7,6 +7,7 @@ namespace Sabre\Event;
 use Exception;
 use Throwable;
 use Sabre\Event\Loop;
+use Sabre\Event\CancellationException;
 
 /**
  * An implementation of the Promise pattern.
@@ -97,6 +98,11 @@ class Promise
 		return $isInstanceiable;
 	}
 	
+    public function getState()
+    {
+        return $this->state;
+    }
+	
     /**
      * This method allows you to specify the callback that will be called after
      * the promise has been fulfilled or rejected.
@@ -155,7 +161,7 @@ class Promise
         return $this->then(null, $onRejected);
     }
 
-	public function resolve($value)
+	public function resolve($value = null)
 	{
 		if ($value instanceof Promise) {
 			return $value->then();
@@ -181,6 +187,13 @@ class Promise
         }
     }
 
+public function rejector($reason = null)
+{
+    $promise = new Promise();
+    $promise->reject($reason);
+
+    return $promise;
+}
     /**
      * Marks this promise as rejected, and set it's rejection reason.
      */
@@ -210,16 +223,16 @@ class Promise
             $this->cancelFn = null;
             try {
                 $fn();
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 $this->reject($e);
-            } catch (\Exception $exception) {
+            } catch (Exception $exception) {
                 $this->reject($exception);
             }
         }
 
         // Reject the promise only if it wasn't rejected in a then callback.
         if (self::PENDING === $this->state) {
-            $this->reject(new \Exception('Promise has been cancelled'));
+            $this->reject(new CancellationException('Promise has been cancelled'));
         }
     }
     /**
@@ -314,6 +327,8 @@ class Promise
                     // If the event handler threw an exception, we need to make sure that
                     // the chained promise is rejected as well.
                     $subPromise->reject($e);
+                } catch (Exception $exception) {
+                    $subPromise->reject($exception);
                 }
             } else {
                 if (self::FULFILLED === $this->state) {
