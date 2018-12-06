@@ -6,6 +6,7 @@ namespace Sabre\Event;
 
 use Exception;
 use Throwable;
+use Sabre\Event\CancellationException;
 
 /**
  * An implementation of the Promise pattern.
@@ -62,19 +63,7 @@ class Promise
 		$callFail = isset($executor[1]) ? $executor[1] : null;	
 		
 		$this->waitFn = is_callable($callDone) ? $callDone : null;
-		$this->cancelFn = is_callable($callFail) 
-			? function($reason = null) use($callFail) {
-				try
-				{
-					return $callFail && ($result = $callFail($reason)) instanceof self ? $result : $this;
-				}
-				catch (Error $ex)
-				{}
-				catch (Exception $ex)
-				{}
-				return $this;
-			} 
-			: null;
+		$this->cancelFn = is_callable($callFail) ? $callFail : null;
 		
 		if (is_callable($callDone)) {
 			$callDone(
@@ -145,9 +134,9 @@ class Promise
 	public function resolve($value): Promise
 	{
 		if ($value instanceof Promise) {
-			return $value->then();
+			return $value->then(null, [$this, 'cancel']);
 		} else {
-			$promise = new Promise();
+			$promise = new Promise(null, [$this, 'cancel']);
 			$promise->fulfill($value);
 
 			return $promise;
@@ -191,22 +180,25 @@ class Promise
         if (self::PENDING !== $this->state) {
             return;
         }
+		
+		Loop\stop();
+		$this->subscribers = [];
 
         if ($this->cancelFn) {
             $fn = $this->cancelFn;
             $this->cancelFn = null;
             try {
-                $fn($this->value);
+                $fn();
             } catch (\Throwable $e) {
                 $this->reject($e);
-            } catch (\Exception $e) {
-                $this->reject($e);
+            } catch (\Exception $exception) {
+                $this->reject($exception);
             }
         }
 
         // Reject the promise only if it wasn't rejected in a then callback.
         if (self::PENDING === $this->state) {
-            $this->reject(new \Exception('Promise has been cancelled'));
+            $this->reject(new CancellationException('Promise has been cancelled'));
         }
     }
     /**
