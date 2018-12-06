@@ -6,7 +6,6 @@ namespace Sabre\Event;
 
 use Exception;
 use Throwable;
-use Sabre\Event\CancellationException;
 
 /**
  * An implementation of the Promise pattern.
@@ -131,16 +130,13 @@ class Promise
         return $this->then(null, $onRejected);
     }
 
-	public function resolve($value): Promise
+	public function resolve($value)
 	{
 		if ($value instanceof Promise) {
-			return $value->then(null, [$this, 'cancel']);
-		} else {
-			$promise = new Promise(null, [$this, 'cancel']);
-			$promise->fulfill($value);
-
-			return $promise;
-		}
+			return $value->then();
+		} 
+		
+		return $this->fulfill($value);
 	}
 
     /**
@@ -181,7 +177,6 @@ class Promise
             return;
         }
 		
-		Loop\stop();
 		$this->subscribers = [];
 
         if ($this->cancelFn) {
@@ -198,7 +193,7 @@ class Promise
 
         // Reject the promise only if it wasn't rejected in a then callback.
         if (self::PENDING === $this->state) {
-            $this->reject(new CancellationException('Promise has been cancelled'));
+            $this->reject(new \Exception('Promise has been cancelled'));
         }
     }
     /**
