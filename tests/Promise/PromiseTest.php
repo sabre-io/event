@@ -334,4 +334,175 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
         Loop\run();
         $this->assertEquals(['B:a', 'D:a'], $res);
     }
+	///////////////////////
+		
+    /**
+     * @expectedException \Sabre\Event\PromiseAlreadyResolvedException
+     * @expectedExceptionMessage This promise is already resolved, and you're not allowed to resolve a promise more than once
+     */
+    public function testCannotResolveNonPendingPromise()
+    {
+        $p = new Promise();
+        $p->resolve('foo');
+        $p->resolve('bar');
+        $this->assertEquals('foo', $p->wait());
+    }
+	
+    /**
+     * @expectedException \Sabre\Event\PromiseAlreadyResolvedException
+     * @expectedExceptionMessage This promise is already resolved, and you're not allowed to resolve a promise more than once
+     */
+    public function testCanResolveWithSameValue()
+    {
+        $p = new Promise();
+        $p->resolve('foo');
+        $p->resolve('foo');
+    }
+	
+    /**
+     * @expectedException \Sabre\Event\PromiseAlreadyResolvedException
+     * @expectedExceptionMessage This promise is already resolved, and you're not allowed to resolve a promise more than once
+     */
+    public function testCannotRejectNonPendingPromise()
+    {
+        $p = new Promise();
+        $p->resolve('foo');
+        $p->reject('bar');
+        $this->assertEquals('foo', $p->wait());
+    }
+	
+    /**
+     * @expectedException \Sabre\Event\PromiseAlreadyResolvedException
+     * @expectedExceptionMessage This promise is already resolved, and you're not allowed to resolve a promise more than once
+     */
+    public function testCanRejectWithSameValue()
+    {
+        $p = new Promise();
+        $p->reject('foo');
+        $p->reject('foo');
+    }
+	
+    /**
+     * @expectedException \Sabre\Event\PromiseAlreadyResolvedException
+     * @expectedExceptionMessage This promise is already resolved, and you're not allowed to resolve a promise more than once
+     */
+    public function testCannotRejectResolveWithSameValue()
+    {
+        $p = new Promise();
+        $p->resolve('foo');
+        $p->reject('foo');
+    }
+	
+	/**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage There were no more events in the loop. This promise will never be fulfilled.
+     */
+    public function testRejectsAndThrowsWhenWaitFailsToResolve()
+    {
+        $p = new Promise(function () {});
+        $p->wait();
+    }
+	
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage foo
+     */
+    public function testThrowsWhenUnwrapIsRejectedWithNonException()
+    {
+        $p = new Promise(function () use (&$p) { $p->reject('foo'); });
+        $p->wait();
+    }
+	
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage foo
+     */
+    public function testThrowsWhenUnwrapIsRejectedWithException()
+    {
+        $e = new \Exception('foo');
+        $p = new Promise(function () use (&$p, $e) { $p->reject($e); });
+        $p->wait();
+    }
+	
+    /**
+     * @expectedException \Exception
+     */
+    public function testThrowsWhenWaitingOnPromiseWithNoWaitFunction()
+    {
+        $p = new Promise();
+        $p->wait();
+    }	
+	
+    public function testCannotCancelNonPending()
+    {
+        $p = new Promise();
+        $p->resolve('foo');
+        $p->cancel();
+        $this->assertEquals(Promise::FULFILLED, $p->getState());
+    }
+	
+    /**
+     * @expectedException \Exception
+     */
+    public function testCancelsPromiseWhenNoCancelFunction()
+    {
+        $p = new Promise();
+        $p->cancel();
+        $this->assertEquals(Promise::REJECTED, $p->getState());
+        $p->wait();
+    }
+	
+    public function testCancelsPromiseWithCancelFunction()
+    {
+        $called = false;
+        $p = new Promise(null, function () use (&$called) { $called = true; });
+        $p->cancel();
+        $this->assertEquals(Promise::REJECTED, $p->getState());
+        $this->assertTrue($called);
+    }
+	
+    public function testCancelsChildPromises()
+    {
+        $called1 = $called2 = $called3 = false;
+        $p1 = new Promise(null, function () use (&$called1) { $called1 = true; });
+        $p2 = new Promise(null, function () use (&$called2) { $called2 = true; });
+        $p3 = new Promise(null, function () use (&$called3) { $called3 = true; });
+        $p4 = $p2->then(function () use ($p3) { return $p3; });
+        $p5 = $p4->then(function () { $this->fail(); });
+        $p4->cancel();
+        $this->assertEquals(Promise::PENDING, $p1->getState());
+        $this->assertEquals(Promise::REJECTED, $p2->getState());
+        $this->assertEquals(Promise::REJECTED, $p4->getState());
+        $this->assertEquals(Promise::PENDING, $p5->getState());
+        $this->assertFalse($called1);
+        $this->assertTrue($called2);
+        $this->assertFalse($called3);
+    }
+	
+    public function testRejectsPromiseWhenCancelFails()
+    {
+        $called = false;
+        $p = new Promise(null, function () use (&$called) {
+            $called = true;
+            throw new \Exception('e');
+        });
+        $p->cancel();
+        $this->assertEquals(Promise::REJECTED, $p->getState());
+        $this->assertTrue($called);
+        try {
+            $p->wait();
+            $this->fail();
+        } catch (\Exception $e) {
+            $this->assertEquals('e', $e->getMessage());
+        }
+    }	
+	
+    public function testCreatesPromiseWhenRejectedWithNoCallback()
+    {
+        $p = new Promise();
+        $p->reject('foo');
+        $p2 = $p->then();
+        $this->assertNotSame($p, $p2);
+        $this->assertInstanceOf(Promise::class, $p2);
+    }
 }

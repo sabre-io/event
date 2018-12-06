@@ -250,26 +250,33 @@ public function rejector($reason = null)
      */
     public function wait()
     {
-        $hasEvents = true;
-        while (self::PENDING === $this->state) {
-            if (!$hasEvents) {
-                throw new \LogicException('There were no more events in the loop. This promise will never be fulfilled.');
-            }
+		if ($this->waitFn && !$this->loop) {
+            $fn = $this->waitFn;
+            $this->waitFn = null;
+            $fn([$this, 'fulfill'], [$this, 'reject']);
+			$this->loop->run();
+		} else {		
+			$hasEvents = true;
+			while (self::PENDING === $this->state) {
+				if (!$hasEvents) {
+					throw new \LogicException('There were no more events in the loop. This promise will never be fulfilled.');
+				}
 
-            // As long as the promise is not fulfilled, we tell the event loop
-            // to handle events, and to block.
-            $hasEvents = Loop\tick(true);
-        }
-
-        if (self::FULFILLED === $this->state) {
-            // If the state of this promise is fulfilled, we can return the value.
-            return $this->value;
-        } else {
-            // If we got here, it means that the asynchronous operation
-            // errored. Therefore we need to throw an exception.
-            throw $this->value;
-        }
-    }
+				// As long as the promise is not fulfilled, we tell the event loop
+				// to handle events, and to block.
+				$hasEvents = Loop\tick(true);
+			}
+		}
+		
+		if (self::FULFILLED === $this->state) {
+			// If the state of this promise is fulfilled, we can return the value.
+			return $this->value;
+		} else {
+			// If we got here, it means that the asynchronous operation
+			// errored. Therefore we need to throw an exception.
+			throw $this->value;
+		}
+	}
 
     /**
      * A list of subscribers. Subscribers are the callbacks that want us to let
