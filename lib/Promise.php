@@ -250,12 +250,12 @@ public function rejector($reason = null)
      */
     public function wait()
     {
-		if ($this->waitFn && !$this->loop) {
+		if ($this->waitFn && method_exists($this->loop, 'add') && method_exists($this->loop, 'run')) {
             $fn = $this->waitFn;
             $this->waitFn = null;
             $fn([$this, 'fulfill'], [$this, 'reject']);
 			$this->loop->run();
-		} else {		
+		} elseif (method_exists($this->loop, 'tick')) {		
 			$hasEvents = true;
 			while (self::PENDING === $this->state) {
 				if (!$hasEvents) {
@@ -264,7 +264,7 @@ public function rejector($reason = null)
 
 				// As long as the promise is not fulfilled, we tell the event loop
 				// to handle events, and to block.
-				$hasEvents = Loop\tick(true);
+				$hasEvents = $this->loop->tick(true);
 			}
 		}
 		
