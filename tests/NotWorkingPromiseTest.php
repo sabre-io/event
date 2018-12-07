@@ -12,6 +12,27 @@ use PHPUnit\Framework\TestCase;
 
 class NotWorkingPromiseTest extends TestCase
 {		
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage foo
+     */
+    public function testThrowsWhenUnwrapIsRejectedWithNonException()
+    {
+        $p = new Promise(function () use (&$p) { $p->reject('foo'); });
+        $p->wait();
+    }
+	
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage foo
+     */
+    public function testThrowsWhenUnwrapIsRejectedWithException()
+    {
+        $e = new \Exception('foo');
+        $p = new Promise(function () use (&$p, $e) { $p->reject($e); });
+        $p->wait();
+    }
+	
     public function testInvokesWaitFunction()
     {
         $p = new Promise(function () use (&$p) { $p->resolve('10'); });
@@ -60,21 +81,7 @@ class NotWorkingPromiseTest extends TestCase
             $this->assertEquals('Bar?', $e->getMessage());
         }
     }
-	
-    public function testGetsActualWaitValueFromThen()
-    {
-        $p = new Promise(function () use (&$p) { $p->reject('Foo!'); });
-        $p2 = $p->then(null, function ($reason) {
-            return new RejectedPromise([$reason]);
-        });
-        try {
-            $p2->wait();
-            $this->fail('Should have thrown');
-        } catch (RejectionException $e) {
-            $this->assertEquals(['Foo!'], $e->getReason());
-        }
-    }
-	
+		
     public function testWaitBehaviorIsBasedOnLastPromiseInChain()
     {
         $p3 = new Promise(function () use (&$p3) { $p3->resolve('Whoop'); });

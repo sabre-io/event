@@ -405,27 +405,6 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
 	
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage foo
-     */
-    public function testThrowsWhenUnwrapIsRejectedWithNonException()
-    {
-        $p = new Promise(function () use (&$p) { $p->reject('foo'); });
-        $p->wait();
-    }
-	
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage foo
-     */
-    public function testThrowsWhenUnwrapIsRejectedWithException()
-    {
-        $e = new \Exception('foo');
-        $p = new Promise(function () use (&$p, $e) { $p->reject($e); });
-        $p->wait();
-    }
-	
-    /**
-     * @expectedException \Exception
      */
     public function testThrowsWhenWaitingOnPromiseWithNoWaitFunction()
     {
