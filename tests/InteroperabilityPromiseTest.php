@@ -14,7 +14,14 @@ class InteroperabilityPromiseTest extends TestCase
 {			
 	const PENDING = Promise::PENDING;
 	const REJECTED = Promise::REJECTED;
-	const FULFILLED = Promise::FULFILLED;		
+	const FULFILLED = Promise::FULFILLED;	
+
+	private $loop = null;
+	
+	protected function setUp()
+    {
+		$this->loop = Loop\instance();
+    }
 	
     public function testForwardsRejectedPromisesDownChainBetweenGaps()
     {
@@ -24,7 +31,7 @@ class InteroperabilityPromiseTest extends TestCase
             ->then(null, function ($v) use (&$r) { $r = $v; return $v . '2'; })
             ->then(function ($v) use (&$r2) { $r2 = $v; });
         $p->reject('foo');
-        Loop\run();
+        $this->loop->run();
         $this->assertEquals('foo', $r);
         $this->assertEquals('foo2', $r2);
     }
@@ -44,7 +51,7 @@ class InteroperabilityPromiseTest extends TestCase
                 function ($v) use (&$r2) { $r2 = $v; }
             );
         $p->reject('foo');
-        Loop\run();
+        $this->loop->run();
         $this->assertEquals('foo', $r);
         $this->assertSame($e, $r2);
     }
@@ -60,7 +67,7 @@ class InteroperabilityPromiseTest extends TestCase
             ->then(null, function ($v) use (&$res) { $res[] = 'C:' . $v; });
         $p->reject('a');
         $p->then(null, function ($v) use (&$res) { $res[] = 'D:' . $v; });
-        Loop\run();
+        $this->loop->run();
         $this->assertEquals(['A:foo', 'B', 'D:a', 'C:foo'], $res);
     }
 	
@@ -72,7 +79,7 @@ class InteroperabilityPromiseTest extends TestCase
             ->then(function ($v) use (&$r) {$r = $v; return $v . '2'; })
             ->then(function ($v) use (&$r2) { $r2 = $v; });
         $p->fulfill('foo');
-        Loop\run();
+        $this->loop->run();
         $this->assertEquals('foo', $r);
         $this->assertEquals('foo2', $r2);
     }
@@ -87,7 +94,7 @@ class InteroperabilityPromiseTest extends TestCase
             ->then(function ($value) use (&$resolved) { $resolved = $value; });
         $p->fulfill('a');
         $p2->fulfill('b');
-        Loop\run();
+        $this->loop->run();
         $this->assertEquals('b', $resolved);
     }
 	
@@ -104,7 +111,7 @@ class InteroperabilityPromiseTest extends TestCase
             ->then(function ($v) use (&$res) { $res[] = 'C:' . $v; });
         $p->fulfill('a');
         $p->then(function ($v) use (&$res) { $res[] = 'D:' . $v; });
-        Loop\run();
+        $this->loop->run();
         $this->assertEquals(['A:foo', 'B', 'D:a', 'C:foo'], $res);
     }	
 	
@@ -119,7 +126,7 @@ class InteroperabilityPromiseTest extends TestCase
             ->then(function ($v) use (&$res) { $res[] = 'C:' . $v; });
         $p->resolve('a');
         $p->then(function ($v) use (&$res) { $res[] = 'D:' . $v; });
-        Loop\run();
+        $this->loop->run();
         $this->assertEquals(['B:a', 'D:a'], $res);
     }
 		
