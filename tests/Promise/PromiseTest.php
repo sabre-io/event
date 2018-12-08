@@ -484,4 +484,50 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
         $this->assertNotSame($p, $p2);
         $this->assertInstanceOf(Promise::class, $p2);
     }
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage foo
+     */
+    public function testThrowsWhenUnwrapIsRejectedWithNonException()
+    {
+        $p = new Promise(function () use (&$p) { $p->reject('foo'); });
+        $p->wait();
+    }
+	
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage foo
+     */
+    public function testThrowsWhenUnwrapIsRejectedWithException()
+    {
+        $e = new \Exception('foo');
+        $p = new Promise(function () use (&$p, $e) { $p->reject($e); });
+        $p->wait();
+    }
+	
+    public function testInvokesWaitFunction()
+    {
+        $p = new Promise(function () use (&$p) { $p->resolve('10'); });
+        $this->assertEquals('10', $p->wait());
+    }	
+	
+    public function testDoesNotUnwrapExceptionsWhenDisabled()
+    {
+        $p = new Promise(function () use (&$p) { $p->reject('foo'); });
+        $this->assertEquals(Promise::PENDING, $p->getState());
+        $p->wait(false);
+        $this->assertEquals(Promise::REJECTED, $p->getState());
+    }
+	
+    public function testRejectsSelfWhenWaitThrows()
+    {
+        $e = new \Exception('foo');
+        $p = new Promise(function () use ($e) { throw $e; });
+        try {
+            $p->wait();
+            $this->fail();
+        } catch (\Exception $e) {
+            $this->assertEquals(Promise::REJECTED, $p->getState());
+        }
+    }
 }

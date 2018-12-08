@@ -51,6 +51,8 @@ class Promise
 	
     public $loop = null;
 
+    private $isWaitRequired = false; 	
+
     /**
      * Creates the promise.
      *
@@ -75,13 +77,19 @@ class Promise
 		$this->loop = $this->checkLoopInstance($childLoop) ? $childLoop : Loop\instance();
 		
 		$this->waitFn = is_callable($callExecutor) ? $callExecutor : null;
-		$this->cancelFn = is_callable($callCanceller) ? $callCanceller : null;
-		
-		if (is_callable($callExecutor) && $this->loop) {
-			$callExecutor(
-                [$this, 'fulfill'],
-                [$this, 'reject']
-			);
+		$this->cancelFn = is_callable($callCanceller) ? $callCanceller : null;		
+	
+		try {
+			if (is_callable($callExecutor) && !$this->isWaitRequired) {
+				$callExecutor(
+					[$this, 'fulfill'],
+					[$this, 'reject']
+				);
+			}
+		} catch (\Throwable $e) {
+			$this->isWaitRequired = true;
+		} catch (\Exception $exception) {
+			$this->isWaitRequired = true;
 		}
     }
 
@@ -248,33 +256,67 @@ public function rejector($reason = null)
      *
      * @return mixed
      */
-    public function wait()
+    public function wait($unwap = true)
     {
-		if ($this->waitFn && method_exists($this->loop, 'add') && method_exists($this->loop, 'run')) {
-            $fn = $this->waitFn;
-            $this->waitFn = null;
-            $fn([$this, 'fulfill'], [$this, 'reject']);
-			$this->loop->run();
-		} elseif (method_exists($this->loop, 'tick')) {		
-			$hasEvents = true;
-			while (self::PENDING === $this->state) {
-				if (!$hasEvents) {
-					throw new \LogicException('There were no more events in the loop. This promise will never be fulfilled.');
+		try {
+			$loop = $this->loop;
+			$fn = $this->waitFn;
+			$this->waitFn = null;
+			if (is_callable($fn) 
+				&& method_exists($loop, 'add') 
+				&& method_exists($loop, 'run') 
+				&& $this->isWaitRequired
+			) {
+				$this->isWaitRequired = false;
+				$fn([$this, 'resolve'], [$this, 'reject']);
+				$loop->run();
+			} elseif (method_exists($loop, 'tick')) {
+				if (is_callable($fn) && $this->isWaitRequired) {
+					$this->isWaitRequired = false;
+					$fn([$this, 'resolve'], [$this, 'reject']);
 				}
+				
+				$hasEvents = true;
+				while (self::PENDING === $this->state) {
+					if (!$hasEvents) {
+						throw new \LogicException('There were no more events in the loop. This promise will never be fulfilled.');
+					}
 
-				// As long as the promise is not fulfilled, we tell the event loop
-				// to handle events, and to block.
-				$hasEvents = $this->loop->tick(true);
+					// As long as the promise is not fulfilled, we tell the event loop
+					// to handle events, and to block.
+					$hasEvents = $loop->tick(true);
+				}
 			}
-		}
+        } catch (\Exception $reason) {
+            if ($this->state === self::PENDING) {
+                // The promise has not been resolved yet, so reject the promise
+                // with the exception.
+                $this->reject($reason);
+            } else {
+                // The promise was already resolved, so there's a problem in
+                // the application.
+                throw $reason;
+            }
+        }
 		
-		if (self::FULFILLED === $this->state) {
+		$result = $this->value;
+					
+		if ($this->state === self::PENDING) {
+            $this->reject('Invoking the wait callback did not resolve the promise');
+        } elseif (self::FULFILLED === $this->state) {
 			// If the state of this promise is fulfilled, we can return the value.
-			return $this->value;
+			return $result;
 		} else {
 			// If we got here, it means that the asynchronous operation
 			// errored. Therefore we need to throw an exception.
-			throw $this->value;
+            if ($result instanceof Exception) {
+                throw $result;
+            } elseif (is_scalar($result) && $unwap) {
+                throw new \Exception($result);
+            } elseif ($unwap) {
+                $type = is_object($result) ? get_class($result) : gettype($result);
+                throw new \Exception('Promise was rejected with reason of type: ' . $type);
+            }		
 		}
 	}
 
