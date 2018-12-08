@@ -78,7 +78,7 @@ class InteroperabilityPromiseTest extends TestCase
         $p->then(null, null)
             ->then(function ($v) use (&$r) {$r = $v; return $v . '2'; })
             ->then(function ($v) use (&$r2) { $r2 = $v; });
-        $p->fulfill('foo');
+        $p->resolve('foo');
         $this->loop->run();
         $this->assertEquals('foo', $r);
         $this->assertEquals('foo2', $r2);
@@ -92,8 +92,8 @@ class InteroperabilityPromiseTest extends TestCase
         $p
             ->then(function ($v) use ($p2) { return $p2; })
             ->then(function ($value) use (&$resolved) { $resolved = $value; });
-        $p->fulfill('a');
-        $p2->fulfill('b');
+        $p->resolve('a');
+        $p2->resolve('b');
         $this->loop->run();
         $this->assertEquals('b', $resolved);
     }
@@ -103,13 +103,13 @@ class InteroperabilityPromiseTest extends TestCase
         $res = [];
         $p = new Promise();
         $p2 = new Promise();
-        $p2->fulfill('foo');
+        $p2->resolve('foo');
         $p2->then(function ($v) use (&$res) { $res[] = 'A:' . $v; });
         // $res is A:foo
         $p
             ->then(function () use ($p2, &$res) { $res[] = 'B'; return $p2; })
             ->then(function ($v) use (&$res) { $res[] = 'C:' . $v; });
-        $p->fulfill('a');
+        $p->resolve('a');
         $p->then(function ($v) use (&$res) { $res[] = 'D:' . $v; });
         $this->loop->run();
         $this->assertEquals(['A:foo', 'B', 'D:a', 'C:foo'], $res);
