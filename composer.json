@@ -41,7 +41,8 @@
         ]
     },
     "require-dev": {
-        "phpunit/phpunit" : ">=6"
+        "phpunit/phpunit" : ">=6",
+        "phpstan/phpstan": "^0.10.6"
     },
     "config" : {
         "bin-dir" : "bin/"
