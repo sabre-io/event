@@ -18,22 +18,7 @@ class NotWorkingPromiseTest extends TestCase
         $p2 = new Promise(function () use (&$p2) { $p2->resolve('foo'); });
         $p3 = $p->then(function () use ($p2) { return $p2; });
         $this->assertSame('foo', $p3->wait());
-    }
-	
-	
-    public function testThrowsWaitExceptionAfterPromiseIsResolved()
-    {
-        $p = new Promise(function () use (&$p) {
-            $p->reject('Foo!');
-            throw new \Exception('Bar?');
-        });
-        try {
-            $p->wait();
-            $this->fail();
-        } catch (\Exception $e) {
-            $this->assertEquals('Bar?', $e->getMessage());
-        }
-    }
+    }	
 		
     public function testWaitBehaviorIsBasedOnLastPromiseInChain()
     {
@@ -101,23 +86,6 @@ class NotWorkingPromiseTest extends TestCase
             ->then(function () use ($p2) { return $p2; })
             ->then(function () use ($p3) { return $p3; });
         $this->assertEquals('c', $p4->wait());
-    }
-
-    public function testRemovesReferenceFromChildWhenParentWaitedUpon()
-    {
-        $r = null;
-        $p = new Promise(function () use (&$p) { $p->resolve('a'); });
-        $p2 = new Promise(function () use (&$p2) { $p2->resolve('b'); });
-        $pb = $p->then(
-            function ($v) use ($p2, &$r) {
-                $r = $v;
-                return $p2;
-            })
-            ->then(function ($v) { return $v . '.'; });
-        $this->assertEquals('a', $p->wait());
-        $this->assertEquals('b', $p2->wait());
-        $this->assertEquals('b.', $pb->wait());
-        $this->assertEquals('a', $r);
     }
 	
     public function testDoesNotBlowStackWhenWaitingOnNestedThens()
