@@ -195,13 +195,6 @@ class Promise
         }
     }
 
-public function rejector($reason = null)
-{
-    $promise = new Promise();
-    $promise->reject($reason);
-
-    return $promise;
-}
     /**
      * Marks this promise as rejected, and set it's rejection reason.
      */
@@ -256,7 +249,7 @@ public function rejector($reason = null)
      *
      * @return mixed
      */
-    public function wait($unwap = true)
+    public function wait($unwrap = true)
     {
 		try {
 			$loop = $this->loop;
@@ -268,16 +261,16 @@ public function rejector($reason = null)
 				&& $this->isWaitRequired
 			) {
 				$this->isWaitRequired = false;
-				$fn([$this, 'resolve'], [$this, 'reject']);
+				$fn([$this, 'fulfill'], [$this, 'reject']);
 				$loop->run();
-			} elseif (method_exists($loop, 'tick')) {
+			} elseif (method_exists($loop, 'tick')) {	
 				if (is_callable($fn) && $this->isWaitRequired) {
 					$this->isWaitRequired = false;
-					$fn([$this, 'resolve'], [$this, 'reject']);
-				}
+					$fn([$this, 'fulfill'], [$this, 'reject']);
+				}	
 				
 				$hasEvents = true;
-				while (self::PENDING === $this->state) {
+				while (self::PENDING === $this->state) {					
 					if (!$hasEvents) {
 						throw new \LogicException('There were no more events in the loop. This promise will never be fulfilled.');
 					}
@@ -299,7 +292,9 @@ public function rejector($reason = null)
             }
         }
 		
-		$result = $this->value;
+		$result = $this->value instanceof Promise 
+					? $this->value->wait() 
+					: $this->value;
 					
 		if ($this->state === self::PENDING) {
             $this->reject('Invoking the wait callback did not resolve the promise');
@@ -311,9 +306,9 @@ public function rejector($reason = null)
 			// errored. Therefore we need to throw an exception.
             if ($result instanceof Exception) {
                 throw $result;
-            } elseif (is_scalar($result) && $unwap) {
+            } elseif (is_scalar($result) && $unwrap) {
                 throw new \Exception($result);
-            } elseif ($unwap) {
+            } elseif ($unwrap) {
                 $type = is_object($result) ? get_class($result) : gettype($result);
                 throw new \Exception('Promise was rejected with reason of type: ' . $type);
             }		
