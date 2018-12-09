@@ -6,8 +6,6 @@ namespace Sabre\Event;
 
 use Exception;
 use Throwable;
-use Sabre\Event\Loop;
-use Sabre\Event\CancellationException;
 
 /**
  * An implementation of the Promise pattern.
@@ -48,10 +46,6 @@ class Promise
      * @var int
      */
     public $state = self::PENDING;
-	
-    public $loop = null;
-
-    private $isWaitRequired = false; 	
 
     /**
      * Creates the promise.
@@ -62,55 +56,16 @@ class Promise
      * Each are callbacks that map to $this->fulfill and $this->reject.
      * Using the executor is optional.
      */
-    public function __construct( ...$executor)
-    {		
-		$callExecutor = isset($executor[0]) ? $executor[0] : null;		
-		$childLoop = $this->checkLoopInstance($callExecutor) ? $callExecutor : null;
-		$callExecutor = $this->checkLoopInstance($callExecutor) ? null : $callExecutor;	
-		
-		$callCanceller = isset($executor[1]) ? $executor[1] : null;
-		$childLoop = $this->checkLoopInstance($callCanceller) ? $callCanceller : $childLoop;
-		$callCanceller = $this->checkLoopInstance($callCanceller) ? null : $callCanceller;	
-				
-		$loop = isset($executor[2]) ? $executor[2] : null;		
-		$childLoop = $this->checkLoopInstance($loop) ? $loop : $childLoop;		
-		$this->loop = $this->checkLoopInstance($childLoop) ? $childLoop : Loop\instance();
-		
-		$this->waitFn = is_callable($callExecutor) ? $callExecutor : null;
-		$this->cancelFn = is_callable($callCanceller) ? $callCanceller : null;		
-	
-		try {
-			if (is_callable($callExecutor) && !$this->isWaitRequired) {
-				$callExecutor(
-					[$this, 'fulfill'],
-					[$this, 'reject']
-				);
-			}
-		} catch (\Throwable $e) {
-			$this->isWaitRequired = true;
-		} catch (\Exception $exception) {
-			$this->isWaitRequired = true;
-		}
+    public function __construct(callable $executor = null)
+    {
+        if ($executor) {
+            $executor(
+                [$this, 'fulfill'],
+                [$this, 'reject']
+            );
+        }
     }
 
-	private function checkLoopInstance($instance = null): bool
-	{
-		$isInstanceiable = false;
-		if ($instance instanceof TaskQueueInterface)
-			$isInstanceiable = true;
-		elseif ($instance instanceof LoopInterface)
-			$isInstanceiable = true;
-		elseif ($instance instanceof Loop)
-			$isInstanceiable = true;
-			
-		return $isInstanceiable;
-	}
-	
-    public function getState()
-    {
-        return $this->state;
-    }
-	
     /**
      * This method allows you to specify the callback that will be called after
      * the promise has been fulfilled or rejected.
@@ -135,7 +90,7 @@ class Promise
         // This new subPromise will be returned from this function, and will
         // be fulfilled with the result of the onFulfilled or onRejected event
         // handlers.
-        $subPromise = new Promise(null, [$this, 'cancel']);
+        $subPromise = new self();
 
         switch ($this->state) {
             case self::PENDING:
@@ -169,15 +124,6 @@ class Promise
         return $this->then(null, $onRejected);
     }
 
-	public function resolve($value = null)
-	{
-		if ($value instanceof Promise) {
-			return $value->then();
-		} 
-		
-		return $this->fulfill($value);
-	}
-
     /**
      * Marks this promise as fulfilled and sets its return value.
      *
@@ -198,7 +144,7 @@ class Promise
     /**
      * Marks this promise as rejected, and set it's rejection reason.
      */
-    public function reject($reason)
+    public function reject(Throwable $reason)
     {
         if (self::PENDING !== $this->state) {
             throw new PromiseAlreadyResolvedException('This promise is already resolved, and you\'re not allowed to resolve a promise more than once');
@@ -210,32 +156,6 @@ class Promise
         }
     }
 
-    public function cancel()
-    {
-        if (self::PENDING !== $this->state) {
-            return;
-        }
-		
-		$this->waitFn = null;
-		$this->subscribers = [];
-
-        if ($this->cancelFn) {
-            $fn = $this->cancelFn;
-            $this->cancelFn = null;
-            try {
-                $fn();
-            } catch (Throwable $e) {
-                $this->reject($e);
-            } catch (Exception $exception) {
-                $this->reject($exception);
-            }
-        }
-
-        // Reject the promise only if it wasn't rejected in a then callback.
-        if (self::PENDING === $this->state) {
-            $this->reject(new CancellationException('Promise has been cancelled'));
-        }
-    }
     /**
      * Stops execution until this promise is resolved.
      *
@@ -249,71 +169,28 @@ class Promise
      *
      * @return mixed
      */
-    public function wait($unwrap = true)
+    public function wait()
     {
-		try {
-			$loop = $this->loop;
-			$fn = $this->waitFn;
-			$this->waitFn = null;
-			if (is_callable($fn) 
-				&& method_exists($loop, 'add') 
-				&& method_exists($loop, 'run') 
-				&& $this->isWaitRequired
-			) {
-				$this->isWaitRequired = false;
-				$fn([$this, 'fulfill'], [$this, 'reject']);
-				$loop->run();
-			} elseif (method_exists($loop, 'tick')) {	
-				if (is_callable($fn) && $this->isWaitRequired) {
-					$this->isWaitRequired = false;
-					$fn([$this, 'fulfill'], [$this, 'reject']);
-				}	
-				
-				$hasEvents = true;
-				while (self::PENDING === $this->state) {					
-					if (!$hasEvents) {
-						throw new \LogicException('There were no more events in the loop. This promise will never be fulfilled.');
-					}
-
-					// As long as the promise is not fulfilled, we tell the event loop
-					// to handle events, and to block.
-					$hasEvents = $loop->tick(true);
-				}
-			}
-        } catch (\Exception $reason) {
-            if ($this->state === self::PENDING) {
-                // The promise has not been resolved yet, so reject the promise
-                // with the exception.
-                $this->reject($reason);
-            } else {
-                // The promise was already resolved, so there's a problem in
-                // the application.
-                throw $reason;
+        $hasEvents = true;
+        while (self::PENDING === $this->state) {
+            if (!$hasEvents) {
+                throw new \LogicException('There were no more events in the loop. This promise will never be fulfilled.');
             }
+
+            // As long as the promise is not fulfilled, we tell the event loop
+            // to handle events, and to block.
+            $hasEvents = Loop\tick(true);
         }
-		
-		$result = $this->value instanceof Promise 
-					? $this->value->wait() 
-					: $this->value;
-					
-		if ($this->state === self::PENDING) {
-            $this->reject('Invoking the wait callback did not resolve the promise');
-        } elseif (self::FULFILLED === $this->state) {
-			// If the state of this promise is fulfilled, we can return the value.
-			return $result;
-		} else {
-			// If we got here, it means that the asynchronous operation
-			// errored. Therefore we need to throw an exception.
-            if ($result instanceof Exception) {
-                throw $result;
-            } elseif (is_scalar($result) && $unwrap) {
-                throw new \Exception($result);
-            } elseif ($unwrap) {
-                $type = is_object($result) ? get_class($result) : gettype($result);
-                throw new \Exception('Promise was rejected with reason of type: ' . $type);
-            }		
-		}
-	}
+
+        if (self::FULFILLED === $this->state) {
+            // If the state of this promise is fulfilled, we can return the value.
+            return $this->value;
+        } else {
+            // If we got here, it means that the asynchronous operation
+            // errored. Therefore we need to throw an exception.
+            throw $this->value;
+        }
+    }
 
     /**
      * A list of subscribers. Subscribers are the callbacks that want us to let
@@ -332,8 +209,6 @@ class Promise
      * @var mixed
      */
     protected $value = null;
-    protected $cancelFn = null;
-    protected $waitFn = null;
 
     /**
      * This method is used to call either an onFulfilled or onRejected callback.
@@ -352,7 +227,7 @@ class Promise
         // passed to 'then'.
         //
         // This makes the order of execution more predictable.
-        $promiseFunction = function() use ($callBack, $subPromise) {
+        Loop\nextTick(function () use ($callBack, $subPromise) {
             if (is_callable($callBack)) {
                 try {
                     $result = $callBack($this->value);
@@ -371,8 +246,6 @@ class Promise
                     // If the event handler threw an exception, we need to make sure that
                     // the chained promise is rejected as well.
                     $subPromise->reject($e);
-                } catch (Exception $exception) {
-                    $subPromise->reject($exception);
                 }
             } else {
                 if (self::FULFILLED === $this->state) {
@@ -381,30 +254,6 @@ class Promise
                     $subPromise->reject($this->value);
                 }
             }
-        };
-		
-		$this->implement($promiseFunction, $subPromise);
+        });
     }
-	
-	public function implement(callable $function, Promise $promise = null)
-	{		
-        if ($this->loop) {
-			$loop = $this->loop;
-			
-			$othersLoop = method_exists($loop, 'futureTick') ? [$loop, 'futureTick'] : null;
-			$othersLoop = method_exists($loop, 'addTick') ? [$loop, 'addTick'] : $othersLoop;
-			$othersLoop = method_exists($loop, 'onTick') ? [$loop, 'onTick'] : $othersLoop;
-			$othersLoop = method_exists($loop, 'enqueue') ? [$loop, 'enqueue'] : $othersLoop;
-			$othersLoop = method_exists($loop, 'add') ? [$loop, 'add'] : $othersLoop;
-			
-			if ($othersLoop)
-				call_user_func_array($othersLoop, $function); 
-			else 	
-				$loop->nextTick($function);
-        } else {
-            return $function();
-        } 
-		
-		return $promise;
-	}
 }
