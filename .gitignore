@@ -13,3 +13,10 @@ bin/phpunit
 #development stuff
 tests/cov
 .php_cs.cache
+
+#phpstan/phpstan
+bin/phpunit.bat
+bin/phpstan.bat
+bin/phpstan
+bin/php-parse.bat
+bin/php-parse
