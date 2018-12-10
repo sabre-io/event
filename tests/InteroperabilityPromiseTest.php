@@ -207,6 +207,10 @@ class InteroperabilityPromiseTest extends TestCase
     {
         $promise = new Promise();
         $this->loop->nextTick(function () use ($promise) {
+        //$this->loop->addTick(function () use ($promise) {
+        //$this->loop->enqueue(function () use ($promise) {
+        //$this->loop->add(function () use ($promise) {
+        //$this->loop->futureTick(function () use ($promise) {
             $promise->resolve(1);
         });
         $this->assertEquals(
@@ -239,6 +243,10 @@ class InteroperabilityPromiseTest extends TestCase
     {
         $promise = new Promise();
         $this->loop->nextTick(function () use ($promise) {
+        //$this->loop->addTick(function () use ($promise) {
+        //$this->loop->enqueue(function () use ($promise) {
+        //$this->loop->add(function () use ($promise) {
+        //$this->loop->futureTick(function () use ($promise) {
             $promise->reject(new \OutOfBoundsException('foo'));
         });
         try {
@@ -254,6 +262,10 @@ class InteroperabilityPromiseTest extends TestCase
     {
         $promise = new Promise();
         $this->loop->nextTick(function () use ($promise) {
+        //$this->loop->addTick(function () use ($promise) {
+        //$this->loop->enqueue(function () use ($promise) {
+        //$this->loop->add(function () use ($promise) {
+        //$this->loop->futureTick(function () use ($promise) {
             $promise->reject(new Exception('foo'));
         });
         try {
