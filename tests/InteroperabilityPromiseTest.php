@@ -1,6 +1,9 @@
 <?php
 
 namespace Sabre\Event\Promise;
+//namespace GuzzleHttp\Promise;
+//namespace React\Promise;
+//namespace Async\Tests
 
 use Exception;
 use Sabre\Event\Loop;
@@ -8,6 +11,19 @@ use Sabre\Event\Promise;
 use Sabre\Event\RejectionException;
 use Sabre\Event\CancellationException;
 use Sabre\Event\PromiseAlreadyResolvedException;
+//use GuzzleHttp\Promise;
+//use GuzzleHttp\Promise\TaskQueue;
+//use GuzzleHttp\Promise\PromiseInterface;
+//use GuzzleHttp\Promise\RejectionException;
+//use GuzzleHttp\Promise\CancellationException;
+//use Async\Loop\Loop;
+//use Async\Promise\Promise;
+//use Async\Promise\PromiseInterface;
+//use Async\Promise\RejectionException;
+//use Async\Promise\CancellationException;
+//use React\Promise;
+//use React\EventLoop\Factory;
+//use React\Promise\Internal\Queue;
 use PHPUnit\Framework\TestCase;
 
 class InteroperabilityPromiseTest extends TestCase
@@ -15,12 +31,238 @@ class InteroperabilityPromiseTest extends TestCase
 	const PENDING = Promise::PENDING;
 	const REJECTED = Promise::REJECTED;
 	const FULFILLED = Promise::FULFILLED;	
+	//const PENDING = PromiseInterface::PENDING;
+	//const REJECTED = PromiseInterface::REJECTED;
+	//const FULFILLED = PromiseInterface::FULFILLED;	
+	//const PENDING = PromiseInterface::STATE_PENDING;
+	//const REJECTED = PromiseInterface::STATE_REJECTED;
+	//const FULFILLED = PromiseInterface::STATE_RESOLVED;	
+	//const PENDING = 'pending';
+	//const REJECTED = 'rejected';	
+	//const FULFILLED = 'fulfilled';
 
 	private $loop = null;
 	
 	protected function setUp()
     {
 		$this->loop = Loop\instance();
+		//$this->loop = new TaskQueue();
+		//Loop::clearInstance();
+		//$this->loop = Promise::getLoop(true);
+		//$this->loop = Factory::create();
+		//$this->loop = new Queue();
+    }
+	
+    public function testSuccess()
+    {
+        $finalValue = 0;
+        $promise = new Promise();
+        $promise->resolve(1);
+
+        $promise->then(function ($value) use (&$finalValue) {
+            $finalValue = $value + 2;
+        });
+        $this->loop->run();
+
+        $this->assertEquals(3, $finalValue);
+    }
+
+    public function testFailure()
+    {
+        $finalValue = 0;
+        $promise = new Promise();
+        $promise->reject(new Exception('1'));
+
+        $promise->then(null, function ($value) use (&$finalValue) {
+            $finalValue = $value->getMessage() + 2;
+        });
+        $this->loop->run();
+
+        $this->assertEquals(3, $finalValue);
+    }
+
+    public function testChaining()
+    {
+        $finalValue = 0;
+        $promise = new Promise();
+        $promise->resolve(1);
+
+        $promise->then(function ($value) use (&$finalValue) {
+            $finalValue = $value + 2;
+
+            return $finalValue;
+        })->then(function ($value) use (&$finalValue) {
+            $finalValue = $value + 4;
+
+            return $finalValue;
+        });
+        $this->loop->run();
+
+        $this->assertEquals(7, $finalValue);
+    }
+	
+    public function testPendingResult()
+    {
+        $finalValue = 0;
+        $promise = new Promise();
+
+        $promise->then(function ($value) use (&$finalValue) {
+            $finalValue = $value + 2;
+        });
+
+        $promise->resolve(4);
+        $this->loop->run();
+
+        $this->assertEquals(6, $finalValue);
+    }
+
+    public function testPendingFail()
+    {
+        $finalValue = 0;
+        $promise = new Promise();
+
+        $promise->otherwise(function ($value) use (&$finalValue) {
+            $finalValue = $value->getMessage() + 2;
+        });
+
+        $promise->reject(new Exception('4'));
+        $this->loop->run();
+
+        $this->assertEquals(6, $finalValue);
+    }
+	
+    public function testChainingPromises()
+    {
+        $finalValue = 0;
+        $promise = new Promise();
+        $promise->resolve(1);
+
+        $subPromise = new Promise();
+
+        $promise->then(function ($value) use ($subPromise) {
+            return $subPromise;
+        })->then(function ($value) use (&$finalValue) {
+            $finalValue = $value + 4;
+
+            return $finalValue;
+        });
+
+        $subPromise->resolve(2);
+        $this->loop->run();
+
+        $this->assertEquals(6, $finalValue);
+    }
+
+	/**
+	 * /expected Risky - No Tests Performed!
+     * /or  Exception
+     * @expectedException \Exception
+     */
+    public function testResolveTwice()
+    {
+        $promise = new Promise();
+        $promise->resolve(1);
+        $promise->resolve(1);
+    }
+	
+	/**
+	 * /expected Risky - No Tests Performed!
+     * /or  Exception
+     * @expectedException \Exception
+     */
+    public function testRejectTwice()
+    {
+        $promise = new Promise();
+        $promise->reject(new Exception('1'));
+        $promise->reject(new Exception('1'));
+    }
+	
+    public function testConstructorCallResolve()
+    {
+        $promise = (new Promise(function ($resolve, $reject) {
+            $resolve('hi');
+        }))->then(function ($result) use (&$realResult) {
+            $realResult = $result;
+        });
+        $this->loop->run();
+
+        $this->assertEquals('hi', $realResult);
+    }
+
+    public function testConstructorCallReject()
+    {
+        $promise = (new Promise(function ($resolve, $reject) {
+            $reject(new Exception('hi'));
+        }))->then(function ($result) use (&$realResult) {
+            $realResult = 'incorrect';
+        })->otherwise(function ($reason) use (&$realResult) {
+            $realResult = $reason->getMessage();
+        });
+        $this->loop->run();
+
+        $this->assertEquals('hi', $realResult);
+    }
+
+    public function testWaitResolve()
+    {
+        $promise = new Promise();
+        $this->loop->nextTick(function () use ($promise) {
+            $promise->resolve(1);
+        });
+        $this->assertEquals(
+            1,
+            $promise->wait()
+        );
+    }
+	
+    public function testFailureHandler()
+    {
+        $ok = 0;
+        $promise = new Promise();
+        $promise->otherwise(function ($reason) {
+            $this->assertEquals('foo', $reason);
+            throw new \Exception('hi');
+        })->then(function () use (&$ok) {
+            $ok = -1;
+        }, function () use (&$ok) {
+            $ok = 1;
+        });
+
+        $this->assertEquals(0, $ok);
+        $promise->reject(new Exception('foo'));
+        $this->loop->run();
+
+        $this->assertEquals(1, $ok);
+    }
+	
+    public function testWaitRejectedException()
+    {
+        $promise = new Promise();
+        $this->loop->nextTick(function () use ($promise) {
+            $promise->reject(new \OutOfBoundsException('foo'));
+        });
+        try {
+            $promise->wait();
+            $this->fail('We did not get the expected exception');
+        } catch (\Exception $e) {
+            $this->assertInstanceOf('OutOfBoundsException', $e);
+            $this->assertEquals('foo', $e->getMessage());
+        }
+    }
+
+    public function testWaitRejectedScalar()
+    {
+        $promise = new Promise();
+        $this->loop->nextTick(function () use ($promise) {
+            $promise->reject(new Exception('foo'));
+        });
+        try {
+            $promise->wait();
+            $this->fail('We did not get the expected exception');
+        } catch (\Exception $e) {
+            $this->assertInstanceOf('Exception', $e);
+            $this->assertEquals('foo', $e->getMessage());
+        }
     }
 	
     public function testForwardsRejectedPromisesDownChainBetweenGaps()
@@ -131,6 +373,8 @@ class InteroperabilityPromiseTest extends TestCase
     }
 		
     /**
+     * /expectedException \LogicException
+	 * /expectedExceptionMessage The promise is already fulfilled
      * @expectedException \Sabre\Event\PromiseAlreadyResolvedException
      * @expectedExceptionMessage This promise is already resolved, and you're not allowed to resolve a promise more than once
      */
@@ -143,6 +387,7 @@ class InteroperabilityPromiseTest extends TestCase
     }
 	
     /**
+	 * /expected Risky - No Tests Performed!
      * @expectedException \Sabre\Event\PromiseAlreadyResolvedException
      * @expectedExceptionMessage This promise is already resolved, and you're not allowed to resolve a promise more than once
      */
@@ -154,6 +399,8 @@ class InteroperabilityPromiseTest extends TestCase
     }
 	
     /**
+     * /expectedException \LogicException
+     * /expectedExceptionMessage Cannot change a fulfilled promise to rejected
      * @expectedException \Sabre\Event\PromiseAlreadyResolvedException
      * @expectedExceptionMessage This promise is already resolved, and you're not allowed to resolve a promise more than once
      */
@@ -166,6 +413,7 @@ class InteroperabilityPromiseTest extends TestCase
     }
 	
     /**
+	 * /expected Risky - No Tests Performed!
      * @expectedException \Sabre\Event\PromiseAlreadyResolvedException
      * @expectedExceptionMessage This promise is already resolved, and you're not allowed to resolve a promise more than once
      */
@@ -177,6 +425,8 @@ class InteroperabilityPromiseTest extends TestCase
     }
 	
     /**
+     * /expectedException \LogicException
+     * /expectedExceptionMessage Cannot change a fulfilled promise to rejected
      * @expectedException \Sabre\Event\PromiseAlreadyResolvedException
      * @expectedExceptionMessage This promise is already resolved, and you're not allowed to resolve a promise more than once
      */
@@ -188,6 +438,7 @@ class InteroperabilityPromiseTest extends TestCase
     }
 	
 	/**
+     * /expectedException \Async\Promise\RejectionException
      * @expectedException \LogicException
      * @expectedExceptionMessage There were no more events in the loop. This promise will never be fulfilled.
      */
@@ -198,6 +449,7 @@ class InteroperabilityPromiseTest extends TestCase
     }
 	
     /**
+     * /expectedException \Async\Promise\RejectionException
      * @expectedException \Exception
      */
     public function testThrowsWhenWaitingOnPromiseWithNoWaitFunction()
@@ -215,6 +467,7 @@ class InteroperabilityPromiseTest extends TestCase
     }
 	
     /**
+     * /expectedException \Async\Promise\CancellationException
      * @expectedException \Exception
      */
     public function testCancelsPromiseWhenNoCancelFunction()
@@ -280,6 +533,8 @@ class InteroperabilityPromiseTest extends TestCase
     }
 	
     /**
+     * /expectedException \Async\Promise\RejectionException
+     * /expectedExceptionMessage The promise was rejected with reason: foo
      * @expectedException \Exception
      * @expectedExceptionMessage foo
      */
@@ -290,6 +545,8 @@ class InteroperabilityPromiseTest extends TestCase
     }
 	
     /**
+     * /expectedException \Async\Promise\RejectionException
+     * /expectedExceptionMessage The promise was rejected with reason: foo
      * @expectedException \Exception
      * @expectedExceptionMessage foo
      */
