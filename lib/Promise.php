@@ -65,16 +65,16 @@ class Promise
     public function __construct( ...$executor)
     {		
 		$callExecutor = isset($executor[0]) ? $executor[0] : null;		
-		$childLoop = $this->checkLoopInstance($callExecutor) ? $callExecutor : null;
-		$callExecutor = $this->checkLoopInstance($callExecutor) ? null : $callExecutor;	
+		$childLoop = $this->isEventLoopAvailable($callExecutor) ? $callExecutor : null;
+		$callExecutor = $this->isEventLoopAvailable($callExecutor) ? null : $callExecutor;	
 		
 		$callCanceller = isset($executor[1]) ? $executor[1] : null;
-		$childLoop = $this->checkLoopInstance($callCanceller) ? $callCanceller : $childLoop;
-		$callCanceller = $this->checkLoopInstance($callCanceller) ? null : $callCanceller;	
+		$childLoop = $this->isEventLoopAvailable($callCanceller) ? $callCanceller : $childLoop;
+		$callCanceller = $this->isEventLoopAvailable($callCanceller) ? null : $callCanceller;	
 				
 		$loop = isset($executor[2]) ? $executor[2] : null;		
-		$childLoop = $this->checkLoopInstance($loop) ? $loop : $childLoop;		
-		$this->loop = $this->checkLoopInstance($childLoop) ? $childLoop : Loop\instance();
+		$childLoop = $this->isEventLoopAvailable($loop) ? $loop : $childLoop;		
+		$this->loop = $this->isEventLoopAvailable($childLoop) ? $childLoop : Loop\instance();
 		
 		$this->waitFn = is_callable($callExecutor) ? $callExecutor : null;
 		$this->cancelFn = is_callable($callCanceller) ? $callCanceller : null;		
@@ -93,7 +93,7 @@ class Promise
 		}
     }
 
-	private function checkLoopInstance($instance = null): bool
+	private function isEventLoopAvailable($instance = null): bool
 	{
 		$isInstanceiable = false;
 		if ($instance instanceof TaskQueueInterface)
@@ -391,11 +391,17 @@ class Promise
         if ($this->loop) {
 			$loop = $this->loop;
 			
-			$othersLoop = method_exists($loop, 'futureTick') ? [$loop, 'futureTick'] : null;
-			$othersLoop = method_exists($loop, 'addTick') ? [$loop, 'addTick'] : $othersLoop;
-			$othersLoop = method_exists($loop, 'onTick') ? [$loop, 'onTick'] : $othersLoop;
-			$othersLoop = method_exists($loop, 'enqueue') ? [$loop, 'enqueue'] : $othersLoop;
-			$othersLoop = method_exists($loop, 'add') ? [$loop, 'add'] : $othersLoop;
+			$othersLoop = null;
+			if (method_exists($loop, 'futureTick'))
+				$othersLoop = [$loop, 'futureTick']; 
+			elseif (method_exists($loop, 'addTick'))
+				$othersLoop = [$loop, 'addTick'];
+			elseif (method_exists($loop, 'onTick'))
+				$othersLoop = [$loop, 'onTick'];
+			elseif (method_exists($loop, 'enqueue'))
+				$othersLoop = [$loop, 'enqueue'];
+			elseif (method_exists($loop, 'add'))
+				$othersLoop = [$loop, 'add'];
 			
 			if ($othersLoop)
 				call_user_func_array($othersLoop, $function); 
