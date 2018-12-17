@@ -79,17 +79,20 @@ class Promise
 		$this->waitFn = is_callable($callExecutor) ? $callExecutor : null;
 		$this->cancelFn = is_callable($callCanceller) ? $callCanceller : null;		
 	
-		try {
-			if (is_callable($callExecutor) && !$this->isWaitRequired) {
-				$callExecutor(
-					[$this, 'fulfill'],
-					[$this, 'reject']
-				);
-			}
+			$promiseFunction = function () use($callExecutor) { 
+				if (is_callable($callExecutor)) {
+					$callExecutor([$this, 'fulfill'], [$this, 'reject']);
+				}			
+			};
+			
+		try {			
+			$promiseFunction();
 		} catch (\Throwable $e) {
 			$this->isWaitRequired = true;
+				$this->implement($promiseFunction);
 		} catch (\Exception $exception) {
 			$this->isWaitRequired = true;
+				$this->implement($promiseFunction);
 		}
     }
 
@@ -263,12 +266,7 @@ class Promise
 				$this->isWaitRequired = false;
 				$fn([$this, 'fulfill'], [$this, 'reject']);
 				$loop->run();
-			} elseif (method_exists($loop, 'tick')) {	
-				if (is_callable($fn) && $this->isWaitRequired) {
-					$this->isWaitRequired = false;
-					$fn([$this, 'fulfill'], [$this, 'reject']);
-				}	
-				
+			} elseif (method_exists($loop, 'tick')) {				
 				$hasEvents = true;
 				while (self::PENDING === $this->state) {					
 					if (!$hasEvents) {
@@ -293,7 +291,7 @@ class Promise
         }
 		
 		$result = $this->value instanceof Promise 
-					? $this->value->wait() 
+					? $this->value->wait($unwrap) 
 					: $this->value;
 					
 		if ($this->state === self::PENDING) {
@@ -301,14 +299,14 @@ class Promise
         } elseif (self::FULFILLED === $this->state) {
 			// If the state of this promise is fulfilled, we can return the value.
 			return $result;
-		} else {
+		} elseif ($unwrap) {
 			// If we got here, it means that the asynchronous operation
 			// errored. Therefore we need to throw an exception.
             if ($result instanceof Exception) {
                 throw $result;
-            } elseif (is_scalar($result) && $unwrap) {
+            } elseif (is_scalar($result)) {
                 throw new \Exception($result);
-            } elseif ($unwrap) {
+            } else {
                 $type = is_object($result) ? get_class($result) : gettype($result);
                 throw new \Exception('Promise was rejected with reason of type: ' . $type);
             }		
@@ -404,7 +402,7 @@ class Promise
 				$othersLoop = [$loop, 'add'];
 			
 			if ($othersLoop)
-				call_user_func_array($othersLoop, $function); 
+				call_user_func($othersLoop, $function); 
 			else 	
 				$loop->nextTick($function);
         } else {
