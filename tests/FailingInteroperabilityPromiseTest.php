@@ -47,8 +47,8 @@ class FailingInteroperabilityPromiseTest extends TestCase
     {
 		$this->markTestSkipped('These test fails in various stages, all taken from Guzzle phpunit tests.');
 		$this->loop = Loop\instance();
-		//$this->loop = new TaskQueue();
-		//Loop::clearInstance();
+		//$this->loop = \GuzzleHttp\Promise\queue();
+		//Loop::clearInstance(); 
 		//$this->loop = Promise::getLoop(true);
 		//$this->loop = Factory::create();
 		//$this->loop = new Queue();

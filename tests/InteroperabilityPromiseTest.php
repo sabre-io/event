@@ -46,7 +46,7 @@ class InteroperabilityPromiseTest extends TestCase
 	protected function setUp()
     {
 		$this->loop = Loop\instance();
-		//$this->loop = new TaskQueue();
+		//$this->loop = \GuzzleHttp\Promise\queue();
 		//Loop::clearInstance();
 		//$this->loop = Promise::getLoop(true);
 		//$this->loop = Factory::create();
