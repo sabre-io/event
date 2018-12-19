@@ -11,6 +11,8 @@ use Sabre\Event\Promise;
 use Sabre\Event\RejectionException;
 use Sabre\Event\CancellationException;
 use Sabre\Event\PromiseAlreadyResolvedException;
+use Sabre\Tests\Thennable;
+use Sabre\Tests\NotPromiseInstance;
 //use GuzzleHttp\Promise\Promise;
 //use GuzzleHttp\Promise\TaskQueue;
 //use GuzzleHttp\Promise\PromiseInterface;
@@ -45,25 +47,51 @@ class FailingInteroperabilityPromiseTest extends TestCase
 	
 	protected function setUp()
     {
-		$this->markTestSkipped('These test fails in various stages, all taken from Guzzle phpunit tests.');
 		$this->loop = Loop\instance();
 		//$this->loop = \GuzzleHttp\Promise\queue();
 		//Loop::clearInstance(); 
 		//$this->loop = Promise::getLoop(true);
 		//$this->loop = Factory::create();
 		//$this->loop = new Queue();
-    }	
-		
-    public function testWaitBehaviorIsBasedOnLastPromiseInChain()
-    {		
-        $p3 = new Promise(function () use (&$p3) { $p3->resolve('Whoop'); });
-        $p2 = new Promise(function () use (&$p2, $p3) { $p2->reject($p3); });
-        $p = new Promise(function () use (&$p, $p2) { $p->reject($p2); });
-        $this->assertEquals('Whoop', $p->wait());
+    }		
+	
+    public function testRecursivelyForwardsWhenOnlyThennable()
+    {
+		$this->markTestSkipped('These test fails in various stages, all taken from Guzzle phpunit tests.');
+        $res = [];
+        $p = new Promise();
+        $p2 = new Thennable();
+        $p2->resolve('foo');
+        $p2->then(function ($v) use (&$res) { $res[] = 'A:' . $v; });
+        $p->then(function () use ($p2, &$res) { $res[] = 'B'; return $p2; })
+            ->then(function ($v) use (&$res) { $res[] = 'C:' . $v; });
+        $p->resolve('a');
+        $p->then(function ($v) use (&$res) { $res[] = 'D:' . $v; });
+        $this->loop->run();
+        $this->assertEquals(['A:foo', 'B', 'D:a', 'C:foo'], $res);
     }
 	
+    public function testRecursivelyForwardsWhenNotInstanceOfPromise()
+    {
+		$this->markTestSkipped('These test fails in various stages, all taken from Guzzle phpunit tests.');
+        $res = [];
+        $p = new Promise();
+        $p2 = new NotPromiseInstance();
+        $p2->then(function ($v) use (&$res) { $res[] = 'A:' . $v; });
+        $p->then(function () use ($p2, &$res) { $res[] = 'B'; return $p2; })
+            ->then(function ($v) use (&$res) { $res[] = 'C:' . $v; });
+        $p->resolve('a');
+        $p->then(function ($v) use (&$res) { $res[] = 'D:' . $v; });
+        $this->loop->run();
+        $this->assertEquals(['B', 'D:a'], $res);
+        $p2->resolve('foo');
+        $this->loop->run();
+        $this->assertEquals(['B', 'D:a', 'A:foo', 'C:foo'], $res);
+    }		
+		
     public function testCancelsUppermostPendingPromise()
     {
+		$this->markTestSkipped('These test fails in various stages, all taken from Guzzle phpunit tests.');
         $called = false;
         $p1 = new Promise(null, function () use (&$called) { $called = true; });
         $p2 = $p1->then(function () {});
@@ -81,7 +109,7 @@ class FailingInteroperabilityPromiseTest extends TestCase
         } catch (CancellationException $e) {
             $this->assertContains('cancelled', $e->getMessage());
         }
-        try {			
+        try {
             $p4->wait();
             $this->fail();
         } catch (CancellationException $e) {
@@ -92,6 +120,7 @@ class FailingInteroperabilityPromiseTest extends TestCase
 	
     public function testDoesNotBlowStackWhenWaitingOnNestedThens()
     {
+		$this->markTestSkipped('These test fails in various stages, all taken from Guzzle phpunit tests.');
         $inner = new Promise(function () use (&$inner) { $inner->resolve(0); });
         $prev = $inner;
         for ($i = 1; $i < 100; $i++) {

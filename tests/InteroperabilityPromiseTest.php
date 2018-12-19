@@ -665,5 +665,13 @@ class InteroperabilityPromiseTest extends TestCase
         });
         $p->wait(false);
         $this->assertSame(self::REJECTED, $p2->getState());
-    }	
+    }
+	
+    public function testWaitBehaviorIsBasedOnLastPromiseInChain()
+    {		
+        $p3 = new Promise(function () use (&$p3) { $p3->resolve('Whoop'); });
+        $p2 = new Promise(function () use (&$p2, $p3) { $p2->reject($p3); });
+        $p = new Promise(function () use (&$p, $p2) { $p->reject($p2); });
+        $this->assertEquals('Whoop', $p->wait());
+    }
 }

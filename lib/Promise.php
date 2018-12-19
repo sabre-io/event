@@ -290,9 +290,11 @@ class Promise
             }
         }
 		
-		$result = $this->value instanceof Promise 
-					? $this->value->wait($unwrap) 
-					: $this->value;
+		if ($this->value instanceof Promise) {
+            return $this->value->wait($unwrap);
+        }
+		
+		$result = $this->value;
 					
 		if ($this->state === self::PENDING) {
             $this->reject('Invoking the wait callback did not resolve the promise');
