@@ -26,6 +26,7 @@ before_script:
   - composer update --prefer-source $LOWEST_DEPS
 
 script:
+  - if [ $RUN_PHPSTAN == "FALSE"  ]; then ./bin/php-cs-fixer  fix --dry-run --diff; fi
   - if [ $RUN_PHPSTAN == "FALSE"  ]; then ./bin/phpunit --configuration tests/phpunit.xml --coverage-clover=coverage.xml; fi
   - if [ $RUN_PHPSTAN == "TRUE"  ]; then ./bin/phpstan.phar analyse -c phpstan.neon lib; fi
 
