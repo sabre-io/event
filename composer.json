@@ -16,7 +16,7 @@
     "homepage": "http://sabre.io/event/",
     "license": "BSD-3-Clause",
     "require": {
-        "php": ">=7.0"
+        "php": "^7.1"
     },
     "authors": [
         {
@@ -41,7 +41,8 @@
         ]
     },
     "require-dev": {
-        "phpunit/phpunit" : ">=6"
+        "friendsofphp/php-cs-fixer": "2.16.*",
+        "phpunit/phpunit" : "^7"
     },
     "config" : {
         "bin-dir" : "bin/"
