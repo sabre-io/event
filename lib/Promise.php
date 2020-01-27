@@ -217,7 +217,6 @@ class Promise
      * correctly, and any chained promises are also correctly fulfilled or
      * rejected.
      *
-     * @param Promise  $subPromise
      * @param callable $callBack
      */
     private function invokeCallback(Promise $subPromise, callable $callBack = null)

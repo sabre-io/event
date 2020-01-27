@@ -3,9 +3,10 @@ vendor
 composer.lock
 
 #binaries
-bin/sabre-cs-fixer
-bin/php-cs-fixer
 bin/phpunit
+bin/php-cs-fixer
+bin/phpstan
+bin/phpstan.phar
 
 #vim lock files
 .*.swp
@@ -13,3 +14,4 @@ bin/phpunit
 #development stuff
 tests/cov
 .php_cs.cache
+.idea

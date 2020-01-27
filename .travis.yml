@@ -1,10 +1,10 @@
 language: php
 sudo: required
 php:
-  - 7.0
   - 7.1
   - 7.2
   - 7.3
+  - 7.4
 
 env:
   global:
@@ -20,14 +20,15 @@ matrix:
     env: RUN_PHPSTAN="TRUE"
 
 install:
-  - if [ $RUN_PHPSTAN == "TRUE"  ]; then wget https://github.com/phpstan/phpstan/releases/download/0.10.3/phpstan.phar; fi
+  - if [ $RUN_PHPSTAN == "TRUE"  ]; then composer require --dev phpstan/phpstan:^0.12; fi
 
 before_script:
   - composer update --prefer-source $LOWEST_DEPS
 
 script:
-  - if [ $RUN_PHPSTAN == "FALSE"  ]; then ./bin/phpunit --coverage-clover=coverage.xml; fi
-  - if [ $RUN_PHPSTAN == "TRUE"  ]; then php phpstan.phar analyse -c phpstan.neon lib; fi
+  - if [ $RUN_PHPSTAN == "FALSE"  ]; then ./bin/php-cs-fixer  fix --dry-run --diff; fi
+  - if [ $RUN_PHPSTAN == "FALSE"  ]; then ./bin/phpunit --configuration tests/phpunit.xml --coverage-clover=coverage.xml; fi
+  - if [ $RUN_PHPSTAN == "TRUE"  ]; then ./bin/phpstan.phar analyse -c phpstan.neon lib; fi
 
 after_success:
 - bash <(curl -s https://codecov.io/bash)
