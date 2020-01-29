@@ -146,11 +146,9 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1, $finalValue);
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testResolvePromise()
     {
+        $this->expectException(\Exception::class);
         $finalValue = 0;
 
         $promise = new Promise();
