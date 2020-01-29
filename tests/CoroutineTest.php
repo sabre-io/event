@@ -8,11 +8,9 @@ use Exception;
 
 class CoroutineTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testNonGenerator()
     {
+        $this->expectException(\InvalidArgumentException::class);
         coroutine(function () {});
     }
 

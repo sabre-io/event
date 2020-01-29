@@ -12,7 +12,7 @@ abstract class BenchMark
     protected $iterations = 10000;
     protected $totalTime;
 
-    public function setUp()
+    public function setUp(): void
     {
     }
 
@@ -34,7 +34,7 @@ class OneCallBack extends BenchMark
     protected $emitter;
     protected $iterations = 100000;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->emitter = new Emitter();
         $this->emitter->on('foo', function () {
@@ -54,7 +54,7 @@ class ManyCallBacks extends BenchMark
 {
     protected $emitter;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->emitter = new Emitter();
         for ($i = 0; $i < 100; ++$i) {
@@ -76,7 +76,7 @@ class ManyPrioritizedCallBacks extends BenchMark
 {
     protected $emitter;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->emitter = new Emitter();
         for ($i = 0; $i < 100; ++$i) {

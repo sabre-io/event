@@ -7,6 +7,7 @@ namespace Sabre\Event\Promise;
 use Exception;
 use Sabre\Event\Loop;
 use Sabre\Event\Promise;
+use Sabre\Event\PromiseAlreadyResolvedException;
 
 class PromiseTest extends \PHPUnit\Framework\TestCase
 {
@@ -136,21 +137,17 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('hi', $realResult);
     }
 
-    /**
-     * @expectedException \Sabre\Event\PromiseAlreadyResolvedException
-     */
     public function testFulfillTwice()
     {
+        $this->expectException(PromiseAlreadyResolvedException::class);
         $promise = new Promise();
         $promise->fulfill(1);
         $promise->fulfill(1);
     }
 
-    /**
-     * @expectedException \Sabre\Event\PromiseAlreadyResolvedException
-     */
     public function testRejectTwice()
     {
+        $this->expectException(PromiseAlreadyResolvedException::class);
         $promise = new Promise();
         $promise->reject(new Exception('1'));
         $promise->reject(new Exception('1'));
@@ -188,11 +185,9 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testWaitWillNeverResolve()
     {
+        $this->expectException(\LogicException::class);
         $promise = new Promise();
         $promise->wait();
     }

@@ -6,13 +6,13 @@ namespace Sabre\Event\Loop;
 
 class FunctionsTest extends \PHPUnit\Framework\TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         // Always creating a fresh loop object.
         instance(new Loop());
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         // Removing the global loop object.
         instance(null);
