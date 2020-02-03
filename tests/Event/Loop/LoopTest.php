@@ -122,7 +122,7 @@ class LoopTest extends \PHPUnit\Framework\TestCase
             ++$check;
         }, 1);
 
-        $loop->nextTick(function () use ($loop, &$check) {
+        $loop->nextTick(function () use (&$check) {
             ++$check;
         });
         $loop->tick();
