@@ -1,6 +1,13 @@
 ChangeLog
 =========
 
+5.1.1 (2020-09-19)
+------------------
+
+* declare experimental php8 support (@TysonAndre)
+* incorporated psalm types (@staabm)
+* updated build (@phil-davis)
+
 5.1.0 (2020-01-31)
 ------------------
 
