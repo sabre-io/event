@@ -44,6 +44,10 @@ use Throwable;
  *
  * @return \Sabre\Event\Promise
  *
+ * @psalm-template TReturn
+ * @psalm-param callable():\Generator<mixed, mixed, mixed, TReturn> $gen
+ * @psalm-return Promise<TReturn>
+ *
  * @copyright Copyright (C) fruux GmbH (https://fruux.com/)
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
