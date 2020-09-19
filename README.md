@@ -17,10 +17,9 @@ Installation
 
 Make sure you have [composer][3] installed, and then run:
 
-    composer require sabre/event "^3.0"
+    composer require sabre/event "^5.0"
 
-This package requires PHP 5.5. The 2.0 branch is still maintained as well, and
-supports PHP 5.4.
+This package requires PHP 7.1.
 
 Build status
 ------------
@@ -37,15 +36,13 @@ Build status
 Questions?
 ----------
 
-Head over to the [sabre/dav mailinglist][4], or you can also just open a ticket
-on [GitHub][5].
+Open a ticket on [GitHub][5].
 
 Made at fruux
 -------------
 
 This library is being developed by [fruux](https://fruux.com/). Drop us a line for commercial services or enterprise support.
 
-[1]: http://sabre.io/event/
-[3]: http://getcomposer.org/
-[4]: http://groups.google.com/group/sabredav-discuss
+[1]: https://sabre.io/event/
+[3]: https://getcomposer.org/
 [5]: https://github.com/fruux/sabre-event/issues/
