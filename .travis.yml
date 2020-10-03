@@ -17,13 +17,19 @@ env:
 
 matrix:
   include:
-  - name: 'PHPStan'
-    php: 7.4
-    env:
-      - RUN_PHPCSFIXER="FALSE"
-      - RUN_PHPUNIT="FALSE"
-      - RUN_PHPSTAN="TRUE"
-      - REPORT_COVERAGE="FALSE"
+    - name: 'PHP8'
+      dist: focal
+      php: nightly
+      env:
+        - RUN_PHPCSFIXER="FALSE"
+        - REPORT_COVERAGE="FALSE"
+    - name: 'PHPStan'
+      php: 7.4
+      env:
+        - RUN_PHPCSFIXER="FALSE"
+        - RUN_PHPUNIT="FALSE"
+        - RUN_PHPSTAN="TRUE"
+        - REPORT_COVERAGE="FALSE"
   fast_finish: true
 
 before_script:
