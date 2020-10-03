@@ -16,7 +16,7 @@
     "homepage": "http://sabre.io/event/",
     "license": "BSD-3-Clause",
     "require": {
-        "php": "^7.1|^8.0"
+        "php": "^7.1 || ^8.0"
     },
     "authors": [
         {
