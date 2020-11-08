@@ -1,6 +1,8 @@
 sabre/event
 ===========
 
+Trigger CI
+
 A lightweight library for event-based development in PHP.
 
 This library provides the following event-based concepts:
