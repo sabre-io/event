@@ -124,7 +124,7 @@ ChangeLog
 ------------------
 
 * hhvm compatible!
-* Fixed: Issue #4. Compatiblitiy for PHP < 5.4.14.
+* Fixed: Issue #4. Compatibility for PHP < 5.4.14.
 
 
 1.0.0 (2013-07-19)

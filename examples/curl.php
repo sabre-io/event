@@ -77,7 +77,7 @@ function curl_multi_loop_scheduler($mh, callable $done)
     $mrc = curl_multi_exec($mh, $active);
     switch ($mrc) {
         /*
-         * From the curl docs. If CURM_CALL_MULTI_PERFORM is returned, simply
+         * From the curl docs. If CURLM_CALL_MULTI_PERFORM is returned, simply
          * call curl_multi_perform immediately again. In PHP this means we
          * actually call curl_multi_exec immediately again.
          *
