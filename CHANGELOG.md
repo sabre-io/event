@@ -1,6 +1,11 @@
 ChangeLog
 =========
 
+5.1.3 (2021-11-04)
+------------------
+
+* #88 Pass null to $microseconds for null $seconds (@TysonAndre)
+
 5.1.2 (2020-10-03)
 ------------------
 
