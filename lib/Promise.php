@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Sabre\Event;
 
-use Exception;
 use Throwable;
 
 /**
@@ -44,10 +43,8 @@ class Promise
 
     /**
      * The current state of this promise.
-     *
-     * @var int
      */
-    public $state = self::PENDING;
+    public int $state = self::PENDING;
 
     /**
      * Creates the promise.
@@ -131,7 +128,7 @@ class Promise
      *
      * @param mixed $value
      */
-    public function fulfill($value = null)
+    public function fulfill($value = null): void
     {
         if (self::PENDING !== $this->state) {
             throw new PromiseAlreadyResolvedException('This promise is already resolved, and you\'re not allowed to resolve a promise more than once');
@@ -146,7 +143,7 @@ class Promise
     /**
      * Marks this promise as rejected, and set its rejection reason.
      */
-    public function reject(Throwable $reason)
+    public function reject(Throwable $reason): void
     {
         if (self::PENDING !== $this->state) {
             throw new PromiseAlreadyResolvedException('This promise is already resolved, and you\'re not allowed to resolve a promise more than once');
@@ -198,10 +195,8 @@ class Promise
     /**
      * A list of subscribers. Subscribers are the callbacks that want us to let
      * them know if the callback was fulfilled or rejected.
-     *
-     * @var array
      */
-    protected $subscribers = [];
+    protected array $subscribers = [];
 
     /**
      * The result of the promise.
@@ -220,7 +215,7 @@ class Promise
      * correctly, and any chained promises are also correctly fulfilled or
      * rejected.
      */
-    private function invokeCallback(Promise $subPromise, callable $callBack = null)
+    private function invokeCallback(Promise $subPromise, callable $callBack = null): void
     {
         // We use 'nextTick' to ensure that the event handlers are always
         // triggered outside of the calling stack in which they were originally

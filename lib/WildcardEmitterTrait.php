@@ -24,7 +24,7 @@ trait WildcardEmitterTrait
     /**
      * Subscribe to an event.
      */
-    public function on(string $eventName, callable $callBack, int $priority = 100)
+    public function on(string $eventName, callable $callBack, int $priority = 100): void
     {
         // If it ends with a wildcard, we use the wildcardListeners array
         if ('*' === $eventName[\strlen($eventName) - 1]) {
@@ -49,7 +49,7 @@ trait WildcardEmitterTrait
     /**
      * Subscribe to an event exactly once.
      */
-    public function once(string $eventName, callable $callBack, int $priority = 100)
+    public function once(string $eventName, callable $callBack, int $priority = 100): void
     {
         $wrapper = null;
         $wrapper = function () use ($eventName, $callBack, &$wrapper) {
@@ -195,7 +195,7 @@ trait WildcardEmitterTrait
      * removed. If it is not specified, every listener for every event is
      * removed.
      */
-    public function removeAllListeners(string $eventName = null)
+    public function removeAllListeners(string $eventName = null): void
     {
         if (\is_null($eventName)) {
             $this->listeners = [];
@@ -216,12 +216,12 @@ trait WildcardEmitterTrait
     /**
      * The list of listeners.
      */
-    protected $listeners = [];
+    protected array $listeners = [];
 
     /**
      * The list of "wildcard listeners".
      */
-    protected $wildcardListeners = [];
+    protected array $wildcardListeners = [];
 
     /**
      * An index of listeners for a specific event name. This helps speeding
@@ -229,5 +229,5 @@ trait WildcardEmitterTrait
      *
      * If the list of listeners changes though, the index clears.
      */
-    protected $listenerIndex = [];
+    protected array $listenerIndex = [];
 }

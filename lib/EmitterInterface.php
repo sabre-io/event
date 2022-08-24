@@ -19,12 +19,12 @@ interface EmitterInterface
     /**
      * Subscribe to an event.
      */
-    public function on(string $eventName, callable $callBack, int $priority = 100);
+    public function on(string $eventName, callable $callBack, int $priority = 100): void;
 
     /**
      * Subscribe to an event exactly once.
      */
-    public function once(string $eventName, callable $callBack, int $priority = 100);
+    public function once(string $eventName, callable $callBack, int $priority = 100): void;
 
     /**
      * Emits an event.
@@ -74,5 +74,5 @@ interface EmitterInterface
      * removed. If it is not specified, every listener for every event is
      * removed.
      */
-    public function removeAllListeners(string $eventName = null);
+    public function removeAllListeners(string $eventName = null): void;
 }
