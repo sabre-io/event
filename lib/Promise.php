@@ -219,8 +219,6 @@ class Promise
      * This method makes sure that the result of these callbacks are handled
      * correctly, and any chained promises are also correctly fulfilled or
      * rejected.
-     *
-     * @param callable $callBack
      */
     private function invokeCallback(Promise $subPromise, callable $callBack = null)
     {

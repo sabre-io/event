@@ -42,8 +42,6 @@ use Throwable;
  *
  * });
  *
- * @return \Sabre\Event\Promise
- *
  * @psalm-template TReturn
  * @psalm-param callable():\Generator<mixed, mixed, mixed, TReturn> $gen
  * @psalm-return Promise<TReturn>

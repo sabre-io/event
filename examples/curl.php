@@ -102,7 +102,7 @@ function curl_multi_loop_scheduler($mh, callable $done)
             break;
 
         default:
-            throw Exception('Curl error: '.curl_multi_strerror($mrc));
+            throw new Exception('Curl error: '.curl_multi_strerror($mrc));
     }
 }
 
