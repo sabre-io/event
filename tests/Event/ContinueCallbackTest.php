@@ -6,7 +6,7 @@ namespace Sabre\Event;
 
 class ContinueCallbackTest extends \PHPUnit\Framework\TestCase
 {
-    public function testContinueCallBack()
+    public function testContinueCallBack(): void
     {
         $ee = new Emitter();
 
@@ -29,7 +29,7 @@ class ContinueCallbackTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(2, $continueCounter);
     }
 
-    public function testContinueCallBackBreak()
+    public function testContinueCallBackBreak(): void
     {
         $ee = new Emitter();
 
@@ -52,7 +52,7 @@ class ContinueCallbackTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1, $continueCounter);
     }
 
-    public function testContinueCallBackBreakByHandler()
+    public function testContinueCallBackBreakByHandler(): void
     {
         $ee = new Emitter();
 

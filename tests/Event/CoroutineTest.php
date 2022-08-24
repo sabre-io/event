@@ -8,13 +8,13 @@ use Exception;
 
 class CoroutineTest extends \PHPUnit\Framework\TestCase
 {
-    public function testNonGenerator()
+    public function testNonGenerator(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         coroutine(function () {});
     }
 
-    public function testBasicCoroutine()
+    public function testBasicCoroutine(): void
     {
         $start = 0;
 
@@ -26,7 +26,7 @@ class CoroutineTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1, $start);
     }
 
-    public function testFulfilledPromise()
+    public function testFulfilledPromise(): void
     {
         $start = 0;
         $promise = new Promise(function ($fulfill, $reject) {
@@ -42,7 +42,7 @@ class CoroutineTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(3, $start);
     }
 
-    public function testRejectedPromise()
+    public function testRejectedPromise(): void
     {
         $start = 0;
         $promise = new Promise(function ($fulfill, $reject) {
@@ -64,7 +64,7 @@ class CoroutineTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(3, $start);
     }
 
-    public function testRejectedPromiseException()
+    public function testRejectedPromiseException(): void
     {
         $start = 0;
         $promise = new Promise(function ($fulfill, $reject) {
@@ -86,7 +86,7 @@ class CoroutineTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(3, $start);
     }
 
-    public function testFulfilledPromiseAsync()
+    public function testFulfilledPromiseAsync(): void
     {
         $start = 0;
         $promise = new Promise();
@@ -104,7 +104,7 @@ class CoroutineTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(3, $start);
     }
 
-    public function testRejectedPromiseAsync()
+    public function testRejectedPromiseAsync(): void
     {
         $start = 0;
         $promise = new Promise();
@@ -127,7 +127,7 @@ class CoroutineTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(3, $start);
     }
 
-    public function testCoroutineException()
+    public function testCoroutineException(): void
     {
         $start = 0;
         coroutine(function () use (&$start) {
@@ -143,7 +143,7 @@ class CoroutineTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(7, $start);
     }
 
-    public function testDeepException()
+    public function testDeepException(): void
     {
         $start = 0;
         $promise = new Promise();
@@ -162,7 +162,7 @@ class CoroutineTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(3, $start);
     }
 
-    public function testReturn()
+    public function testReturn(): void
     {
         $ok = false;
         coroutine(function () {
@@ -182,7 +182,7 @@ class CoroutineTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($ok);
     }
 
-    public function testReturnPromise()
+    public function testReturnPromise(): void
     {
         $ok = false;
 

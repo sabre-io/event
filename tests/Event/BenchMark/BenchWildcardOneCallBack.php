@@ -11,7 +11,7 @@ include __DIR__.'/../../../vendor/autoload.php';
 class BenchWildcardOneCallBack extends BenchWildcard
 {
     protected $emitter;
-    protected $iterations = 100000;
+    protected int $iterations = 100000;
 
     public function setUp(): void
     {
@@ -21,7 +21,7 @@ class BenchWildcardOneCallBack extends BenchWildcard
         });
     }
 
-    public function test()
+    public function test(): void
     {
         for ($i = 0; $i < $this->iterations; ++$i) {
             $this->emitter->emit('foo', []);

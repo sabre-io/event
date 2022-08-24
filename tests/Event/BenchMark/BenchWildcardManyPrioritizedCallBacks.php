@@ -21,7 +21,7 @@ class BenchWildcardManyPrioritizedCallBacks extends BenchWildcard
         }
     }
 
-    public function test()
+    public function test(): void
     {
         for ($i = 0; $i < $this->iterations; ++$i) {
             $this->emitter->emit('foo', []);
