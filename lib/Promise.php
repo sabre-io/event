@@ -30,17 +30,17 @@ class Promise
     /**
      * The asynchronous operation is pending.
      */
-    const PENDING = 0;
+    public const PENDING = 0;
 
     /**
      * The asynchronous operation has completed, and has a result.
      */
-    const FULFILLED = 1;
+    public const FULFILLED = 1;
 
     /**
      * The asynchronous operation has completed with an error.
      */
-    const REJECTED = 2;
+    public const REJECTED = 2;
 
     /**
      * The current state of this promise.

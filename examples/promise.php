@@ -2,6 +2,7 @@
 <?php declare(strict_types=1);
 
 use function Sabre\Event\coroutine;
+
 use Sabre\Event\Loop;
 use Sabre\Event\Promise;
 
