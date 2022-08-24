@@ -265,7 +265,7 @@ class Loop
      * If $timeout is 0, it will return immediately. If $timeout is null, it
      * will wait indefinitely.
      *
-     * @param float|null timeout
+     * @param float|null $timeout
      */
     protected function runStreams($timeout)
     {
