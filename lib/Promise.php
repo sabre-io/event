@@ -83,6 +83,8 @@ class Promise
      *
      * If either of the callbacks throw an exception, the returned promise will
      * be rejected and the exception will be passed back.
+     *
+     * @return Promise<TReturn>
      */
     public function then(callable $onFulfilled = null, callable $onRejected = null): Promise
     {
@@ -117,6 +119,8 @@ class Promise
      *
      * Its usage is identical to then(). However, the otherwise() function is
      * preferred.
+     *
+     * @return Promise<TReturn>
      */
     public function otherwise(callable $onRejected): Promise
     {
@@ -195,6 +199,8 @@ class Promise
     /**
      * A list of subscribers. Subscribers are the callbacks that want us to let
      * them know if the callback was fulfilled or rejected.
+     *
+     * @var array<int, mixed>
      */
     protected array $subscribers = [];
 
@@ -214,6 +220,8 @@ class Promise
      * This method makes sure that the result of these callbacks are handled
      * correctly, and any chained promises are also correctly fulfilled or
      * rejected.
+     *
+     * @param Promise<TReturn> $subPromise
      */
     private function invokeCallback(Promise $subPromise, callable $callBack = null): void
     {

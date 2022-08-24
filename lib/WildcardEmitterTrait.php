@@ -215,11 +215,15 @@ trait WildcardEmitterTrait
 
     /**
      * The list of listeners.
+     *
+     * @var array<string, mixed>
      */
     protected array $listeners = [];
 
     /**
      * The list of "wildcard listeners".
+     *
+     * @var array<string, mixed>
      */
     protected array $wildcardListeners = [];
 
@@ -228,6 +232,8 @@ trait WildcardEmitterTrait
      * up emitting events after all listeners have been set.
      *
      * If the list of listeners changes though, the index clears.
+     *
+     * @var array<string, mixed>
      */
     protected array $listenerIndex = [];
 }

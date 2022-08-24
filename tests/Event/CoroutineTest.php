@@ -11,7 +11,7 @@ class CoroutineTest extends \PHPUnit\Framework\TestCase
     public function testNonGenerator(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        coroutine(function () {});
+        coroutine(function () {}); /* @phpstan-ignore-line */
     }
 
     public function testBasicCoroutine(): void

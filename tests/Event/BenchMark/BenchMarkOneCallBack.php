@@ -10,7 +10,7 @@ include __DIR__.'/../../../vendor/autoload.php';
 
 class BenchMarkOneCallBack extends BenchMark
 {
-    protected $emitter;
+    protected Emitter $emitter;
     protected int $iterations = 100000;
 
     public function setUp(): void

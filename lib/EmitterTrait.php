@@ -171,6 +171,8 @@ trait EmitterTrait
 
     /**
      * The list of listeners.
+     *
+     * @var array<string, mixed>
      */
     protected array $listeners = [];
 }

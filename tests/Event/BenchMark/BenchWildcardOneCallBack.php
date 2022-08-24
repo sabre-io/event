@@ -10,7 +10,7 @@ include __DIR__.'/../../../vendor/autoload.php';
 
 class BenchWildcardOneCallBack extends BenchWildcard
 {
-    protected $emitter;
+    protected WildcardEmitter $emitter;
     protected int $iterations = 100000;
 
     public function setUp(): void
