@@ -71,9 +71,9 @@ function all(array $promises): Promise
  * The returned promise will resolve or reject with the value or reason of
  * that first promise.
  *
- * @param Promise<int>[] $promises
+ * @param Promise<mixed>[] $promises
  *
- * @return Promise<int>
+ * @return Promise<mixed>
  */
 function race(array $promises): Promise
 {
@@ -108,7 +108,7 @@ function race(array $promises): Promise
  *
  * @param mixed $value
  *
- * @return Promise<int>
+ * @return Promise<mixed>
  */
 function resolve($value): Promise
 {
@@ -125,7 +125,7 @@ function resolve($value): Promise
 /**
  * Returns a Promise that will reject with the given reason.
  *
- * @return Promise<int>
+ * @return Promise<mixed>
  */
 function reject(Throwable $reason): Promise
 {
