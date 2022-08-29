@@ -1,6 +1,12 @@
 ChangeLog
 =========
 
+6.0.0 (2022-08-29)
+------------------
+
+* #96 Minor fixes to examples, tests and comments (@phil-davis)
+* #97 PHP min version 7.4 (@phil-davis)
+
 5.1.4 (2021-11-04)
 ------------------
 
