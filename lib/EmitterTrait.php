@@ -22,7 +22,7 @@ trait EmitterTrait
     /**
      * Subscribe to an event.
      */
-    public function on(string $eventName, callable $callBack, int $priority = 100)
+    public function on(string $eventName, callable $callBack, int $priority = 100): void
     {
         if (!isset($this->listeners[$eventName])) {
             $this->listeners[$eventName] = [
@@ -40,7 +40,7 @@ trait EmitterTrait
     /**
      * Subscribe to an event exactly once.
      */
-    public function once(string $eventName, callable $callBack, int $priority = 100)
+    public function once(string $eventName, callable $callBack, int $priority = 100): void
     {
         $wrapper = null;
         $wrapper = function () use ($eventName, $callBack, &$wrapper) {
@@ -160,7 +160,7 @@ trait EmitterTrait
      * removed. If it is not specified, every listener for every event is
      * removed.
      */
-    public function removeAllListeners(string $eventName = null)
+    public function removeAllListeners(string $eventName = null): void
     {
         if (!\is_null($eventName)) {
             unset($this->listeners[$eventName]);
@@ -172,7 +172,7 @@ trait EmitterTrait
     /**
      * The list of listeners.
      *
-     * @var array
+     * @var array<string, mixed>
      */
-    protected $listeners = [];
+    protected array $listeners = [];
 }

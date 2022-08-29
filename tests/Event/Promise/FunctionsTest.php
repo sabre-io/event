@@ -10,7 +10,7 @@ use Sabre\Event\Promise;
 
 class FunctionsTest extends \PHPUnit\Framework\TestCase
 {
-    public function testAll()
+    public function testAll(): void
     {
         $promise1 = new Promise();
         $promise2 = new Promise();
@@ -29,14 +29,14 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([1, 2], $finalValue);
     }
 
-    public function testAllEmptyArray()
+    public function testAllEmptyArray(): void
     {
         $finalValue = Promise\all([])->wait();
 
         $this->assertEquals([], $finalValue);
     }
 
-    public function testAllReject()
+    public function testAllReject(): void
     {
         $promise1 = new Promise();
         $promise2 = new Promise();
@@ -61,7 +61,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1, $finalValue->getMessage());
     }
 
-    public function testAllRejectThenResolve()
+    public function testAllRejectThenResolve(): void
     {
         $promise1 = new Promise();
         $promise2 = new Promise();
@@ -86,7 +86,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1, $finalValue->getMessage());
     }
 
-    public function testRace()
+    public function testRace(): void
     {
         $promise1 = new Promise();
         $promise2 = new Promise();
@@ -109,7 +109,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1, $finalValue);
     }
 
-    public function testRaceReject()
+    public function testRaceReject(): void
     {
         $promise1 = new Promise();
         $promise2 = new Promise();
@@ -132,7 +132,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1, $finalValue->getMessage());
     }
 
-    public function testResolve()
+    public function testResolve(): void
     {
         $finalValue = 0;
 
@@ -146,7 +146,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1, $finalValue);
     }
 
-    public function testResolvePromise()
+    public function testResolvePromise(): void
     {
         $this->expectException(\Exception::class);
         $finalValue = 0;
@@ -158,7 +158,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
         $newPromise->wait();
     }
 
-    public function testReject()
+    public function testReject(): void
     {
         $finalValue = 0;
 

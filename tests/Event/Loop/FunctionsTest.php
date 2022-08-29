@@ -18,7 +18,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
         instance(null);
     }
 
-    public function testNextTick()
+    public function testNextTick(): void
     {
         $check = 0;
         nextTick(function () use (&$check) {
@@ -30,7 +30,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1, $check);
     }
 
-    public function testTimeout()
+    public function testTimeout(): void
     {
         $check = 0;
         setTimeout(function () use (&$check) {
@@ -42,7 +42,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1, $check);
     }
 
-    public function testTimeoutOrder()
+    public function testTimeoutOrder(): void
     {
         $check = [];
         setTimeout(function () use (&$check) {
@@ -60,7 +60,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['b', 'a', 'c'], $check);
     }
 
-    public function testSetInterval()
+    public function testSetInterval(): void
     {
         $check = 0;
         $intervalId = null;
@@ -75,7 +75,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(6, $check);
     }
 
-    public function testAddWriteStream()
+    public function testAddWriteStream(): void
     {
         $h = fopen('php://temp', 'r+');
         addWriteStream($h, function () use ($h) {
@@ -87,7 +87,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('hello world', stream_get_contents($h));
     }
 
-    public function testAddReadStream()
+    public function testAddReadStream(): void
     {
         $h = fopen('php://temp', 'r+');
         fwrite($h, 'hello world');
@@ -103,7 +103,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('hello world', $result);
     }
 
-    public function testStop()
+    public function testStop(): void
     {
         $check = 0;
         setTimeout(function () use (&$check) {
@@ -118,7 +118,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(0, $check);
     }
 
-    public function testTick()
+    public function testTick(): void
     {
         $check = 0;
         setTimeout(function () use (&$check) {

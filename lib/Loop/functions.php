@@ -7,7 +7,7 @@ namespace Sabre\Event\Loop;
 /**
  * Executes a function after x seconds.
  */
-function setTimeout(callable $cb, float $timeout)
+function setTimeout(callable $cb, float $timeout): void
 {
     instance()->setTimeout($cb, $timeout);
 }
@@ -17,6 +17,8 @@ function setTimeout(callable $cb, float $timeout)
  *
  * The value this function returns can be used to stop the interval with
  * clearInterval.
+ *
+ * @return array<int, mixed>
  */
 function setInterval(callable $cb, float $timeout): array
 {
@@ -25,8 +27,10 @@ function setInterval(callable $cb, float $timeout): array
 
 /**
  * Stops a running interval.
+ *
+ * @param array<int, mixed> $intervalId
  */
-function clearInterval(array $intervalId)
+function clearInterval(array $intervalId): void
 {
     instance()->clearInterval($intervalId);
 }
@@ -34,7 +38,7 @@ function clearInterval(array $intervalId)
 /**
  * Runs a function immediately at the next iteration of the loop.
  */
-function nextTick(callable $cb)
+function nextTick(callable $cb): void
 {
     instance()->nextTick($cb);
 }
@@ -50,7 +54,7 @@ function nextTick(callable $cb)
  *
  * @param resource $stream
  */
-function addReadStream($stream, callable $cb)
+function addReadStream($stream, callable $cb): void
 {
     instance()->addReadStream($stream, $cb);
 }
@@ -66,7 +70,7 @@ function addReadStream($stream, callable $cb)
  *
  * @param resource $stream
  */
-function addWriteStream($stream, callable $cb)
+function addWriteStream($stream, callable $cb): void
 {
     instance()->addWriteStream($stream, $cb);
 }
@@ -76,7 +80,7 @@ function addWriteStream($stream, callable $cb)
  *
  * @param resource $stream
  */
-function removeReadStream($stream)
+function removeReadStream($stream): void
 {
     instance()->removeReadStream($stream);
 }
@@ -86,7 +90,7 @@ function removeReadStream($stream)
  *
  * @param resource $stream
  */
-function removeWriteStream($stream)
+function removeWriteStream($stream): void
 {
     instance()->removeWriteStream($stream);
 }
@@ -97,7 +101,7 @@ function removeWriteStream($stream)
  * This function will run continuously, until there's no more events to
  * handle.
  */
-function run()
+function run(): void
 {
     instance()->run();
 }
@@ -122,7 +126,7 @@ function tick(bool $block = false): bool
 /**
  * Stops a running eventloop.
  */
-function stop()
+function stop(): void
 {
     instance()->stop();
 }

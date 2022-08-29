@@ -10,7 +10,7 @@ include __DIR__.'/../../../vendor/autoload.php';
 
 class BenchMarkManyCallBacks extends BenchMark
 {
-    protected $emitter;
+    protected Emitter $emitter;
 
     public function setUp(): void
     {
@@ -22,7 +22,7 @@ class BenchMarkManyCallBacks extends BenchMark
         }
     }
 
-    public function test()
+    public function test(): void
     {
         for ($i = 0; $i < $this->iterations; ++$i) {
             $this->emitter->emit('foo', []);

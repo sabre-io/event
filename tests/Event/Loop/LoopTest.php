@@ -6,7 +6,7 @@ namespace Sabre\Event\Loop;
 
 class LoopTest extends \PHPUnit\Framework\TestCase
 {
-    public function testNextTick()
+    public function testNextTick(): void
     {
         $loop = new Loop();
         $check = 0;
@@ -19,7 +19,7 @@ class LoopTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1, $check);
     }
 
-    public function testTimeout()
+    public function testTimeout(): void
     {
         $loop = new Loop();
         $check = 0;
@@ -32,7 +32,7 @@ class LoopTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1, $check);
     }
 
-    public function testTimeoutOrder()
+    public function testTimeoutOrder(): void
     {
         $loop = new Loop();
         $check = [];
@@ -51,7 +51,7 @@ class LoopTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['b', 'a', 'c'], $check);
     }
 
-    public function testSetInterval()
+    public function testSetInterval(): void
     {
         $loop = new Loop();
         $check = 0;
@@ -67,7 +67,7 @@ class LoopTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(6, $check);
     }
 
-    public function testAddWriteStream()
+    public function testAddWriteStream(): void
     {
         $h = fopen('php://temp', 'r+');
         $loop = new Loop();
@@ -80,7 +80,7 @@ class LoopTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('hello world', stream_get_contents($h));
     }
 
-    public function testAddReadStream()
+    public function testAddReadStream(): void
     {
         $h = fopen('php://temp', 'r+');
         fwrite($h, 'hello world');
@@ -98,7 +98,7 @@ class LoopTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('hello world', $result);
     }
 
-    public function testStop()
+    public function testStop(): void
     {
         $check = 0;
         $loop = new Loop();
@@ -114,7 +114,7 @@ class LoopTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(0, $check);
     }
 
-    public function testTick()
+    public function testTick(): void
     {
         $check = 0;
         $loop = new Loop();
@@ -134,7 +134,7 @@ class LoopTest extends \PHPUnit\Framework\TestCase
      * Here we add a new nextTick function as we're in the middle of a current
      * nextTick.
      */
-    public function testNextTickStacking()
+    public function testNextTickStacking(): void
     {
         $loop = new Loop();
         $check = 0;

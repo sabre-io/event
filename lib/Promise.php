@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Sabre\Event;
 
-use Exception;
 use Throwable;
 
 /**
@@ -30,24 +29,22 @@ class Promise
     /**
      * The asynchronous operation is pending.
      */
-    const PENDING = 0;
+    public const PENDING = 0;
 
     /**
      * The asynchronous operation has completed, and has a result.
      */
-    const FULFILLED = 1;
+    public const FULFILLED = 1;
 
     /**
      * The asynchronous operation has completed with an error.
      */
-    const REJECTED = 2;
+    public const REJECTED = 2;
 
     /**
      * The current state of this promise.
-     *
-     * @var int
      */
-    public $state = self::PENDING;
+    public int $state = self::PENDING;
 
     /**
      * Creates the promise.
@@ -86,6 +83,8 @@ class Promise
      *
      * If either of the callbacks throw an exception, the returned promise will
      * be rejected and the exception will be passed back.
+     *
+     * @return Promise<TReturn>
      */
     public function then(callable $onFulfilled = null, callable $onRejected = null): Promise
     {
@@ -120,6 +119,8 @@ class Promise
      *
      * Its usage is identical to then(). However, the otherwise() function is
      * preferred.
+     *
+     * @return Promise<TReturn>
      */
     public function otherwise(callable $onRejected): Promise
     {
@@ -131,7 +132,7 @@ class Promise
      *
      * @param mixed $value
      */
-    public function fulfill($value = null)
+    public function fulfill($value = null): void
     {
         if (self::PENDING !== $this->state) {
             throw new PromiseAlreadyResolvedException('This promise is already resolved, and you\'re not allowed to resolve a promise more than once');
@@ -146,7 +147,7 @@ class Promise
     /**
      * Marks this promise as rejected, and set its rejection reason.
      */
-    public function reject(Throwable $reason)
+    public function reject(Throwable $reason): void
     {
         if (self::PENDING !== $this->state) {
             throw new PromiseAlreadyResolvedException('This promise is already resolved, and you\'re not allowed to resolve a promise more than once');
@@ -199,9 +200,9 @@ class Promise
      * A list of subscribers. Subscribers are the callbacks that want us to let
      * them know if the callback was fulfilled or rejected.
      *
-     * @var array
+     * @var array<int, mixed>
      */
-    protected $subscribers = [];
+    protected array $subscribers = [];
 
     /**
      * The result of the promise.
@@ -219,8 +220,10 @@ class Promise
      * This method makes sure that the result of these callbacks are handled
      * correctly, and any chained promises are also correctly fulfilled or
      * rejected.
+     *
+     * @param Promise<TReturn> $subPromise
      */
-    private function invokeCallback(Promise $subPromise, callable $callBack = null)
+    private function invokeCallback(Promise $subPromise, callable $callBack = null): void
     {
         // We use 'nextTick' to ensure that the event handlers are always
         // triggered outside of the calling stack in which they were originally

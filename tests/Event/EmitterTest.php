@@ -6,13 +6,13 @@ namespace Sabre\Event;
 
 class EmitterTest extends \PHPUnit\Framework\TestCase
 {
-    public function testInit()
+    public function testInit(): void
     {
         $ee = new Emitter();
         $this->assertInstanceOf('Sabre\\Event\\Emitter', $ee);
     }
 
-    public function testListeners()
+    public function testListeners(): void
     {
         $ee = new Emitter();
 
@@ -27,7 +27,7 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends testInit
      */
-    public function testHandleEvent()
+    public function testHandleEvent(): void
     {
         $argResult = null;
 
@@ -46,7 +46,7 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends testHandleEvent
      */
-    public function testCancelEvent()
+    public function testCancelEvent(): void
     {
         $argResult = 0;
 
@@ -70,7 +70,7 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends testCancelEvent
      */
-    public function testPriority()
+    public function testPriority(): void
     {
         $argResult = 0;
 
@@ -96,7 +96,7 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends testPriority
      */
-    public function testPriority2()
+    public function testPriority2(): void
     {
         $result = [];
         $ee = new Emitter();
@@ -118,7 +118,7 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['b', 'd', 'a', 'c'], $result);
     }
 
-    public function testRemoveListener()
+    public function testRemoveListener(): void
     {
         $result = false;
 
@@ -142,7 +142,7 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($result);
     }
 
-    public function testRemoveUnknownListener()
+    public function testRemoveUnknownListener(): void
     {
         $result = false;
 
@@ -164,7 +164,7 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($result);
     }
 
-    public function testRemoveListenerTwice()
+    public function testRemoveListenerTwice(): void
     {
         $result = false;
 
@@ -191,7 +191,7 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($result);
     }
 
-    public function testRemoveAllListeners()
+    public function testRemoveAllListeners(): void
     {
         $result = false;
         $callBack = function () use (&$result) {
@@ -211,7 +211,7 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($result);
     }
 
-    public function testRemoveAllListenersNoArg()
+    public function testRemoveAllListenersNoArg(): void
     {
         $result = false;
 
@@ -232,7 +232,7 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($result);
     }
 
-    public function testOnce()
+    public function testOnce(): void
     {
         $result = 0;
 
@@ -252,7 +252,7 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends testCancelEvent
      */
-    public function testPriorityOnce()
+    public function testPriorityOnce(): void
     {
         $argResult = 0;
 

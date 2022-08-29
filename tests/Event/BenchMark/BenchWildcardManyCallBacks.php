@@ -10,7 +10,7 @@ include __DIR__.'/../../../vendor/autoload.php';
 
 class BenchWildcardManyCallBacks extends BenchWildcard
 {
-    protected $emitter;
+    protected WildcardEmitter $emitter;
 
     public function setUp(): void
     {
@@ -22,7 +22,7 @@ class BenchWildcardManyCallBacks extends BenchWildcard
         }
     }
 
-    public function test()
+    public function test(): void
     {
         for ($i = 0; $i < $this->iterations; ++$i) {
             $this->emitter->emit('foo', []);

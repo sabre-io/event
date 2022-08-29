@@ -1,2 +1,12 @@
 parameters:
-  level: 1
+  level: 6
+  phpVersion: 70430 # PHP 7.4.30
+  ignoreErrors:
+  -
+    message: "#^If condition is always true.$#"
+    count: 1
+    path: lib/Loop/Loop.php
+  -
+    message: "#^Left side of && is always true.$#"
+    count: 1
+    path: lib/Loop/Loop.php

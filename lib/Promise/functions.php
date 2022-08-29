@@ -28,7 +28,9 @@ use Throwable;
  * If any of the given Promises fails, the returned promise will immediately
  * fail with the first Promise that fails, and its reason.
  *
- * @param Promise[] $promises
+ * @param Promise<mixed>[] $promises
+ *
+ * @return Promise<mixed>
  */
 function all(array $promises): Promise
 {
@@ -69,7 +71,9 @@ function all(array $promises): Promise
  * The returned promise will resolve or reject with the value or reason of
  * that first promise.
  *
- * @param Promise[] $promises
+ * @param Promise<mixed>[] $promises
+ *
+ * @return Promise<mixed>
  */
 function race(array $promises): Promise
 {
@@ -103,6 +107,8 @@ function race(array $promises): Promise
  * promise and eventually get the same state as the followed promise.
  *
  * @param mixed $value
+ *
+ * @return Promise<mixed>
  */
 function resolve($value): Promise
 {
@@ -118,6 +124,8 @@ function resolve($value): Promise
 
 /**
  * Returns a Promise that will reject with the given reason.
+ *
+ * @return Promise<mixed>
  */
 function reject(Throwable $reason): Promise
 {

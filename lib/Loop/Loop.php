@@ -22,9 +22,9 @@ class Loop
     /**
      * Executes a function after x seconds.
      */
-    public function setTimeout(callable $cb, float $timeout)
+    public function setTimeout(callable $cb, float $timeout): void
     {
-        $triggerTime = microtime(true) + ($timeout);
+        $triggerTime = microtime(true) + $timeout;
 
         if (!$this->timers) {
             // Special case when the timers array was empty.
@@ -60,6 +60,8 @@ class Loop
      *
      * The value this function returns can be used to stop the interval with
      * clearInterval.
+     *
+     * @return array<int, mixed>
      */
     public function setInterval(callable $cb, float $timeout): array
     {
@@ -85,8 +87,10 @@ class Loop
 
     /**
      * Stops a running interval.
+     *
+     * @param array<int, mixed> $intervalId
      */
-    public function clearInterval(array $intervalId)
+    public function clearInterval(array $intervalId): void
     {
         $intervalId[1] = false;
     }
@@ -94,7 +98,7 @@ class Loop
     /**
      * Runs a function immediately at the next iteration of the loop.
      */
-    public function nextTick(callable $cb)
+    public function nextTick(callable $cb): void
     {
         $this->nextTick[] = $cb;
     }
@@ -110,7 +114,7 @@ class Loop
      *
      * @param resource $stream
      */
-    public function addReadStream($stream, callable $cb)
+    public function addReadStream($stream, callable $cb): void
     {
         $this->readStreams[(int) $stream] = $stream;
         $this->readCallbacks[(int) $stream] = $cb;
@@ -127,7 +131,7 @@ class Loop
      *
      * @param resource $stream
      */
-    public function addWriteStream($stream, callable $cb)
+    public function addWriteStream($stream, callable $cb): void
     {
         $this->writeStreams[(int) $stream] = $stream;
         $this->writeCallbacks[(int) $stream] = $cb;
@@ -138,7 +142,7 @@ class Loop
      *
      * @param resource $stream
      */
-    public function removeReadStream($stream)
+    public function removeReadStream($stream): void
     {
         unset(
             $this->readStreams[(int) $stream],
@@ -151,7 +155,7 @@ class Loop
      *
      * @param resource $stream
      */
-    public function removeWriteStream($stream)
+    public function removeWriteStream($stream): void
     {
         unset(
             $this->writeStreams[(int) $stream],
@@ -165,7 +169,7 @@ class Loop
      * This function will run continuously, until there's no more events to
      * handle.
      */
-    public function run()
+    public function run(): void
     {
         $this->running = true;
 
@@ -215,7 +219,7 @@ class Loop
     /**
      * Stops a running eventloop.
      */
-    public function stop()
+    public function stop(): void
     {
         $this->running = false;
     }
@@ -225,7 +229,7 @@ class Loop
      *
      * return void
      */
-    protected function runNextTicks()
+    protected function runNextTicks(): void
     {
         $nextTick = $this->nextTick;
         $this->nextTick = [];
@@ -242,10 +246,8 @@ class Loop
      * seconds until the next timer should be executed.
      *
      * If there's no more pending timers, this function returns null.
-     *
-     * @return float|null
      */
-    protected function runTimers()
+    protected function runTimers(): ?float
     {
         $now = microtime(true);
         while (($timer = array_pop($this->timers)) && $timer[0] < $now) {
@@ -257,6 +259,8 @@ class Loop
 
             return max(0, $timer[0] - microtime(true));
         }
+
+        return null;
     }
 
     /**
@@ -264,10 +268,8 @@ class Loop
      *
      * If $timeout is 0, it will return immediately. If $timeout is null, it
      * will wait indefinitely.
-     *
-     * @param float|null $timeout
      */
-    protected function runStreams($timeout)
+    protected function runStreams(?float $timeout): void
     {
         if ($this->readStreams || $this->writeStreams) {
             $read = $this->readStreams;
@@ -294,50 +296,48 @@ class Loop
 
     /**
      * Is the main loop active.
-     *
-     * @var bool
      */
-    protected $running = false;
+    protected bool $running = false;
 
     /**
      * A list of timers, added by setTimeout.
      *
-     * @var array
+     * @var array<int, mixed>
      */
-    protected $timers = [];
+    protected array $timers = [];
 
     /**
      * A list of 'nextTick' callbacks.
      *
      * @var callable[]
      */
-    protected $nextTick = [];
+    protected array $nextTick = [];
 
     /**
      * List of readable streams for stream_select, indexed by stream id.
      *
      * @var resource[]
      */
-    protected $readStreams = [];
+    protected array $readStreams = [];
 
     /**
      * List of writable streams for stream_select, indexed by stream id.
      *
      * @var resource[]
      */
-    protected $writeStreams = [];
+    protected array $writeStreams = [];
 
     /**
      * List of read callbacks, indexed by stream id.
      *
      * @var callable[]
      */
-    protected $readCallbacks = [];
+    protected array $readCallbacks = [];
 
     /**
      * List of write callbacks, indexed by stream id.
      *
      * @var callable[]
      */
-    protected $writeCallbacks = [];
+    protected array $writeCallbacks = [];
 }

@@ -8,17 +8,17 @@ include __DIR__.'/../../../vendor/autoload.php';
 
 abstract class BenchWildcard
 {
-    protected $startTime;
-    protected $iterations = 10000;
-    protected $totalTime;
+    protected float $startTime;
+    protected int $iterations = 10000;
+    protected float $totalTime;
 
     public function setUp(): void
     {
     }
 
-    abstract public function test();
+    abstract public function test(): void;
 
-    public function go()
+    public function go(): float
     {
         $this->setUp();
         $this->startTime = microtime(true);

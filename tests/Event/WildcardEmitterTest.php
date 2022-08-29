@@ -6,13 +6,13 @@ namespace Sabre\Event;
 
 class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
 {
-    public function testInit()
+    public function testInit(): void
     {
         $ee = new WildcardEmitter();
         $this->assertInstanceOf('Sabre\\Event\\WildcardEmitter', $ee);
     }
 
-    public function testListeners()
+    public function testListeners(): void
     {
         $ee = new WildcardEmitter();
 
@@ -24,7 +24,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([$callback2, $callback1], $ee->listeners('foo'));
     }
 
-    public function testWildcardListeners()
+    public function testWildcardListeners(): void
     {
         $ee = new WildcardEmitter();
 
@@ -40,7 +40,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends testInit
      */
-    public function testHandleEvent()
+    public function testHandleEvent(): void
     {
         $argResult = null;
 
@@ -59,7 +59,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends testHandleEvent
      */
-    public function testCancelEvent()
+    public function testCancelEvent(): void
     {
         $argResult = 0;
 
@@ -89,7 +89,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends testCancelEvent
      */
-    public function testPriority()
+    public function testPriority(): void
     {
         $argResult = 0;
 
@@ -115,7 +115,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends testPriority
      */
-    public function testPriority2()
+    public function testPriority2(): void
     {
         $result = [];
         $ee = new WildcardEmitter();
@@ -137,7 +137,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['b', 'd', 'a', 'c'], $result);
     }
 
-    public function testRemoveListener()
+    public function testRemoveListener(): void
     {
         $result = false;
 
@@ -162,7 +162,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($result);
     }
 
-    public function testRemoveUnknownListener()
+    public function testRemoveUnknownListener(): void
     {
         $result = false;
 
@@ -184,7 +184,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($result);
     }
 
-    public function testRemoveListenerTwice()
+    public function testRemoveListenerTwice(): void
     {
         $result = false;
 
@@ -211,7 +211,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($result);
     }
 
-    public function testRemoveAllListeners()
+    public function testRemoveAllListeners(): void
     {
         $result = false;
         $callBack = function () use (&$result) {
@@ -231,7 +231,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($result);
     }
 
-    public function testRemoveAllListenersNoArg()
+    public function testRemoveAllListenersNoArg(): void
     {
         $result = false;
 
@@ -252,7 +252,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($result);
     }
 
-    public function testRemoveAllListenersWildcard()
+    public function testRemoveAllListenersWildcard(): void
     {
         $result = false;
         $callBack = function () use (&$result) {
@@ -272,7 +272,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($result);
     }
 
-    public function testOnce()
+    public function testOnce(): void
     {
         $result = 0;
 
@@ -292,7 +292,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends testCancelEvent
      */
-    public function testPriorityOnce()
+    public function testPriorityOnce(): void
     {
         $argResult = 0;
 
@@ -315,7 +315,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(2, $argResult);
     }
 
-    public function testContinueCallBack()
+    public function testContinueCallBack(): void
     {
         $ee = new WildcardEmitter();
 
@@ -338,7 +338,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(2, $continueCounter);
     }
 
-    public function testContinueCallBackBreak()
+    public function testContinueCallBackBreak(): void
     {
         $ee = new WildcardEmitter();
 
@@ -361,7 +361,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1, $continueCounter);
     }
 
-    public function testContinueCallBackBreakByHandler()
+    public function testContinueCallBackBreakByHandler(): void
     {
         $ee = new WildcardEmitter();
 

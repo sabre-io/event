@@ -11,7 +11,7 @@ use Sabre\Event\PromiseAlreadyResolvedException;
 
 class PromiseTest extends \PHPUnit\Framework\TestCase
 {
-    public function testSuccess()
+    public function testSuccess(): void
     {
         $finalValue = 0;
         $promise = new Promise();
@@ -25,7 +25,7 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(3, $finalValue);
     }
 
-    public function testFail()
+    public function testFail(): void
     {
         $finalValue = 0;
         $promise = new Promise();
@@ -39,7 +39,7 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(3, $finalValue);
     }
 
-    public function testChain()
+    public function testChain(): void
     {
         $finalValue = 0;
         $promise = new Promise();
@@ -59,7 +59,7 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(7, $finalValue);
     }
 
-    public function testChainPromise()
+    public function testChainPromise(): void
     {
         $finalValue = 0;
         $promise = new Promise();
@@ -81,7 +81,7 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(6, $finalValue);
     }
 
-    public function testPendingResult()
+    public function testPendingResult(): void
     {
         $finalValue = 0;
         $promise = new Promise();
@@ -96,7 +96,7 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(6, $finalValue);
     }
 
-    public function testPendingFail()
+    public function testPendingFail(): void
     {
         $finalValue = 0;
         $promise = new Promise();
@@ -111,7 +111,7 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(6, $finalValue);
     }
 
-    public function testExecutorSuccess()
+    public function testExecutorSuccess(): void
     {
         $promise = (new Promise(function ($success, $fail) {
             $success('hi');
@@ -123,7 +123,7 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('hi', $realResult);
     }
 
-    public function testExecutorFail()
+    public function testExecutorFail(): void
     {
         $promise = (new Promise(function ($success, $fail) {
             $fail(new Exception('hi'));
@@ -137,7 +137,7 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('hi', $realResult);
     }
 
-    public function testFulfillTwice()
+    public function testFulfillTwice(): void
     {
         $this->expectException(PromiseAlreadyResolvedException::class);
         $promise = new Promise();
@@ -145,7 +145,7 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
         $promise->fulfill(1);
     }
 
-    public function testRejectTwice()
+    public function testRejectTwice(): void
     {
         $this->expectException(PromiseAlreadyResolvedException::class);
         $promise = new Promise();
@@ -153,7 +153,7 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
         $promise->reject(new Exception('1'));
     }
 
-    public function testFromFailureHandler()
+    public function testFromFailureHandler(): void
     {
         $ok = 0;
         $promise = new Promise();
@@ -173,7 +173,7 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1, $ok);
     }
 
-    public function testWaitResolve()
+    public function testWaitResolve(): void
     {
         $promise = new Promise();
         Loop\nextTick(function () use ($promise) {
@@ -185,14 +185,14 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testWaitWillNeverResolve()
+    public function testWaitWillNeverResolve(): void
     {
         $this->expectException(\LogicException::class);
         $promise = new Promise();
         $promise->wait();
     }
 
-    public function testWaitRejectedException()
+    public function testWaitRejectedException(): void
     {
         $promise = new Promise();
         Loop\nextTick(function () use ($promise) {
@@ -207,7 +207,7 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function testWaitRejectedScalar()
+    public function testWaitRejectedScalar(): void
     {
         $promise = new Promise();
         Loop\nextTick(function () use ($promise) {
