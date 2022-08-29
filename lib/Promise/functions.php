@@ -28,9 +28,9 @@ use Throwable;
  * If any of the given Promises fails, the returned promise will immediately
  * fail with the first Promise that fails, and its reason.
  *
- * @param Promise<int>[] $promises
+ * @param Promise<mixed>[] $promises
  *
- * @return Promise<int>
+ * @return Promise<mixed>
  */
 function all(array $promises): Promise
 {
