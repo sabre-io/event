@@ -67,6 +67,9 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
         $intervalId = setInterval(function () use (&$check, &$intervalId) {
             ++$check;
             if ($check > 5) {
+                if (null === $intervalId) {
+                    throw new \Exception('intervalId is not set - cannot clearInterval');
+                }
                 clearInterval($intervalId);
             }
         }, 0.02);

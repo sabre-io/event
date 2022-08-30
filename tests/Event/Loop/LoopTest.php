@@ -59,6 +59,9 @@ class LoopTest extends \PHPUnit\Framework\TestCase
         $intervalId = $loop->setInterval(function () use (&$check, &$intervalId, $loop) {
             ++$check;
             if ($check > 5) {
+                if (null === $intervalId) {
+                    throw new \Exception('intervalId is not set - cannot clearInterval');
+                }
                 $loop->clearInterval($intervalId);
             }
         }, 0.02);
