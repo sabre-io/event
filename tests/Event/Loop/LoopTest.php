@@ -70,6 +70,9 @@ class LoopTest extends \PHPUnit\Framework\TestCase
     public function testAddWriteStream(): void
     {
         $h = fopen('php://temp', 'r+');
+        if (false === $h) {
+            $this->fail('failed to open php://temp');
+        }
         $loop = new Loop();
         $loop->addWriteStream($h, function () use ($h, $loop) {
             fwrite($h, 'hello world');
@@ -83,6 +86,9 @@ class LoopTest extends \PHPUnit\Framework\TestCase
     public function testAddReadStream(): void
     {
         $h = fopen('php://temp', 'r+');
+        if (false === $h) {
+            $this->fail('failed to open php://temp');
+        }
         fwrite($h, 'hello world');
         rewind($h);
 

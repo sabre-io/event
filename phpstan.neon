@@ -1,5 +1,5 @@
 parameters:
-  level: 6
+  level: 7
   phpVersion: 70430 # PHP 7.4.30
   ignoreErrors:
   -
