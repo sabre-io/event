@@ -171,6 +171,7 @@ class Promise
      * chain.
      *
      * @return mixed
+     *
      * @psalm-return TReturn
      */
     public function wait()
