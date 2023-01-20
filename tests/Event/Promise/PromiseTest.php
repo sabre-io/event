@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Sabre\Event\Promise;
 
-use Exception;
 use Sabre\Event\Loop;
 use Sabre\Event\Promise;
 use Sabre\Event\PromiseAlreadyResolvedException;
@@ -29,7 +28,7 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
     {
         $finalValue = 0;
         $promise = new Promise();
-        $promise->reject(new Exception('1'));
+        $promise->reject(new \Exception('1'));
 
         $promise->then(null, function ($value) use (&$finalValue) {
             $finalValue = $value->getMessage() + 2;
@@ -105,7 +104,7 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
             $finalValue = $value->getMessage() + 2;
         });
 
-        $promise->reject(new Exception('4'));
+        $promise->reject(new \Exception('4'));
         Loop\run();
 
         $this->assertEquals(6, $finalValue);
@@ -126,7 +125,7 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
     public function testExecutorFail(): void
     {
         $promise = (new Promise(function ($success, $fail) {
-            $fail(new Exception('hi'));
+            $fail(new \Exception('hi'));
         }))->then(function ($result) use (&$realResult) {
             $realResult = 'incorrect';
         })->otherwise(function ($reason) use (&$realResult) {
@@ -149,8 +148,8 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
     {
         $this->expectException(PromiseAlreadyResolvedException::class);
         $promise = new Promise();
-        $promise->reject(new Exception('1'));
-        $promise->reject(new Exception('1'));
+        $promise->reject(new \Exception('1'));
+        $promise->reject(new \Exception('1'));
     }
 
     public function testFromFailureHandler(): void
@@ -167,7 +166,7 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
         });
 
         $this->assertEquals(0, $ok);
-        $promise->reject(new Exception('foo'));
+        $promise->reject(new \Exception('foo'));
         Loop\run();
 
         $this->assertEquals(1, $ok);
@@ -211,7 +210,7 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
     {
         $promise = new Promise();
         Loop\nextTick(function () use ($promise) {
-            $promise->reject(new Exception('foo'));
+            $promise->reject(new \Exception('foo'));
         });
         try {
             $promise->wait();

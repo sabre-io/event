@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Sabre\Event\Promise;
 
-use Exception;
 use Sabre\Event\Loop;
 use Sabre\Event\Promise;
 
@@ -53,10 +52,10 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
             }
         );
 
-        $promise1->reject(new Exception('1'));
+        $promise1->reject(new \Exception('1'));
         Loop\run();
         $this->assertEquals('1', $finalValue->getMessage());
-        $promise2->reject(new Exception('2'));
+        $promise2->reject(new \Exception('2'));
         Loop\run();
         $this->assertEquals(1, $finalValue->getMessage());
     }
@@ -78,10 +77,10 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
             }
         );
 
-        $promise1->reject(new Exception('1'));
+        $promise1->reject(new \Exception('1'));
         Loop\run();
         $this->assertEquals(1, $finalValue->getMessage());
-        $promise2->fulfill(new Exception('2'));
+        $promise2->fulfill(new \Exception('2'));
         Loop\run();
         $this->assertEquals(1, $finalValue->getMessage());
     }
@@ -124,10 +123,10 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
             }
         );
 
-        $promise1->reject(new Exception('1'));
+        $promise1->reject(new \Exception('1'));
         Loop\run();
         $this->assertEquals(1, $finalValue->getMessage());
-        $promise2->reject(new Exception('2'));
+        $promise2->reject(new \Exception('2'));
         Loop\run();
         $this->assertEquals(1, $finalValue->getMessage());
     }
@@ -162,7 +161,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
     {
         $finalValue = 0;
 
-        $promise = reject(new Exception('1'));
+        $promise = reject(new \Exception('1'));
         $promise->then(function ($value) use (&$finalValue) {
             $finalValue = 'im broken';
         }, function ($reason) use (&$finalValue) {
