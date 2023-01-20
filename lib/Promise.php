@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Sabre\Event;
 
-use Throwable;
-
 /**
  * An implementation of the Promise pattern.
  *
@@ -147,7 +145,7 @@ class Promise
     /**
      * Marks this promise as rejected, and set its rejection reason.
      */
-    public function reject(Throwable $reason): void
+    public function reject(\Throwable $reason): void
     {
         if (self::PENDING !== $this->state) {
             throw new PromiseAlreadyResolvedException('This promise is already resolved, and you\'re not allowed to resolve a promise more than once');
@@ -246,7 +244,7 @@ class Promise
                         // immediately fulfill the chained promise.
                         $subPromise->fulfill($result);
                     }
-                } catch (Throwable $e) {
+                } catch (\Throwable $e) {
                     // If the event handler threw an exception, we need to make sure that
                     // the chained promise is rejected as well.
                     $subPromise->reject($e);
