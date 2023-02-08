@@ -9,7 +9,7 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
     public function testInit(): void
     {
         $ee = new Emitter();
-        $this->assertInstanceOf('Sabre\\Event\\Emitter', $ee);
+        self::assertInstanceOf('Sabre\\Event\\Emitter', $ee);
     }
 
     public function testListeners(): void
@@ -21,7 +21,7 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
         $ee->on('foo', $callback1, 200);
         $ee->on('foo', $callback2, 100);
 
-        $this->assertEquals([$callback2, $callback1], $ee->listeners('foo'));
+        self::assertEquals([$callback2, $callback1], $ee->listeners('foo'));
     }
 
     /**
@@ -36,11 +36,11 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
             $argResult = $arg;
         });
 
-        $this->assertTrue(
+        self::assertTrue(
             $ee->emit('foo', ['bar'])
         );
 
-        $this->assertEquals('bar', $argResult);
+        self::assertEquals('bar', $argResult);
     }
 
     /**
@@ -60,11 +60,11 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
             $argResult = 2;
         });
 
-        $this->assertFalse(
+        self::assertFalse(
             $ee->emit('foo', ['bar'])
         );
 
-        $this->assertEquals(1, $argResult);
+        self::assertEquals(1, $argResult);
     }
 
     /**
@@ -86,11 +86,11 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
             return false;
         }, 1);
 
-        $this->assertFalse(
+        self::assertFalse(
             $ee->emit('foo', ['bar'])
         );
 
-        $this->assertEquals(2, $argResult);
+        self::assertEquals(2, $argResult);
     }
 
     /**
@@ -115,7 +115,7 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
         });
 
         $ee->emit('foo');
-        $this->assertEquals(['b', 'd', 'a', 'c'], $result);
+        self::assertEquals(['b', 'd', 'a', 'c'], $result);
     }
 
     public function testRemoveListener(): void
@@ -131,15 +131,15 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
         $ee->on('foo', $callBack);
 
         $ee->emit('foo');
-        $this->assertTrue($result);
+        self::assertTrue($result);
         $result = false;
 
-        $this->assertTrue(
+        self::assertTrue(
             $ee->removeListener('foo', $callBack)
         );
 
         $ee->emit('foo');
-        $this->assertFalse($result);
+        self::assertFalse($result);
     }
 
     public function testRemoveUnknownListener(): void
@@ -155,13 +155,13 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
         $ee->on('foo', $callBack);
 
         $ee->emit('foo');
-        $this->assertTrue($result);
+        self::assertTrue($result);
         $result = false;
 
-        $this->assertFalse($ee->removeListener('bar', $callBack));
+        self::assertFalse($ee->removeListener('bar', $callBack));
 
         $ee->emit('foo');
-        $this->assertTrue($result);
+        self::assertTrue($result);
     }
 
     public function testRemoveListenerTwice(): void
@@ -177,18 +177,18 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
         $ee->on('foo', $callBack);
 
         $ee->emit('foo');
-        $this->assertTrue($result);
+        self::assertTrue($result);
         $result = false;
 
-        $this->assertTrue(
+        self::assertTrue(
             $ee->removeListener('foo', $callBack)
         );
-        $this->assertFalse(
+        self::assertFalse(
             $ee->removeListener('foo', $callBack)
         );
 
         $ee->emit('foo');
-        $this->assertFalse($result);
+        self::assertFalse($result);
     }
 
     public function testRemoveAllListeners(): void
@@ -202,13 +202,13 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
         $ee->on('foo', $callBack);
 
         $ee->emit('foo');
-        $this->assertTrue($result);
+        self::assertTrue($result);
         $result = false;
 
         $ee->removeAllListeners('foo');
 
         $ee->emit('foo');
-        $this->assertFalse($result);
+        self::assertFalse($result);
     }
 
     public function testRemoveAllListenersNoArg(): void
@@ -223,13 +223,13 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
         $ee->on('foo', $callBack);
 
         $ee->emit('foo');
-        $this->assertTrue($result);
+        self::assertTrue($result);
         $result = false;
 
         $ee->removeAllListeners();
 
         $ee->emit('foo');
-        $this->assertFalse($result);
+        self::assertFalse($result);
     }
 
     public function testOnce(): void
@@ -246,7 +246,7 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
         $ee->emit('foo');
         $ee->emit('foo');
 
-        $this->assertEquals(1, $result);
+        self::assertEquals(1, $result);
     }
 
     /**
@@ -268,10 +268,10 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
             return false;
         }, 1);
 
-        $this->assertFalse(
+        self::assertFalse(
             $ee->emit('foo', ['bar'])
         );
 
-        $this->assertEquals(2, $argResult);
+        self::assertEquals(2, $argResult);
     }
 }

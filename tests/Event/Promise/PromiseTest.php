@@ -21,7 +21,7 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
         });
         Loop\run();
 
-        $this->assertEquals(3, $finalValue);
+        self::assertEquals(3, $finalValue);
     }
 
     public function testFail(): void
@@ -35,7 +35,7 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
         });
         Loop\run();
 
-        $this->assertEquals(3, $finalValue);
+        self::assertEquals(3, $finalValue);
     }
 
     public function testChain(): void
@@ -55,7 +55,7 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
         });
         Loop\run();
 
-        $this->assertEquals(7, $finalValue);
+        self::assertEquals(7, $finalValue);
     }
 
     public function testChainPromise(): void
@@ -77,7 +77,7 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
         $subPromise->fulfill(2);
         Loop\run();
 
-        $this->assertEquals(6, $finalValue);
+        self::assertEquals(6, $finalValue);
     }
 
     public function testPendingResult(): void
@@ -92,7 +92,7 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
         $promise->fulfill(4);
         Loop\run();
 
-        $this->assertEquals(6, $finalValue);
+        self::assertEquals(6, $finalValue);
     }
 
     public function testPendingFail(): void
@@ -107,7 +107,7 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
         $promise->reject(new \Exception('4'));
         Loop\run();
 
-        $this->assertEquals(6, $finalValue);
+        self::assertEquals(6, $finalValue);
     }
 
     public function testExecutorSuccess(): void
@@ -119,7 +119,7 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
         });
         Loop\run();
 
-        $this->assertEquals('hi', $realResult);
+        self::assertEquals('hi', $realResult);
     }
 
     public function testExecutorFail(): void
@@ -133,7 +133,7 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
         });
         Loop\run();
 
-        $this->assertEquals('hi', $realResult);
+        self::assertEquals('hi', $realResult);
     }
 
     public function testFulfillTwice(): void
@@ -157,7 +157,7 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
         $ok = 0;
         $promise = new Promise();
         $promise->otherwise(function ($reason) {
-            $this->assertEquals('foo', $reason);
+            self::assertEquals('foo', $reason);
             throw new \Exception('hi');
         })->then(function () use (&$ok) {
             $ok = -1;
@@ -165,11 +165,11 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
             $ok = 1;
         });
 
-        $this->assertEquals(0, $ok);
+        self::assertEquals(0, $ok);
         $promise->reject(new \Exception('foo'));
         Loop\run();
 
-        $this->assertEquals(1, $ok);
+        self::assertEquals(1, $ok);
     }
 
     public function testWaitResolve(): void
@@ -178,7 +178,7 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
         Loop\nextTick(function () use ($promise) {
             $promise->fulfill(1);
         });
-        $this->assertEquals(
+        self::assertEquals(
             1,
             $promise->wait()
         );
@@ -201,8 +201,8 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
             $promise->wait();
             $this->fail('We did not get the expected exception');
         } catch (\Exception $e) {
-            $this->assertInstanceOf('OutOfBoundsException', $e);
-            $this->assertEquals('foo', $e->getMessage());
+            self::assertInstanceOf('OutOfBoundsException', $e);
+            self::assertEquals('foo', $e->getMessage());
         }
     }
 
@@ -216,8 +216,8 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
             $promise->wait();
             $this->fail('We did not get the expected exception');
         } catch (\Exception $e) {
-            $this->assertInstanceOf('Exception', $e);
-            $this->assertEquals('foo', $e->getMessage());
+            self::assertInstanceOf('Exception', $e);
+            self::assertEquals('foo', $e->getMessage());
         }
     }
 }

@@ -21,18 +21,18 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
 
         $promise1->fulfill(1);
         Loop\run();
-        $this->assertEquals(0, $finalValue);
+        self::assertEquals(0, $finalValue);
 
         $promise2->fulfill(2);
         Loop\run();
-        $this->assertEquals([1, 2], $finalValue);
+        self::assertEquals([1, 2], $finalValue);
     }
 
     public function testAllEmptyArray(): void
     {
         $finalValue = Promise\all([])->wait();
 
-        $this->assertEquals([], $finalValue);
+        self::assertEquals([], $finalValue);
     }
 
     public function testAllReject(): void
@@ -54,10 +54,10 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
 
         $promise1->reject(new \Exception('1'));
         Loop\run();
-        $this->assertEquals('1', $finalValue->getMessage());
+        self::assertEquals('1', $finalValue->getMessage());
         $promise2->reject(new \Exception('2'));
         Loop\run();
-        $this->assertEquals(1, $finalValue->getMessage());
+        self::assertEquals(1, $finalValue->getMessage());
     }
 
     public function testAllRejectThenResolve(): void
@@ -79,10 +79,10 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
 
         $promise1->reject(new \Exception('1'));
         Loop\run();
-        $this->assertEquals(1, $finalValue->getMessage());
+        self::assertEquals(1, $finalValue->getMessage());
         $promise2->fulfill(new \Exception('2'));
         Loop\run();
-        $this->assertEquals(1, $finalValue->getMessage());
+        self::assertEquals(1, $finalValue->getMessage());
     }
 
     public function testRace(): void
@@ -102,10 +102,10 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
 
         $promise1->fulfill(1);
         Loop\run();
-        $this->assertEquals(1, $finalValue);
+        self::assertEquals(1, $finalValue);
         $promise2->fulfill(2);
         Loop\run();
-        $this->assertEquals(1, $finalValue);
+        self::assertEquals(1, $finalValue);
     }
 
     public function testRaceReject(): void
@@ -125,10 +125,10 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
 
         $promise1->reject(new \Exception('1'));
         Loop\run();
-        $this->assertEquals(1, $finalValue->getMessage());
+        self::assertEquals(1, $finalValue->getMessage());
         $promise2->reject(new \Exception('2'));
         Loop\run();
-        $this->assertEquals(1, $finalValue->getMessage());
+        self::assertEquals(1, $finalValue->getMessage());
     }
 
     public function testResolve(): void
@@ -140,9 +140,9 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
             $finalValue = $value;
         });
 
-        $this->assertEquals(0, $finalValue);
+        self::assertEquals(0, $finalValue);
         Loop\run();
-        $this->assertEquals(1, $finalValue);
+        self::assertEquals(1, $finalValue);
     }
 
     public function testResolvePromise(): void
@@ -168,8 +168,8 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
             $finalValue = $reason;
         });
 
-        $this->assertEquals(0, $finalValue);
+        self::assertEquals(0, $finalValue);
         Loop\run();
-        $this->assertEquals(1, $finalValue->getMessage());
+        self::assertEquals(1, $finalValue->getMessage());
     }
 }
