@@ -27,7 +27,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
 
         run();
 
-        $this->assertEquals(1, $check);
+        self::assertEquals(1, $check);
     }
 
     public function testTimeout(): void
@@ -39,7 +39,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
 
         run();
 
-        $this->assertEquals(1, $check);
+        self::assertEquals(1, $check);
     }
 
     public function testTimeoutOrder(): void
@@ -57,7 +57,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
 
         run();
 
-        $this->assertEquals(['b', 'a', 'c'], $check);
+        self::assertEquals(['b', 'a', 'c'], $check);
     }
 
     public function testSetInterval(): void
@@ -75,7 +75,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
         }, 0.02);
 
         run();
-        $this->assertEquals(6, $check);
+        self::assertEquals(6, $check);
     }
 
     public function testAddWriteStream(): void
@@ -90,7 +90,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
         });
         run();
         rewind($h);
-        $this->assertEquals('hello world', stream_get_contents($h));
+        self::assertEquals('hello world', stream_get_contents($h));
     }
 
     public function testAddReadStream(): void
@@ -109,7 +109,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
             removeReadStream($h);
         });
         run();
-        $this->assertEquals('hello world', $result);
+        self::assertEquals('hello world', $result);
     }
 
     public function testStop(): void
@@ -124,7 +124,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
         });
         run();
 
-        $this->assertEquals(0, $check);
+        self::assertEquals(0, $check);
     }
 
     public function testTick(): void
@@ -139,6 +139,6 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
         });
         tick();
 
-        $this->assertEquals(1, $check);
+        self::assertEquals(1, $check);
     }
 }

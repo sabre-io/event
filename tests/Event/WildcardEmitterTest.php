@@ -9,7 +9,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
     public function testInit(): void
     {
         $ee = new WildcardEmitter();
-        $this->assertInstanceOf('Sabre\\Event\\WildcardEmitter', $ee);
+        self::assertInstanceOf('Sabre\\Event\\WildcardEmitter', $ee);
     }
 
     public function testListeners(): void
@@ -21,7 +21,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
         $ee->on('foo', $callback1, 200);
         $ee->on('foo', $callback2, 100);
 
-        $this->assertEquals([$callback2, $callback1], $ee->listeners('foo'));
+        self::assertEquals([$callback2, $callback1], $ee->listeners('foo'));
     }
 
     public function testWildcardListeners(): void
@@ -33,8 +33,8 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
         $ee->on('foo:*', $callback1, 200);
         $ee->on('foo:bar', $callback2, 100);
 
-        $this->assertEquals([$callback2, $callback1], $ee->listeners('foo:bar'));
-        $this->assertEquals([$callback1], $ee->listeners('foo:baz'));
+        self::assertEquals([$callback2, $callback1], $ee->listeners('foo:bar'));
+        self::assertEquals([$callback1], $ee->listeners('foo:baz'));
     }
 
     /**
@@ -49,11 +49,11 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
             $argResult = $arg;
         });
 
-        $this->assertTrue(
+        self::assertTrue(
             $ee->emit('foo:BAR', ['bar'])
         );
 
-        $this->assertEquals('bar', $argResult);
+        self::assertEquals('bar', $argResult);
     }
 
     /**
@@ -73,17 +73,17 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
             $argResult = 2;
         }, 20);
 
-        $this->assertFalse(
+        self::assertFalse(
             $ee->emit('foo:BAR', ['bar'])
         );
 
-        $this->assertEquals(1, $argResult);
+        self::assertEquals(1, $argResult);
 
         $argResult = 0;
-        $this->assertTrue(
+        self::assertTrue(
             $ee->emit('foo:NOTBAR', ['bar'])
         );
-        $this->assertEquals(2, $argResult);
+        self::assertEquals(2, $argResult);
     }
 
     /**
@@ -105,11 +105,11 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
             return false;
         }, 1);
 
-        $this->assertFalse(
+        self::assertFalse(
             $ee->emit('foo:bar:baz', ['bar'])
         );
 
-        $this->assertEquals(2, $argResult);
+        self::assertEquals(2, $argResult);
     }
 
     /**
@@ -134,7 +134,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
         });
 
         $ee->emit('foo:bar:baz');
-        $this->assertEquals(['b', 'd', 'a', 'c'], $result);
+        self::assertEquals(['b', 'd', 'a', 'c'], $result);
     }
 
     public function testRemoveListener(): void
@@ -150,16 +150,16 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
         $ee->on('foo', $callBack);
 
         $ee->emit('foo');
-        $this->assertTrue($result);
+        self::assertTrue($result);
 
         $result = false;
 
-        $this->assertTrue(
+        self::assertTrue(
             $ee->removeListener('foo', $callBack)
         );
 
         $ee->emit('foo');
-        $this->assertFalse($result);
+        self::assertFalse($result);
     }
 
     public function testRemoveUnknownListener(): void
@@ -175,13 +175,13 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
         $ee->on('foo', $callBack);
 
         $ee->emit('foo');
-        $this->assertTrue($result);
+        self::assertTrue($result);
         $result = false;
 
-        $this->assertFalse($ee->removeListener('bar', $callBack));
+        self::assertFalse($ee->removeListener('bar', $callBack));
 
         $ee->emit('foo');
-        $this->assertTrue($result);
+        self::assertTrue($result);
     }
 
     public function testRemoveListenerTwice(): void
@@ -197,18 +197,18 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
         $ee->on('foo', $callBack);
 
         $ee->emit('foo');
-        $this->assertTrue($result);
+        self::assertTrue($result);
         $result = false;
 
-        $this->assertTrue(
+        self::assertTrue(
             $ee->removeListener('foo', $callBack)
         );
-        $this->assertFalse(
+        self::assertFalse(
             $ee->removeListener('foo', $callBack)
         );
 
         $ee->emit('foo');
-        $this->assertFalse($result);
+        self::assertFalse($result);
     }
 
     public function testRemoveAllListeners(): void
@@ -222,13 +222,13 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
         $ee->on('foo', $callBack);
 
         $ee->emit('foo');
-        $this->assertTrue($result);
+        self::assertTrue($result);
         $result = false;
 
         $ee->removeAllListeners('foo');
 
         $ee->emit('foo');
-        $this->assertFalse($result);
+        self::assertFalse($result);
     }
 
     public function testRemoveAllListenersNoArg(): void
@@ -243,13 +243,13 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
         $ee->on('foo', $callBack);
 
         $ee->emit('foo');
-        $this->assertTrue($result);
+        self::assertTrue($result);
         $result = false;
 
         $ee->removeAllListeners();
 
         $ee->emit('foo');
-        $this->assertFalse($result);
+        self::assertFalse($result);
     }
 
     public function testRemoveAllListenersWildcard(): void
@@ -263,13 +263,13 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
         $ee->on('foo:*', $callBack);
 
         $ee->emit('foo:bar');
-        $this->assertTrue($result);
+        self::assertTrue($result);
         $result = false;
 
         $ee->removeAllListeners('foo:*');
 
         $ee->emit('foo:bar');
-        $this->assertFalse($result);
+        self::assertFalse($result);
     }
 
     public function testOnce(): void
@@ -286,7 +286,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
         $ee->emit('foo:bar');
         $ee->emit('foo:baz');
 
-        $this->assertEquals(1, $result);
+        self::assertEquals(1, $result);
     }
 
     /**
@@ -308,11 +308,11 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
             return false;
         }, 1);
 
-        $this->assertFalse(
+        self::assertFalse(
             $ee->emit('foo:bar', ['bar'])
         );
 
-        $this->assertEquals(2, $argResult);
+        self::assertEquals(2, $argResult);
     }
 
     public function testContinueCallBack(): void
@@ -333,9 +333,9 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
 
             return true;
         });
-        $this->assertTrue($r);
-        $this->assertEquals(3, $handlerCounter);
-        $this->assertEquals(2, $continueCounter);
+        self::assertTrue($r);
+        self::assertEquals(3, $handlerCounter);
+        self::assertEquals(2, $continueCounter);
     }
 
     public function testContinueCallBackBreak(): void
@@ -356,9 +356,9 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
 
             return false;
         });
-        $this->assertTrue($r);
-        $this->assertEquals(1, $handlerCounter);
-        $this->assertEquals(1, $continueCounter);
+        self::assertTrue($r);
+        self::assertEquals(1, $handlerCounter);
+        self::assertEquals(1, $continueCounter);
     }
 
     public function testContinueCallBackBreakByHandler(): void
@@ -381,8 +381,8 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
 
             return false;
         });
-        $this->assertFalse($r);
-        $this->assertEquals(1, $handlerCounter);
-        $this->assertEquals(0, $continueCounter);
+        self::assertFalse($r);
+        self::assertEquals(1, $handlerCounter);
+        self::assertEquals(0, $continueCounter);
     }
 }

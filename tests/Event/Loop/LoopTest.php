@@ -16,7 +16,7 @@ class LoopTest extends \PHPUnit\Framework\TestCase
 
         $loop->run();
 
-        $this->assertEquals(1, $check);
+        self::assertEquals(1, $check);
     }
 
     public function testTimeout(): void
@@ -29,7 +29,7 @@ class LoopTest extends \PHPUnit\Framework\TestCase
 
         $loop->run();
 
-        $this->assertEquals(1, $check);
+        self::assertEquals(1, $check);
     }
 
     public function testTimeoutOrder(): void
@@ -48,7 +48,7 @@ class LoopTest extends \PHPUnit\Framework\TestCase
 
         $loop->run();
 
-        $this->assertEquals(['b', 'a', 'c'], $check);
+        self::assertEquals(['b', 'a', 'c'], $check);
     }
 
     public function testSetInterval(): void
@@ -67,7 +67,7 @@ class LoopTest extends \PHPUnit\Framework\TestCase
         }, 0.02);
 
         $loop->run();
-        $this->assertEquals(6, $check);
+        self::assertEquals(6, $check);
     }
 
     public function testAddWriteStream(): void
@@ -83,7 +83,7 @@ class LoopTest extends \PHPUnit\Framework\TestCase
         });
         $loop->run();
         rewind($h);
-        $this->assertEquals('hello world', stream_get_contents($h));
+        self::assertEquals('hello world', stream_get_contents($h));
     }
 
     public function testAddReadStream(): void
@@ -104,7 +104,7 @@ class LoopTest extends \PHPUnit\Framework\TestCase
             $loop->removeReadStream($h);
         });
         $loop->run();
-        $this->assertEquals('hello world', $result);
+        self::assertEquals('hello world', $result);
     }
 
     public function testStop(): void
@@ -120,7 +120,7 @@ class LoopTest extends \PHPUnit\Framework\TestCase
         });
         $loop->run();
 
-        $this->assertEquals(0, $check);
+        self::assertEquals(0, $check);
     }
 
     public function testTick(): void
@@ -136,7 +136,7 @@ class LoopTest extends \PHPUnit\Framework\TestCase
         });
         $loop->tick();
 
-        $this->assertEquals(1, $check);
+        self::assertEquals(1, $check);
     }
 
     /**
@@ -156,6 +156,6 @@ class LoopTest extends \PHPUnit\Framework\TestCase
 
         $loop->run();
 
-        $this->assertEquals(2, $check);
+        self::assertEquals(2, $check);
     }
 }

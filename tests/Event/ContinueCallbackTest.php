@@ -24,9 +24,9 @@ class ContinueCallbackTest extends \PHPUnit\Framework\TestCase
 
             return true;
         });
-        $this->assertTrue($r);
-        $this->assertEquals(3, $handlerCounter);
-        $this->assertEquals(2, $continueCounter);
+        self::assertTrue($r);
+        self::assertEquals(3, $handlerCounter);
+        self::assertEquals(2, $continueCounter);
     }
 
     public function testContinueCallBackBreak(): void
@@ -47,9 +47,9 @@ class ContinueCallbackTest extends \PHPUnit\Framework\TestCase
 
             return false;
         });
-        $this->assertTrue($r);
-        $this->assertEquals(1, $handlerCounter);
-        $this->assertEquals(1, $continueCounter);
+        self::assertTrue($r);
+        self::assertEquals(1, $handlerCounter);
+        self::assertEquals(1, $continueCounter);
     }
 
     public function testContinueCallBackBreakByHandler(): void
@@ -72,8 +72,8 @@ class ContinueCallbackTest extends \PHPUnit\Framework\TestCase
 
             return false;
         });
-        $this->assertFalse($r);
-        $this->assertEquals(1, $handlerCounter);
-        $this->assertEquals(0, $continueCounter);
+        self::assertFalse($r);
+        self::assertEquals(1, $handlerCounter);
+        self::assertEquals(0, $continueCounter);
     }
 }
