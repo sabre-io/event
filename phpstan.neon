@@ -10,3 +10,27 @@ parameters:
     message: "#^Left side of && is always true.$#"
     count: 1
     path: lib/Loop/Loop.php
+  -
+    message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert::assertInstanceOf\\(\\) with .* and .* will always evaluate to true\\.$#"
+    count: 1
+    path: tests/Event/EmitterTest.php
+  -
+    message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert::assertFalse\\(\\) with false will always evaluate to true\\.$#"
+    count: 4
+    path: tests/Event/EmitterTest.php
+  -
+    message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert::assertTrue\\(\\) with false will always evaluate to false\\.$#"
+    count: 1
+    path: tests/Event/EmitterTest.php
+  -
+    message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert::assertInstanceOf\\(\\) with .* and .* will always evaluate to true\\.$#"
+    count: 1
+    path: tests/Event/WildcardEmitterTest.php
+  -
+    message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert::assertFalse\\(\\) with false will always evaluate to true\\.$#"
+    count: 5
+    path: tests/Event/WildcardEmitterTest.php
+  -
+    message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert::assertTrue\\(\\) with false will always evaluate to false\\.$#"
+    count: 1
+    path: tests/Event/WildcardEmitterTest.php
