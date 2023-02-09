@@ -26,7 +26,7 @@ class Loop
     {
         $triggerTime = microtime(true) + $timeout;
 
-        if (!$this->timers) {
+        if (0 === count($this->timers)) {
             // Special case when the timers array was empty.
             $this->timers[] = [$triggerTime, $cb];
 
@@ -200,7 +200,7 @@ class Loop
         if (!$block) {
             // Don't wait
             $streamWait = 0;
-        } elseif ($this->nextTick) {
+        } elseif (count($this->nextTick) > 0) {
             // There's a pending 'nextTick'. Don't wait.
             $streamWait = 0;
         } elseif (is_numeric($nextTimeout)) {
@@ -213,7 +213,7 @@ class Loop
 
         $this->runStreams($streamWait);
 
-        return $this->readStreams || $this->writeStreams || $this->nextTick || $this->timers;
+        return count($this->readStreams) > 0 || count($this->writeStreams) > 0 || count($this->nextTick) > 0 || count($this->timers) > 0;
     }
 
     /**
@@ -250,11 +250,11 @@ class Loop
     protected function runTimers(): ?float
     {
         $now = microtime(true);
-        while (($timer = array_pop($this->timers)) && $timer[0] < $now) {
+        while (($timer = array_pop($this->timers)) !== null && $timer[0] < $now) {
             $timer[1]();
         }
         // Add the last timer back to the array.
-        if ($timer) {
+        if (null !== $timer) {
             $this->timers[] = $timer;
 
             return max(0, $timer[0] - microtime(true));
@@ -271,7 +271,7 @@ class Loop
      */
     protected function runStreams(?float $timeout): void
     {
-        if ($this->readStreams || $this->writeStreams) {
+        if (count($this->readStreams) > 0 || count($this->writeStreams) > 0) {
             $read = $this->readStreams;
             $write = $this->writeStreams;
             $except = null;
@@ -289,7 +289,7 @@ class Loop
                     $writeCb();
                 }
             }
-        } elseif ($this->running && ($this->nextTick || $this->timers)) {
+        } elseif ($this->running && (count($this->nextTick) > 0 || count($this->timers) > 0)) {
             usleep(null !== $timeout ? intval($timeout * 1000000) : 200000);
         }
     }

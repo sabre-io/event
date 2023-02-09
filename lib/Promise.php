@@ -55,7 +55,7 @@ class Promise
      */
     public function __construct(callable $executor = null)
     {
-        if ($executor) {
+        if (is_callable($executor)) {
             $executor(
                 [$this, 'fulfill'],
                 [$this, 'reject']

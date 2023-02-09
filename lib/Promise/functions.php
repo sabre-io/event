@@ -34,7 +34,7 @@ use Sabre\Event\Promise;
 function all(array $promises): Promise
 {
     return new Promise(function ($success, $fail) use ($promises) {
-        if (empty($promises)) {
+        if (0 === count($promises)) {
             $success([]);
 
             return;

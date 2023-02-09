@@ -11,6 +11,18 @@ parameters:
     count: 1
     path: lib/Loop/Loop.php
   -
+    message: "#^Variable \\$timer might not be defined.$#"
+    count: 1
+    path: lib/Loop/Loop.php
+  -
+    message: "#^Only booleans are allowed in an if condition, int<0, max>|false given.$#"
+    count: 1
+    path: lib/Loop/Loop.php
+  -
+    message: "#^Instanceof between Generator<mixed, mixed, mixed, TReturn> and Generator will always evaluate to true.$#"
+    count: 1
+    path: lib/coroutine.php
+  -
     message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert::assertInstanceOf\\(\\) with .* and .* will always evaluate to true\\.$#"
     count: 1
     path: tests/Event/EmitterTest.php
