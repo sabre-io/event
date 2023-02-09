@@ -9,7 +9,7 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
     public function testInit(): void
     {
         $ee = new Emitter();
-        self::assertInstanceOf('Sabre\\Event\\Emitter', $ee);
+        self::assertInstanceOf('Sabre\\Event\\Emitter', $ee); /* @phpstan-ignore-line */
     }
 
     public function testListeners(): void
@@ -139,7 +139,7 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
         );
 
         $ee->emit('foo');
-        self::assertFalse($result);
+        self::assertFalse($result); /* @phpstan-ignore-line */
     }
 
     public function testRemoveUnknownListener(): void
@@ -161,7 +161,7 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
         self::assertFalse($ee->removeListener('bar', $callBack));
 
         $ee->emit('foo');
-        self::assertTrue($result);
+        self::assertTrue($result); /* @phpstan-ignore-line */
     }
 
     public function testRemoveListenerTwice(): void
@@ -188,7 +188,7 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
         );
 
         $ee->emit('foo');
-        self::assertFalse($result);
+        self::assertFalse($result); /* @phpstan-ignore-line */
     }
 
     public function testRemoveAllListeners(): void
@@ -208,7 +208,7 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
         $ee->removeAllListeners('foo');
 
         $ee->emit('foo');
-        self::assertFalse($result);
+        self::assertFalse($result); /* @phpstan-ignore-line */
     }
 
     public function testRemoveAllListenersNoArg(): void
@@ -229,7 +229,7 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
         $ee->removeAllListeners();
 
         $ee->emit('foo');
-        self::assertFalse($result);
+        self::assertFalse($result); /* @phpstan-ignore-line */
     }
 
     public function testOnce(): void

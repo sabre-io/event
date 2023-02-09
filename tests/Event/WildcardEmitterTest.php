@@ -9,7 +9,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
     public function testInit(): void
     {
         $ee = new WildcardEmitter();
-        self::assertInstanceOf('Sabre\\Event\\WildcardEmitter', $ee);
+        self::assertInstanceOf('Sabre\\Event\\WildcardEmitter', $ee); /* @phpstan-ignore-line */
     }
 
     public function testListeners(): void
@@ -159,7 +159,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
         );
 
         $ee->emit('foo');
-        self::assertFalse($result);
+        self::assertFalse($result); /* @phpstan-ignore-line */
     }
 
     public function testRemoveUnknownListener(): void
@@ -181,7 +181,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
         self::assertFalse($ee->removeListener('bar', $callBack));
 
         $ee->emit('foo');
-        self::assertTrue($result);
+        self::assertTrue($result); /* @phpstan-ignore-line */
     }
 
     public function testRemoveListenerTwice(): void
@@ -208,7 +208,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
         );
 
         $ee->emit('foo');
-        self::assertFalse($result);
+        self::assertFalse($result); /* @phpstan-ignore-line */
     }
 
     public function testRemoveAllListeners(): void
@@ -228,7 +228,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
         $ee->removeAllListeners('foo');
 
         $ee->emit('foo');
-        self::assertFalse($result);
+        self::assertFalse($result); /* @phpstan-ignore-line */
     }
 
     public function testRemoveAllListenersNoArg(): void
@@ -249,7 +249,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
         $ee->removeAllListeners();
 
         $ee->emit('foo');
-        self::assertFalse($result);
+        self::assertFalse($result); /* @phpstan-ignore-line */
     }
 
     public function testRemoveAllListenersWildcard(): void
@@ -269,7 +269,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
         $ee->removeAllListeners('foo:*');
 
         $ee->emit('foo:bar');
-        self::assertFalse($result);
+        self::assertFalse($result); /* @phpstan-ignore-line */
     }
 
     public function testOnce(): void

@@ -199,7 +199,7 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
         });
         try {
             $promise->wait();
-            $this->fail('We did not get the expected exception');
+            self::fail('We did not get the expected exception');
         } catch (\Exception $e) {
             self::assertInstanceOf('OutOfBoundsException', $e);
             self::assertEquals('foo', $e->getMessage());
@@ -214,9 +214,8 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
         });
         try {
             $promise->wait();
-            $this->fail('We did not get the expected exception');
+            self::fail('We did not get the expected exception');
         } catch (\Exception $e) {
-            self::assertInstanceOf('Exception', $e);
             self::assertEquals('foo', $e->getMessage());
         }
     }

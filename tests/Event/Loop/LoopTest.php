@@ -74,7 +74,7 @@ class LoopTest extends \PHPUnit\Framework\TestCase
     {
         $h = fopen('php://temp', 'r+');
         if (false === $h) {
-            $this->fail('failed to open php://temp');
+            self::fail('failed to open php://temp');
         }
         $loop = new Loop();
         $loop->addWriteStream($h, function () use ($h, $loop) {
@@ -90,7 +90,7 @@ class LoopTest extends \PHPUnit\Framework\TestCase
     {
         $h = fopen('php://temp', 'r+');
         if (false === $h) {
-            $this->fail('failed to open php://temp');
+            self::fail('failed to open php://temp');
         }
         fwrite($h, 'hello world');
         rewind($h);

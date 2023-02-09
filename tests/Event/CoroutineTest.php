@@ -173,7 +173,7 @@ class CoroutineTest extends \PHPUnit\Framework\TestCase
             self::assertEquals(3, $value);
             $ok = true;
         })->otherwise(function ($reason) {
-            $this->fail($reason);
+            self::fail($reason);
         });
         Loop\run();
 
@@ -193,7 +193,7 @@ class CoroutineTest extends \PHPUnit\Framework\TestCase
         })->then(function ($value) use (&$ok) {
             $ok = $value;
         })->otherwise(function ($reason) {
-            $this->fail($reason);
+            self::fail($reason);
         });
 
         $promise->fulfill('omg it worked');
