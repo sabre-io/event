@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Sabre\Event;
 
-use Generator;
-
 /**
  * Turn asynchronous promise-based code into something that looks synchronous
  * again, through the use of generators.
