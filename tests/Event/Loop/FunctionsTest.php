@@ -82,7 +82,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
     {
         $h = fopen('php://temp', 'r+');
         if (false === $h) {
-            $this->fail('failed to open php://temp');
+            self::fail('failed to open php://temp');
         }
         addWriteStream($h, function () use ($h) {
             fwrite($h, 'hello world');
@@ -97,7 +97,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
     {
         $h = fopen('php://temp', 'r+');
         if (false === $h) {
-            $this->fail('failed to open php://temp');
+            self::fail('failed to open php://temp');
         }
         fwrite($h, 'hello world');
         rewind($h);

@@ -137,7 +137,7 @@ function stop(): void
 function instance(Loop $newLoop = null): Loop
 {
     static $loop;
-    if ($newLoop) {
+    if ($newLoop instanceof Loop) {
         $loop = $newLoop;
     } elseif (!$loop) {
         $loop = new Loop();
