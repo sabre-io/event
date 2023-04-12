@@ -66,7 +66,7 @@ class CurlScheduler
 
     public function addHandle($curlHandle)
     {
-        curl_multi_add_handle($mh, $curlHandle);
+        curl_multi_add_handle($this->curlMultiHandle, $curlHandle);
     }
 }
 
