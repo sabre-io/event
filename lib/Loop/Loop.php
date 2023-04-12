@@ -26,7 +26,7 @@ class Loop
     {
         $triggerTime = microtime(true) + $timeout;
 
-        if (0 === count($this->timers)) {
+        if (count($this->timers) === 0) {
             // Special case when the timers array was empty.
             $this->timers[] = [$triggerTime, $cb];
 
