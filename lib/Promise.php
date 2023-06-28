@@ -127,6 +127,8 @@ class Promise
 
     /**
      * Marks this promise as fulfilled and sets its return value.
+     *
+     * @param mixed $value the value to return for the fulfilled promise
      */
     public function fulfill($value = null): void
     {
@@ -203,7 +205,9 @@ class Promise
      * The result of the promise.
      *
      * If the promise was fulfilled, this will be the result value. If the
-     * promise was rejected, this property hold the rejection reason.
+     * promise was rejected, this property holds the rejection reason.
+     *
+     * @var mixed the result to be returned when the promise is resolved
      */
     protected $value;
 
