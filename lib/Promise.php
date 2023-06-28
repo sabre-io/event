@@ -127,8 +127,6 @@ class Promise
 
     /**
      * Marks this promise as fulfilled and sets its return value.
-     *
-     * @param mixed $value
      */
     public function fulfill($value = null): void
     {
@@ -168,8 +166,6 @@ class Promise
      * one. In PHP it might be useful to call this on the last promise in a
      * chain.
      *
-     * @return mixed
-     *
      * @psalm-return TReturn
      */
     public function wait()
@@ -208,10 +204,8 @@ class Promise
      *
      * If the promise was fulfilled, this will be the result value. If the
      * promise was rejected, this property hold the rejection reason.
-     *
-     * @var mixed
      */
-    protected $value = null;
+    protected $value;
 
     /**
      * This method is used to call either an onFulfilled or onRejected callback.

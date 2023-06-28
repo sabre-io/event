@@ -105,8 +105,6 @@ function race(array $promises): Promise
  * If the value is a promise, the returned promise will attach itself to that
  * promise and eventually get the same state as the followed promise.
  *
- * @param mixed $value
- *
  * @return Promise<mixed>
  */
 function resolve($value): Promise
