@@ -26,6 +26,7 @@ Loop\setTimeout(function () use ($promise) {
 $result = $promise
     ->then(function ($value) {
         echo "Step 2\n";
+
         // Immediately returning a new value.
         return $value.' world';
     })
@@ -43,6 +44,7 @@ $result = $promise
     })
     ->then(function ($value) {
         echo "Step 4\n";
+
         // This is the final event handler.
         return $value.' you rock!';
     })
