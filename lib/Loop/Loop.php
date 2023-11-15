@@ -302,7 +302,7 @@ class Loop
     /**
      * A list of timers, added by setTimeout.
      *
-     * @var array<int, mixed>
+     * @var array<int, array{0:float, 1:callable}>
      */
     protected array $timers = [];
 

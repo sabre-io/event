@@ -188,8 +188,13 @@ class Promise
             return $this->value;
         } else {
             // If we got here, it means that the asynchronous operation
-            // errored. Therefore we need to throw an exception.
-            throw $this->value;
+            // errored. Therefore, we need to throw an exception.
+            if ($this->value instanceof \Throwable) {
+                throw $this->value;
+            }
+            // The state should have been REJECTED, with "value" a Throwable
+            // But "value" was not a Throwable. So throw a more general exception.
+            throw new \LogicException('The Promise was not fulfilled but no exception was specified');
         }
     }
 
@@ -197,7 +202,7 @@ class Promise
      * A list of subscribers. Subscribers are the callbacks that want us to let
      * them know if the callback was fulfilled or rejected.
      *
-     * @var array<int, mixed>
+     * @var array<int, array{0:Promise<TReturn>, 1:callable|null, 2:callable|null}>
      */
     protected array $subscribers = [];
 
@@ -251,7 +256,11 @@ class Promise
                 if (self::FULFILLED === $this->state) {
                     $subPromise->fulfill($this->value);
                 } else {
-                    $subPromise->reject($this->value);
+                    if ($this->value instanceof \Throwable) {
+                        $subPromise->reject($this->value);
+                    } else {
+                        throw new \LogicException('The subPromise was not fulfilled but no exception was specified');
+                    }
                 }
             }
         });
