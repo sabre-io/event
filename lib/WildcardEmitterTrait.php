@@ -216,14 +216,14 @@ trait WildcardEmitterTrait
     /**
      * The list of listeners.
      *
-     * @var array<string, mixed>
+     * @var array<string, array<int, array{0:int, 1:callable}>>
      */
     protected array $listeners = [];
 
     /**
      * The list of "wildcard listeners".
      *
-     * @var array<string, mixed>
+     * @var array<string, array<int, array{0:int, 1:callable}>>
      */
     protected array $wildcardListeners = [];
 
@@ -233,7 +233,7 @@ trait WildcardEmitterTrait
      *
      * If the list of listeners changes though, the index clears.
      *
-     * @var array<string, mixed>
+     * @var array<string, array<int, callable>>
      */
     protected array $listenerIndex = [];
 }
