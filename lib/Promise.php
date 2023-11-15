@@ -202,7 +202,7 @@ class Promise
      * A list of subscribers. Subscribers are the callbacks that want us to let
      * them know if the callback was fulfilled or rejected.
      *
-     * @var array<int, array{0:Promise<TReturn>, 1:callable|null, 2:callable|null}>
+     * @var list<array{0:Promise<TReturn>, 1:callable|null, 2:callable|null}>
      */
     protected array $subscribers = [];
 
