@@ -18,7 +18,7 @@ function setTimeout(callable $cb, float $timeout): void
  * The value this function returns can be used to stop the interval with
  * clearInterval.
  *
- * @return array{0:string, 1:boolean}
+ * @return IntervalStatus
  */
 function setInterval(callable $cb, float $timeout): array
 {
@@ -28,7 +28,7 @@ function setInterval(callable $cb, float $timeout): array
 /**
  * Stops a running interval.
  *
- * @param array{0:string, 1:boolean} $intervalId
+ * @param IntervalStatus $intervalId
  */
 function clearInterval(array $intervalId): void
 {

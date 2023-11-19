@@ -1,6 +1,8 @@
 parameters:
   level: 9
   phpVersion: 70430 # PHP 7.4.30
+  typeAliases:
+    IntervalStatus: 'array{0:string, 1:boolean}'
   ignoreErrors:
   -
     message: "#^If condition is always true.$#"
