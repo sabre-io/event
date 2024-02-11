@@ -18,7 +18,7 @@ function setTimeout(callable $cb, float $timeout): void
  * The value this function returns can be used to stop the interval with
  * clearInterval.
  *
- * @return array{0:string, 1:boolean}
+ * @return array{0:string, 1:bool}
  */
 function setInterval(callable $cb, float $timeout): array
 {
@@ -28,7 +28,7 @@ function setInterval(callable $cb, float $timeout): array
 /**
  * Stops a running interval.
  *
- * @param array{0:string, 1:boolean} $intervalId
+ * @param array{0:string, 1:bool} $intervalId
  */
 function clearInterval(array $intervalId): void
 {
@@ -134,7 +134,7 @@ function stop(): void
 /**
  * Retrieves or sets the global Loop object.
  */
-function instance(Loop $newLoop = null): Loop
+function instance(?Loop $newLoop = null): Loop
 {
     static $loop;
     if ($newLoop instanceof Loop) {

@@ -53,7 +53,7 @@ class Promise
      * Each are callbacks that map to $this->fulfill and $this->reject.
      * Using the executor is optional.
      */
-    public function __construct(callable $executor = null)
+    public function __construct(?callable $executor = null)
     {
         if (is_callable($executor)) {
             $executor(
@@ -84,7 +84,7 @@ class Promise
      *
      * @return Promise<TReturn>
      */
-    public function then(callable $onFulfilled = null, callable $onRejected = null): Promise
+    public function then(?callable $onFulfilled = null, ?callable $onRejected = null): Promise
     {
         // This new subPromise will be returned from this function, and will
         // be fulfilled with the result of the onFulfilled or onRejected event
@@ -225,7 +225,7 @@ class Promise
      *
      * @param Promise<TReturn> $subPromise
      */
-    private function invokeCallback(Promise $subPromise, callable $callBack = null): void
+    private function invokeCallback(Promise $subPromise, ?callable $callBack = null): void
     {
         // We use 'nextTick' to ensure that the event handlers are always
         // triggered outside of the calling stack in which they were originally
