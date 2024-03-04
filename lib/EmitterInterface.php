@@ -50,7 +50,7 @@ interface EmitterInterface
      * @param list<mixed>          $arguments
      * @param callable():bool|null $continueCallBack
      */
-    public function emit(string $eventName, array $arguments = [], callable $continueCallBack = null): bool;
+    public function emit(string $eventName, array $arguments = [], ?callable $continueCallBack = null): bool;
 
     /**
      * Returns the list of listeners for an event.
@@ -77,5 +77,5 @@ interface EmitterInterface
      * removed. If it is not specified, every listener for every event is
      * removed.
      */
-    public function removeAllListeners(string $eventName = null): void;
+    public function removeAllListeners(?string $eventName = null): void;
 }

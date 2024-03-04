@@ -61,7 +61,7 @@ class Loop
      * The value this function returns can be used to stop the interval with
      * clearInterval.
      *
-     * @return array{0:string, 1:boolean}
+     * @return array{0:string, 1:bool}
      */
     public function setInterval(callable $cb, float $timeout): array
     {
@@ -88,7 +88,7 @@ class Loop
     /**
      * Stops a running interval.
      *
-     * @param array{0:string, 1:boolean} $intervalId
+     * @param array{0:string, 1:bool} $intervalId
      */
     public function clearInterval(array $intervalId): void
     {
