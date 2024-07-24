@@ -19,6 +19,9 @@ jobs:
           - php-versions: '7.1'
             coverage: 'none'
             code-analysis: 'yes'
+          - php-versions: '8.4'
+            coverage: 'pcov'
+            code-analysis: 'yes'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
