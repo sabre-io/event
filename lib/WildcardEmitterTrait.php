@@ -82,7 +82,7 @@ trait WildcardEmitterTrait
      * Lastly, if there are 5 event handlers for an event. The continueCallback
      * will be called at most 4 times.
      */
-    public function emit(string $eventName, array $arguments = [], callable $continueCallBack = null): bool
+    public function emit(string $eventName, array $arguments = [], ?callable $continueCallBack = null): bool
     {
         if (\is_null($continueCallBack)) {
             foreach ($this->listeners($eventName) as $listener) {
@@ -195,7 +195,7 @@ trait WildcardEmitterTrait
      * removed. If it is not specified, every listener for every event is
      * removed.
      */
-    public function removeAllListeners(string $eventName = null)
+    public function removeAllListeners(?string $eventName = null)
     {
         if (\is_null($eventName)) {
             $this->listeners = [];
