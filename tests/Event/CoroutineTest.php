@@ -56,7 +56,7 @@ class CoroutineTest extends \PHPUnit\Framework\TestCase
                 // This line is unreachable, but it's our control
                 $start += 4;
             } catch (\Exception $e) {
-                $start += $e->getMessage();
+                $start += (int) $e->getMessage();
             }
         });
 
@@ -78,7 +78,7 @@ class CoroutineTest extends \PHPUnit\Framework\TestCase
                 // This line is unreachable, but it's our control
                 $start += 4;
             } catch (\LogicException $e) {
-                $start += $e->getMessage();
+                $start += (int) $e->getMessage();
             }
         });
 
@@ -115,13 +115,13 @@ class CoroutineTest extends \PHPUnit\Framework\TestCase
                 // This line is unreachable, but it's our control
                 $start += 4;
             } catch (\Exception $e) {
-                $start += $e->getMessage();
+                $start += (int) $e->getMessage();
             }
         });
 
         $this->assertEquals(1, $start);
 
-        $promise->reject(new \Exception((string) 2));
+        $promise->reject(new \Exception('2'));
         Loop\run();
 
         $this->assertEquals(3, $start);
@@ -156,7 +156,7 @@ class CoroutineTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(1, $start);
 
-        $promise->reject(new \Exception((string) 2));
+        $promise->reject(new \Exception('2'));
         Loop\run();
 
         $this->assertEquals(3, $start);
