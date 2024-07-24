@@ -52,7 +52,7 @@ jobs:
 
       - name: Code Analysis (PHP CS-Fixer)
         if: matrix.code-analysis == 'yes'
-        run: php vendor/bin/php-cs-fixer fix --dry-run --diff
+        run: PHP_CS_FIXER_IGNORE_ENV=true php vendor/bin/php-cs-fixer fix --dry-run --diff
 
       - name: Code Analysis (PHPStan)
         if: matrix.code-analysis == 'yes'
