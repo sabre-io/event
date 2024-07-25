@@ -130,7 +130,7 @@ function stop()
 /**
  * Retrieves or sets the global Loop object.
  */
-function instance(Loop $newLoop = null): Loop
+function instance(?Loop $newLoop = null): Loop
 {
     static $loop;
     if ($newLoop) {
