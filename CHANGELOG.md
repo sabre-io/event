@@ -1,6 +1,12 @@
 ChangeLog
 =========
 
+5.1.5 (2024-07-25)
+------------------
+
+* #125 PHPdoc, CI and test changes to bring 5.1 up to PHP 8.3 (@phil-davis)
+* #126 PHP 8.4 compliance (@phil-davis)
+
 5.1.4 (2021-11-04)
 ------------------
 
