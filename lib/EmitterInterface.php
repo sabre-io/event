@@ -74,5 +74,5 @@ interface EmitterInterface
      * removed. If it is not specified, every listener for every event is
      * removed.
      */
-    public function removeAllListeners(?string $eventName = null);
+    public function removeAllListeners(string $eventName = null);
 }
