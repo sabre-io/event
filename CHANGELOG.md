@@ -1,6 +1,11 @@
 ChangeLog
 =========
 
+5.1.6 (2024-07-26)
+------------------
+
+* #128 Explicitly mark nullable parameter (@cedric-anne)
+
 5.1.5 (2024-07-25)
 ------------------
 
