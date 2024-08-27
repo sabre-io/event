@@ -6,7 +6,12 @@ $config->getFinder()
     ->in(__DIR__);
 $config->setRules([
     '@PSR1' => true,
-    '@Symfony' => true
+    '@Symfony' => true,
+    'ordered_imports' => [
+        'imports_order' => [
+            'class', 'function', 'const',
+        ],
+    ],
 ]);
 
 return $config;

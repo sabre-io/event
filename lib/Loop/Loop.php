@@ -24,7 +24,7 @@ class Loop
      */
     public function setTimeout(callable $cb, float $timeout)
     {
-        $triggerTime = microtime(true) + ($timeout);
+        $triggerTime = microtime(true) + $timeout;
 
         if (!$this->timers) {
             // Special case when the timers array was empty.

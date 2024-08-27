@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Sabre\Event;
 
-use Exception;
-
 class CoroutineTest extends \PHPUnit\Framework\TestCase
 {
     public function testNonGenerator()
@@ -46,7 +44,7 @@ class CoroutineTest extends \PHPUnit\Framework\TestCase
     {
         $start = 0;
         $promise = new Promise(function ($fulfill, $reject) {
-            $reject(new Exception('2'));
+            $reject(new \Exception('2'));
         });
 
         coroutine(function () use (&$start, $promise) {
