@@ -8,6 +8,7 @@ $config = new PhpCsFixer\Config();
 $config->setRules([
     '@PSR1' => true,
     '@Symfony' => true,
+    'blank_line_between_import_groups' => false,
     'nullable_type_declaration' => [
         'syntax' => 'question_mark',
     ],

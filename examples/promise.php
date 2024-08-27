@@ -5,7 +5,6 @@ declare(strict_types=1);
 
 use Sabre\Event\Loop;
 use Sabre\Event\Promise;
-
 use function Sabre\Event\coroutine;
 
 require __DIR__.'/../vendor/autoload.php';
