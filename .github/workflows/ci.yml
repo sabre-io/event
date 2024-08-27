@@ -14,14 +14,20 @@ jobs:
       matrix:
         php-versions: ['7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3']
         coverage: ['pcov']
+        code-style: ['no']
         code-analysis: ['no']
+        code-analysis-extensions: ['no']
         include:
           - php-versions: '7.1'
             coverage: 'none'
+            code-style: 'yes'
             code-analysis: 'yes'
+            code-analysis-extensions: 'no'
           - php-versions: '8.4'
             coverage: 'pcov'
+            code-style: 'no'
             code-analysis: 'yes'
+            code-analysis-extensions: 'yes'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -50,8 +56,14 @@ jobs:
       - name: Install composer dependencies
         run: composer install --no-progress --prefer-dist --optimize-autoloader
 
+      - name: Extra components for phpstan v1
+        if: matrix.code-analysis-extensions == 'yes'
+        run: |
+          composer config --no-plugins allow-plugins.phpstan/extension-installer true
+          composer require --dev phpstan/phpstan-phpunit phpstan/phpstan-strict-rules phpstan/extension-installer
+
       - name: Code Analysis (PHP CS-Fixer)
-        if: matrix.code-analysis == 'yes'
+        if: matrix.code-style == 'yes'
         run: PHP_CS_FIXER_IGNORE_ENV=true php vendor/bin/php-cs-fixer fix --dry-run --diff
 
       - name: Code Analysis (PHPStan)
