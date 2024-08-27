@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Sabre\Event\Promise;
 
 use Sabre\Event\Promise;
-use Throwable;
 
 /**
  * This file contains a set of functions that are useful for dealing with the
@@ -101,8 +100,6 @@ function race(array $promises): Promise
  *
  * If the value is a promise, the returned promise will attach itself to that
  * promise and eventually get the same state as the followed promise.
- *
- * @param mixed $value
  */
 function resolve($value): Promise
 {
@@ -119,7 +116,7 @@ function resolve($value): Promise
 /**
  * Returns a Promise that will reject with the given reason.
  */
-function reject(Throwable $reason): Promise
+function reject(\Throwable $reason): Promise
 {
     $promise = new Promise();
     $promise->reject($reason);

@@ -1,9 +1,12 @@
 #!/usr/bin/env php
-<?php declare(strict_types=1);
+<?php
 
-use function Sabre\Event\coroutine;
+declare(strict_types=1);
+
 use Sabre\Event\Loop;
 use Sabre\Event\Promise;
+
+use function Sabre\Event\coroutine;
 
 require __DIR__.'/../vendor/autoload.php';
 
@@ -25,6 +28,7 @@ Loop\setTimeout(function () use ($promise) {
 $result = $promise
     ->then(function ($value) {
         echo "Step 2\n";
+
         // Immediately returning a new value.
         return $value.' world';
     })
@@ -42,6 +46,7 @@ $result = $promise
     })
     ->then(function ($value) {
         echo "Step 4\n";
+
         // This is the final event handler.
         return $value.' you rock!';
     })

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Sabre\Event;
 
 use Generator;
-use Throwable;
 
 /**
  * Turn asynchronous promise-based code into something that looks synchronous
@@ -43,7 +42,9 @@ use Throwable;
  * });
  *
  * @psalm-template TReturn
+ *
  * @psalm-param callable():\Generator<mixed, mixed, mixed, TReturn> $gen
+ *
  * @psalm-return Promise<TReturn>
  *
  * @copyright Copyright (C) fruux GmbH (https://fruux.com/)
@@ -53,7 +54,7 @@ use Throwable;
 function coroutine(callable $gen): Promise
 {
     $generator = $gen();
-    if (!$generator instanceof Generator) {
+    if (!$generator instanceof \Generator) {
         throw new \InvalidArgumentException('You must pass a generator function');
     }
 
@@ -73,11 +74,11 @@ function coroutine(callable $gen): Promise
                         $generator->send($value);
                         $advanceGenerator();
                     },
-                    function (Throwable $reason) use ($generator, $advanceGenerator) {
+                    function (\Throwable $reason) use ($generator, $advanceGenerator) {
                         $generator->throw($reason);
                         $advanceGenerator();
                     }
-                )->otherwise(function (Throwable $reason) use ($promise) {
+                )->otherwise(function (\Throwable $reason) use ($promise) {
                     // This error handler would be called, if something in the
                     // generator throws an exception, and it's not caught
                     // locally.
@@ -102,7 +103,7 @@ function coroutine(callable $gen): Promise
             if ($returnValue instanceof Promise) {
                 $returnValue->then(function ($value) use ($promise) {
                     $promise->fulfill($value);
-                }, function (Throwable $reason) use ($promise) {
+                }, function (\Throwable $reason) use ($promise) {
                     $promise->reject($reason);
                 });
             } else {
@@ -113,7 +114,7 @@ function coroutine(callable $gen): Promise
 
     try {
         $advanceGenerator();
-    } catch (Throwable $e) {
+    } catch (\Throwable $e) {
         $promise->reject($e);
     }
 

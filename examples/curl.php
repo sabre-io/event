@@ -1,5 +1,7 @@
 #!/usr/bin/env php
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 /*
  * The following example demonstrates doing asynchronous HTTP requests with
@@ -26,10 +28,10 @@ $ch2 = curl_init();
 curl_setopt_array($ch1, CURLOPT_URL, 'http://httpbin.org/delay/5');
 curl_setopt_array($ch2, CURLOPT_URL, 'http://httpbin.org/delay/5');
 
-//create the multiple cURL handle
+// create the multiple cURL handle
 $mh = curl_multi_init();
 
-//add the two handles
+// add the two handles
 curl_multi_add_handle($mh, $ch1);
 curl_multi_add_handle($mh, $ch2);
 
@@ -112,7 +114,7 @@ curl_multi_loop_scheduler($mh, function () {
 
 Loop\run();
 
-//close the handles
+// close the handles
 curl_multi_remove_handle($mh, $ch1);
 curl_multi_remove_handle($mh, $ch2);
 curl_multi_close($mh);
