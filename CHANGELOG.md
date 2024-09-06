@@ -1,11 +1,35 @@
 ChangeLog
 =========
 
+6.0.1 (2024-09-06)
+------------------
+* #105 Adjust code for things reported by phpstan ( @phil-davis )
+* #109 Apply latest cs-fixer changes ( @phil-davis )
+* #113 Increase phpstan level to 9 ( @phil-davis )
+* #116 Change array<int...> to list<...> in PHP doc ( @phil-davis )
+* #120 use php-cs-fixer 3.49 ( @phil-davis )
+
 6.0.0 (2022-08-29)
 ------------------
 
 * #96 Minor fixes to examples, tests and comments (@phil-davis)
 * #97 PHP min version 7.4 (@phil-davis)
+
+5.1.7 (2024-08-27)
+------------------
+
+* #132 allow php-cs-fixer major version 3 (@phil-davis)
+
+5.1.6 (2024-07-26)
+------------------
+
+* #128 Explicitly mark nullable parameter (@cedric-anne)
+
+5.1.5 (2024-07-25)
+------------------
+
+* #125 PHPdoc, CI and test changes to bring 5.1 up to PHP 8.3 (@phil-davis)
+* #126 PHP 8.4 compliance (@phil-davis)
 
 5.1.4 (2021-11-04)
 ------------------
