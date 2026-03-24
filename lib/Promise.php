@@ -184,11 +184,18 @@ class Promise
         if (self::FULFILLED === $this->state) {
             // If the state of this promise is fulfilled, we can return the value.
             return $this->value;
-        } else {
-            // If we got here, it means that the asynchronous operation
-            // errored. Therefore we need to throw an exception.
+        }
+        // If we got here, it means that the asynchronous operation
+        // errored. Therefore we need to throw an exception.
+        throw $this->value;
+        // If we got here, it means that the asynchronous operation
+        // errored. Therefore, we need to throw an exception.
+        if ($this->value instanceof \Throwable) {
             throw $this->value;
         }
+        // The state should have been REJECTED, with "value" a Throwable
+        // But "value" was not a Throwable. So throw a more general exception.
+        throw new \LogicException('The Promise was not fulfilled but no exception was specified');
     }
 
     /**
