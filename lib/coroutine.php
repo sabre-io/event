@@ -85,10 +85,9 @@ function coroutine(callable $gen): Promise
                 // We need to break out of the loop, because $advanceGenerator
                 // will be called asynchronously when the promise has a result.
                 break;
-            } else {
-                // If the value was not a promise, we'll just let it pass through.
-                $generator->send($yieldedValue);
             }
+            // If the value was not a promise, we'll just let it pass through.
+            $generator->send($yieldedValue);
         }
 
         // If the generator is at the end, and we didn't run into an exception,

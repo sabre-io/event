@@ -113,12 +113,11 @@ function resolve($value): Promise
 {
     if ($value instanceof Promise) {
         return $value->then();
-    } else {
-        $promise = new Promise();
-        $promise->fulfill($value);
-
-        return $promise;
     }
+    $promise = new Promise();
+    $promise->fulfill($value);
+
+    return $promise;
 }
 
 /**
