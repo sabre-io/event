@@ -15,7 +15,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
         $promise2 = new Promise();
 
         $finalValue = 0;
-        Promise\all([$promise1, $promise2])->then(function ($value) use (&$finalValue) {
+        Promise\all([$promise1, $promise2])->then(function ($value) use (&$finalValue): void {
             $finalValue = $value;
         });
 
@@ -47,7 +47,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
 
                 return 'test';
             },
-            function ($value) use (&$finalValue) {
+            function ($value) use (&$finalValue): void {
                 $finalValue = $value;
             }
         );
@@ -72,7 +72,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
 
                 return 'test';
             },
-            function ($value) use (&$finalValue) {
+            function ($value) use (&$finalValue): void {
                 $finalValue = $value;
             }
         );
@@ -92,10 +92,10 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
 
         $finalValue = 0;
         Promise\race([$promise1, $promise2])->then(
-            function ($value) use (&$finalValue) {
+            function ($value) use (&$finalValue): void {
                 $finalValue = $value;
             },
-            function ($value) use (&$finalValue) {
+            function ($value) use (&$finalValue): void {
                 $finalValue = $value;
             }
         );
@@ -115,10 +115,10 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
 
         $finalValue = 0;
         Promise\race([$promise1, $promise2])->then(
-            function ($value) use (&$finalValue) {
+            function ($value) use (&$finalValue): void {
                 $finalValue = $value;
             },
-            function ($value) use (&$finalValue) {
+            function ($value) use (&$finalValue): void {
                 $finalValue = $value;
             }
         );
@@ -136,7 +136,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
         $finalValue = 0;
 
         $promise = resolve(1);
-        $promise->then(function ($value) use (&$finalValue) {
+        $promise->then(function ($value) use (&$finalValue): void {
             $finalValue = $value;
         });
 
@@ -162,9 +162,9 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
         $finalValue = 0;
 
         $promise = reject(new \Exception('1'));
-        $promise->then(function ($value) use (&$finalValue) {
+        $promise->then(function ($value) use (&$finalValue): void {
             $finalValue = 'im broken';
-        }, function ($reason) use (&$finalValue) {
+        }, function ($reason) use (&$finalValue): void {
             $finalValue = $reason;
         });
 

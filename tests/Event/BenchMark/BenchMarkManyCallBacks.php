@@ -16,7 +16,7 @@ class BenchMarkManyCallBacks extends BenchMark
     {
         $this->emitter = new Emitter();
         for ($i = 0; $i < 100; ++$i) {
-            $this->emitter->on('foo', function () {
+            $this->emitter->on('foo', function (): void {
                 // NOOP
             });
         }

@@ -21,7 +21,7 @@ require __DIR__.'/../vendor/autoload.php';
 
 $tail = popen('tail -fn0 '.escapeshellarg($argv[1]), 'r');
 
-\Sabre\Event\Loop\addReadStream($tail, function () use ($tail) {
+\Sabre\Event\Loop\addReadStream($tail, function () use ($tail): void {
     echo fread($tail, 4096);
 });
 

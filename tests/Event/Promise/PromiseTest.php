@@ -16,7 +16,7 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
         $promise = new Promise();
         $promise->fulfill(1);
 
-        $promise->then(function ($value) use (&$finalValue) {
+        $promise->then(function ($value) use (&$finalValue): void {
             $finalValue = $value + 2;
         });
         Loop\run();
@@ -30,7 +30,7 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
         $promise = new Promise();
         $promise->reject(new \Exception('1'));
 
-        $promise->then(null, function ($value) use (&$finalValue) {
+        $promise->then(null, function ($value) use (&$finalValue): void {
             $finalValue = $value->getMessage() + 2;
         });
         Loop\run();
@@ -66,9 +66,7 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
 
         $subPromise = new Promise();
 
-        $promise->then(function ($value) use ($subPromise) {
-            return $subPromise;
-        })->then(function ($value) use (&$finalValue) {
+        $promise->then(fn ($value) => $subPromise)->then(function ($value) use (&$finalValue) {
             $finalValue = $value + 4;
 
             return $finalValue;
@@ -85,7 +83,7 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
         $finalValue = 0;
         $promise = new Promise();
 
-        $promise->then(function ($value) use (&$finalValue) {
+        $promise->then(function ($value) use (&$finalValue): void {
             $finalValue = $value + 2;
         });
 
@@ -100,7 +98,7 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
         $finalValue = 0;
         $promise = new Promise();
 
-        $promise->otherwise(function ($value) use (&$finalValue) {
+        $promise->otherwise(function ($value) use (&$finalValue): void {
             $finalValue = $value->getMessage() + 2;
         });
 
@@ -112,9 +110,9 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
 
     public function testExecutorSuccess(): void
     {
-        $promise = (new Promise(function ($success, $fail) {
+        $promise = (new Promise(function ($success, $fail): void {
             $success('hi');
-        }))->then(function ($result) use (&$realResult) {
+        }))->then(function ($result) use (&$realResult): void {
             $realResult = $result;
         });
         Loop\run();
@@ -124,11 +122,11 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
 
     public function testExecutorFail(): void
     {
-        $promise = (new Promise(function ($success, $fail) {
+        $promise = (new Promise(function ($success, $fail): void {
             $fail(new \Exception('hi'));
-        }))->then(function ($result) use (&$realResult) {
+        }))->then(function ($result) use (&$realResult): void {
             $realResult = 'incorrect';
-        })->otherwise(function ($reason) use (&$realResult) {
+        })->otherwise(function ($reason) use (&$realResult): void {
             $realResult = $reason->getMessage();
         });
         Loop\run();
@@ -156,12 +154,12 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
     {
         $ok = 0;
         $promise = new Promise();
-        $promise->otherwise(function ($reason) {
+        $promise->otherwise(function ($reason): void {
             self::assertEquals('foo', $reason);
             throw new \Exception('hi');
-        })->then(function () use (&$ok) {
+        })->then(function () use (&$ok): void {
             $ok = -1;
-        }, function () use (&$ok) {
+        }, function () use (&$ok): void {
             $ok = 1;
         });
 
@@ -175,7 +173,7 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
     public function testWaitResolve(): void
     {
         $promise = new Promise();
-        Loop\nextTick(function () use ($promise) {
+        Loop\nextTick(function () use ($promise): void {
             $promise->fulfill(1);
         });
         self::assertEquals(
@@ -194,7 +192,7 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
     public function testWaitRejectedException(): void
     {
         $promise = new Promise();
-        Loop\nextTick(function () use ($promise) {
+        Loop\nextTick(function () use ($promise): void {
             $promise->reject(new \OutOfBoundsException('foo'));
         });
         try {
@@ -209,7 +207,7 @@ class PromiseTest extends \PHPUnit\Framework\TestCase
     public function testWaitRejectedScalar(): void
     {
         $promise = new Promise();
-        Loop\nextTick(function () use ($promise) {
+        Loop\nextTick(function () use ($promise): void {
             $promise->reject(new \Exception('foo'));
         });
         try {

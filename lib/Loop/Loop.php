@@ -68,7 +68,7 @@ class Loop
         $keepGoing = true;
         $f = null;
 
-        $f = function () use ($cb, &$f, $timeout, &$keepGoing) {
+        $f = function () use ($cb, &$f, $timeout, &$keepGoing): void {
             if ($keepGoing) {
                 $cb();
                 $this->setTimeout($f, $timeout);

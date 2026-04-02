@@ -16,7 +16,7 @@ class BenchMarkOneCallBack extends BenchMark
     public function setUp(): void
     {
         $this->emitter = new Emitter();
-        $this->emitter->on('foo', function () {
+        $this->emitter->on('foo', function (): void {
             // NOOP
         });
     }

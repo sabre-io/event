@@ -16,7 +16,7 @@ class BenchWildcardManyCallBacks extends BenchWildcard
     {
         $this->emitter = new WildcardEmitter();
         for ($i = 0; $i < 100; ++$i) {
-            $this->emitter->on('foo', function () {
+            $this->emitter->on('foo', function (): void {
                 // NOOP
             });
         }

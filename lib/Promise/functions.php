@@ -33,7 +33,7 @@ use Sabre\Event\Promise;
  */
 function all(array $promises): Promise
 {
-    return new Promise(function ($success, $fail) use ($promises) {
+    return new Promise(function ($success, $fail) use ($promises): void {
         if (0 === count($promises)) {
             $success([]);
 
@@ -55,7 +55,7 @@ function all(array $promises): Promise
                     return $result;
                 }
             )->otherwise(
-                function ($reason) use ($fail) {
+                function ($reason) use ($fail): void {
                     $fail($reason);
                 }
             );
@@ -76,18 +76,18 @@ function all(array $promises): Promise
  */
 function race(array $promises): Promise
 {
-    return new Promise(function ($success, $fail) use ($promises) {
+    return new Promise(function ($success, $fail) use ($promises): void {
         $alreadyDone = false;
         foreach ($promises as $promise) {
             $promise->then(
-                function ($result) use ($success, &$alreadyDone) {
+                function ($result) use ($success, &$alreadyDone): void {
                     if ($alreadyDone) {
                         return;
                     }
                     $alreadyDone = true;
                     $success($result);
                 },
-                function ($reason) use ($fail, &$alreadyDone) {
+                function ($reason) use ($fail, &$alreadyDone): void {
                     if ($alreadyDone) {
                         return;
                     }

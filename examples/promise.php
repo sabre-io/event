@@ -18,7 +18,7 @@ require __DIR__.'/../vendor/autoload.php';
 $promise = new Promise();
 
 /* After 2 seconds we fulfill it */
-Loop\setTimeout(function () use ($promise) {
+Loop\setTimeout(function () use ($promise): void {
     echo "Step 1\n";
     $promise->fulfill('hello');
 }, 2);
@@ -38,7 +38,7 @@ $result = $promise
         $promise = new Promise();
 
         // Resolving after 2 seconds
-        Loop\setTimeout(function () use ($promise, $value) {
+        Loop\setTimeout(function () use ($promise, $value): void {
             $promise->fulfill($value.', how are ya?');
         }, 2);
 
@@ -61,7 +61,7 @@ $result = coroutine(function () {
     $promise = new Promise();
 
     /* After 2 seconds we fulfill it */
-    Loop\setTimeout(function () use ($promise) {
+    Loop\setTimeout(function () use ($promise): void {
         echo "Step 1\n";
         $promise->fulfill('hello');
     }, 2);
@@ -73,7 +73,7 @@ $result = coroutine(function () {
 
     echo "Step 3\n";
     $promise = new Promise();
-    Loop\setTimeout(function () use ($promise, $value) {
+    Loop\setTimeout(function () use ($promise, $value): void {
         $promise->fulfill($value.', how are ya?');
     }, 2);
 

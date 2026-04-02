@@ -30,9 +30,9 @@ abstract class BenchWildcard
 }
 
 $tests = [
-    'Sabre\Event\BenchMark\BenchWildcardOneCallBack',
-    'Sabre\Event\BenchMark\BenchWildcardManyCallBacks',
-    'Sabre\Event\BenchMark\BenchWildcardManyPrioritizedCallBacks',
+    BenchWildcardOneCallBack::class,
+    BenchWildcardManyCallBacks::class,
+    BenchWildcardManyPrioritizedCallBacks::class,
 ];
 
 foreach ($tests as $test) {
