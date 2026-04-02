@@ -25,8 +25,8 @@ $ch1 = curl_init();
 $ch2 = curl_init();
 
 // set URL. The httpbin.org test url will wait 5 seconds to respond.
-curl_setopt_array($ch1, CURLOPT_URL);
-curl_setopt_array($ch2, CURLOPT_URL);
+curl_setopt_array($ch1, [CURLOPT_URL => 'http://httpbin.org/delay/5']);
+curl_setopt_array($ch2, [CURLOPT_URL => 'http://httpbin.org/delay/5']);
 
 // create the multiple cURL handle
 $mh = curl_multi_init();
