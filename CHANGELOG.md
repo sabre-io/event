@@ -1,6 +1,13 @@
 ChangeLog
 =========
 
+5.1.8 (2026-04-27)
+------------------
+
+* #147 chore: adjust code for cs-fixer no-useless-else (@phil-davis)
+* #151 fix: remove duplicate code from Promise.php and release (@phil-davis)
+* various bumps to versions of tools and actions in CI (@phil-davis)
+
 5.1.7 (2024-08-27)
 ------------------
 

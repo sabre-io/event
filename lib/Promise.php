@@ -186,9 +186,6 @@ class Promise
             return $this->value;
         }
         // If we got here, it means that the asynchronous operation
-        // errored. Therefore we need to throw an exception.
-        throw $this->value;
-        // If we got here, it means that the asynchronous operation
         // errored. Therefore, we need to throw an exception.
         if ($this->value instanceof \Throwable) {
             throw $this->value;
