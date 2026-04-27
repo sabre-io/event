@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+6.1.0 (2026-04-27)
+------------------
+* #153 chore: drop support for PHP 7.4 8.0 8.1 ( @phil-davis )
+
 6.0.2 (2026-04-27)
 ------------------
 * #144 chore: adjust code for cs-fixer no-useless-else ( @phil-davis )
