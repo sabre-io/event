@@ -9,15 +9,15 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
     public function testInit(): void
     {
         $ee = new Emitter();
-        self::assertInstanceOf('Sabre\\Event\\Emitter', $ee);
+        self::assertInstanceOf(Emitter::class, $ee);
     }
 
     public function testListeners(): void
     {
         $ee = new Emitter();
 
-        $callback1 = function () { };
-        $callback2 = function () { };
+        $callback1 = function (): void { };
+        $callback2 = function (): void { };
         $ee->on('foo', $callback1, 200);
         $ee->on('foo', $callback2, 100);
 
@@ -32,7 +32,7 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
         $argResult = null;
 
         $ee = new Emitter();
-        $ee->on('foo', function ($arg) use (&$argResult) {
+        $ee->on('foo', function ($arg) use (&$argResult): void {
             $argResult = $arg;
         });
 
@@ -56,7 +56,7 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
 
             return false;
         });
-        $ee->on('foo', function ($arg) use (&$argResult) {
+        $ee->on('foo', function ($arg) use (&$argResult): void {
             $argResult = 2;
         });
 
@@ -101,16 +101,16 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
         $result = [];
         $ee = new Emitter();
 
-        $ee->on('foo', function () use (&$result) {
+        $ee->on('foo', function () use (&$result): void {
             $result[] = 'a';
         }, 200);
-        $ee->on('foo', function () use (&$result) {
+        $ee->on('foo', function () use (&$result): void {
             $result[] = 'b';
         }, 50);
-        $ee->on('foo', function () use (&$result) {
+        $ee->on('foo', function () use (&$result): void {
             $result[] = 'c';
         }, 300);
-        $ee->on('foo', function () use (&$result) {
+        $ee->on('foo', function () use (&$result): void {
             $result[] = 'd';
         });
 
@@ -122,7 +122,7 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
     {
         $result = false;
 
-        $callBack = function () use (&$result) {
+        $callBack = function () use (&$result): void {
             $result = true;
         };
 
@@ -146,7 +146,7 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
     {
         $result = false;
 
-        $callBack = function () use (&$result) {
+        $callBack = function () use (&$result): void {
             $result = true;
         };
 
@@ -168,7 +168,7 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
     {
         $result = false;
 
-        $callBack = function () use (&$result) {
+        $callBack = function () use (&$result): void {
             $result = true;
         };
 
@@ -194,7 +194,7 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
     public function testRemoveAllListeners(): void
     {
         $result = false;
-        $callBack = function () use (&$result) {
+        $callBack = function () use (&$result): void {
             $result = true;
         };
 
@@ -215,7 +215,7 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
     {
         $result = false;
 
-        $callBack = function () use (&$result) {
+        $callBack = function () use (&$result): void {
             $result = true;
         };
 
@@ -236,7 +236,7 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
     {
         $result = 0;
 
-        $callBack = function () use (&$result) {
+        $callBack = function () use (&$result): void {
             ++$result;
         };
 

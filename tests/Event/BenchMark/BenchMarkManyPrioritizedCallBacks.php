@@ -16,7 +16,7 @@ class BenchMarkManyPrioritizedCallBacks extends BenchMark
     {
         $this->emitter = new Emitter();
         for ($i = 0; $i < 100; ++$i) {
-            $this->emitter->on('foo', function () {
+            $this->emitter->on('foo', function (): void {
             }, 1000 - $i);
         }
     }

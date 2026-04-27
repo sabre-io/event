@@ -16,7 +16,7 @@ class BenchWildcardOneCallBack extends BenchWildcard
     public function setUp(): void
     {
         $this->emitter = new WildcardEmitter();
-        $this->emitter->on('foo', function () {
+        $this->emitter->on('foo', function (): void {
             // NOOP
         });
     }

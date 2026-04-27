@@ -11,7 +11,7 @@ class ContinueCallbackTest extends \PHPUnit\Framework\TestCase
         $ee = new Emitter();
 
         $handlerCounter = 0;
-        $bla = function () use (&$handlerCounter) {
+        $bla = function () use (&$handlerCounter): void {
             ++$handlerCounter;
         };
         $ee->on('foo', $bla);
@@ -34,7 +34,7 @@ class ContinueCallbackTest extends \PHPUnit\Framework\TestCase
         $ee = new Emitter();
 
         $handlerCounter = 0;
-        $bla = function () use (&$handlerCounter) {
+        $bla = function () use (&$handlerCounter): void {
             ++$handlerCounter;
         };
         $ee->on('foo', $bla);

@@ -89,6 +89,7 @@ class Promise
         // This new subPromise will be returned from this function, and will
         // be fulfilled with the result of the onFulfilled or onRejected event
         // handlers.
+        /** @var Promise<TReturn> $subPromise */
         $subPromise = new self();
 
         switch ($this->state) {
@@ -231,7 +232,7 @@ class Promise
         // passed to 'then'.
         //
         // This makes the order of execution more predictable.
-        Loop\nextTick(function () use ($callBack, $subPromise) {
+        Loop\nextTick(function () use ($callBack, $subPromise): void {
             if (is_callable($callBack)) {
                 try {
                     $result = $callBack($this->value);

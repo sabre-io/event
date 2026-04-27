@@ -30,9 +30,9 @@ abstract class BenchMark
 }
 
 $tests = [
-    'Sabre\Event\BenchMark\BenchMarkOneCallBack',
-    'Sabre\Event\BenchMark\BenchMarkManyCallBacks',
-    'Sabre\Event\BenchMark\BenchMarkManyPrioritizedCallBacks',
+    BenchMarkOneCallBack::class,
+    BenchMarkManyCallBacks::class,
+    BenchMarkManyPrioritizedCallBacks::class,
 ];
 
 foreach ($tests as $test) {

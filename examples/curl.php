@@ -25,8 +25,8 @@ $ch1 = curl_init();
 $ch2 = curl_init();
 
 // set URL. The httpbin.org test url will wait 5 seconds to respond.
-curl_setopt_array($ch1, CURLOPT_URL, 'http://httpbin.org/delay/5');
-curl_setopt_array($ch2, CURLOPT_URL, 'http://httpbin.org/delay/5');
+curl_setopt_array($ch1, [CURLOPT_URL => 'http://httpbin.org/delay/5']);
+curl_setopt_array($ch2, [CURLOPT_URL => 'http://httpbin.org/delay/5']);
 
 // create the multiple cURL handle
 $mh = curl_multi_init();
@@ -86,7 +86,7 @@ function curl_multi_loop_scheduler($mh, callable $done)
          * We're doing this in the next tick.
          */
         case CURLM_CALL_MULTI_PERFORM:
-            Loop\nextTick(function () use ($mh, $done) {
+            Loop\nextTick(function () use ($mh, $done): void {
                 curl_multi_loop_scheduler($mh, $done);
             });
             break;
@@ -98,7 +98,7 @@ function curl_multi_loop_scheduler($mh, callable $done)
                 return;
             }
             // Check again after 0.02 seconds
-            Loop\setTimeout(function () use ($mh, $done) {
+            Loop\setTimeout(function () use ($mh, $done): void {
                 curl_multi_loop_scheduler($mh, $done);
             }, 0.02);
             break;
@@ -108,7 +108,7 @@ function curl_multi_loop_scheduler($mh, callable $done)
     }
 }
 
-curl_multi_loop_scheduler($mh, function () {
+curl_multi_loop_scheduler($mh, function (): void {
     echo "Success!\n";
 });
 

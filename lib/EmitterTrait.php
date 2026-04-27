@@ -172,7 +172,7 @@ trait EmitterTrait
     /**
      * The list of listeners.
      *
-     * @var array<string, array{0:bool, 1:list<mixed>, 2:list<callable>}>
+     * @var array<string, array{0:bool, 1:array<int<0,max>,mixed>, 2:array<int<0,max>,callable>}>
      */
     protected array $listeners = [];
 }

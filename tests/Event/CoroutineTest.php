@@ -9,7 +9,7 @@ class CoroutineTest extends \PHPUnit\Framework\TestCase
     public function testNonGenerator(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        coroutine(function () {}); /* @phpstan-ignore-line */
+        coroutine(function (): void {}); /* @phpstan-ignore-line */
     }
 
     public function testBasicCoroutine(): void
@@ -27,7 +27,7 @@ class CoroutineTest extends \PHPUnit\Framework\TestCase
     public function testFulfilledPromise(): void
     {
         $start = 0;
-        $promise = new Promise(function ($fulfill, $reject) {
+        $promise = new Promise(function ($fulfill, $reject): void {
             $fulfill(2);
         });
 
@@ -43,7 +43,7 @@ class CoroutineTest extends \PHPUnit\Framework\TestCase
     public function testRejectedPromise(): void
     {
         $start = 0;
-        $promise = new Promise(function ($fulfill, $reject) {
+        $promise = new Promise(function ($fulfill, $reject): void {
             $reject(new \Exception('2'));
         });
 
@@ -65,7 +65,7 @@ class CoroutineTest extends \PHPUnit\Framework\TestCase
     public function testRejectedPromiseException(): void
     {
         $start = 0;
-        $promise = new Promise(function ($fulfill, $reject) {
+        $promise = new Promise(function ($fulfill, $reject): void {
             $reject(new \LogicException('2'));
         });
 
@@ -133,7 +133,7 @@ class CoroutineTest extends \PHPUnit\Framework\TestCase
             $start += yield 2;
 
             throw new \Exception('4');
-        })->otherwise(function ($e) use (&$start) {
+        })->otherwise(function ($e) use (&$start): void {
             $start += $e->getMessage();
         });
         Loop\run();
@@ -148,7 +148,7 @@ class CoroutineTest extends \PHPUnit\Framework\TestCase
         coroutine(function () use (&$start, $promise) {
             ++$start;
             $start += yield $promise;
-        })->otherwise(function ($e) use (&$start) {
+        })->otherwise(function ($e) use (&$start): void {
             $start += $e->getMessage();
         });
 
@@ -169,10 +169,10 @@ class CoroutineTest extends \PHPUnit\Framework\TestCase
             $hello = 'hi';
 
             return 3;
-        })->then(function ($value) use (&$ok) {
+        })->then(function ($value) use (&$ok): void {
             self::assertEquals(3, $value);
             $ok = true;
-        })->otherwise(function ($reason) {
+        })->otherwise(function ($reason): void {
             self::fail($reason);
         });
         Loop\run();
@@ -190,9 +190,9 @@ class CoroutineTest extends \PHPUnit\Framework\TestCase
             yield 'fail';
 
             return $promise;
-        })->then(function ($value) use (&$ok) {
+        })->then(function ($value) use (&$ok): void {
             $ok = $value;
-        })->otherwise(function ($reason) {
+        })->otherwise(function ($reason): void {
             self::fail($reason);
         });
 

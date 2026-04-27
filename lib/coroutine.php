@@ -57,26 +57,27 @@ function coroutine(callable $gen): Promise
     }
 
     // This is the value we're returning.
+    /** @var Promise<TReturn> $promise */
     $promise = new Promise();
 
     /**
      * So tempted to use the mythical y-combinator here, but it's not needed in
      * PHP.
      */
-    $advanceGenerator = function () use (&$advanceGenerator, $generator, $promise) {
+    $advanceGenerator = function () use (&$advanceGenerator, $generator, $promise): void {
         while ($generator->valid()) {
             $yieldedValue = $generator->current();
             if ($yieldedValue instanceof Promise) {
                 $yieldedValue->then(
-                    function ($value) use ($generator, &$advanceGenerator) {
+                    function ($value) use ($generator, &$advanceGenerator): void {
                         $generator->send($value);
                         $advanceGenerator();
                     },
-                    function (\Throwable $reason) use ($generator, $advanceGenerator) {
+                    function (\Throwable $reason) use ($generator, $advanceGenerator): void {
                         $generator->throw($reason);
                         $advanceGenerator();
                     }
-                )->otherwise(function (\Throwable $reason) use ($promise) {
+                )->otherwise(function (\Throwable $reason) use ($promise): void {
                     // This error handler would be called, if something in the
                     // generator throws an exception, and it's not caught
                     // locally.
@@ -98,9 +99,9 @@ function coroutine(callable $gen): Promise
 
             // The return value is a promise.
             if ($returnValue instanceof Promise) {
-                $returnValue->then(function ($value) use ($promise) {
+                $returnValue->then(function ($value) use ($promise): void {
                     $promise->fulfill($value);
-                }, function (\Throwable $reason) use ($promise) {
+                }, function (\Throwable $reason) use ($promise): void {
                     $promise->reject($reason);
                 });
             } else {

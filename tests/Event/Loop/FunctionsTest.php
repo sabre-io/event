@@ -21,7 +21,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
     public function testNextTick(): void
     {
         $check = 0;
-        nextTick(function () use (&$check) {
+        nextTick(function () use (&$check): void {
             ++$check;
         });
 
@@ -33,7 +33,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
     public function testTimeout(): void
     {
         $check = 0;
-        setTimeout(function () use (&$check) {
+        setTimeout(function () use (&$check): void {
             ++$check;
         }, 0.02);
 
@@ -45,13 +45,13 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
     public function testTimeoutOrder(): void
     {
         $check = [];
-        setTimeout(function () use (&$check) {
+        setTimeout(function () use (&$check): void {
             $check[] = 'a';
         }, 0.2);
-        setTimeout(function () use (&$check) {
+        setTimeout(function () use (&$check): void {
             $check[] = 'b';
         }, 0.1);
-        setTimeout(function () use (&$check) {
+        setTimeout(function () use (&$check): void {
             $check[] = 'c';
         }, 0.3);
 
@@ -64,7 +64,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
     {
         $check = 0;
         $intervalId = null;
-        $intervalId = setInterval(function () use (&$check, &$intervalId) {
+        $intervalId = setInterval(function () use (&$check, &$intervalId): void {
             ++$check;
             if ($check > 5) {
                 if (null === $intervalId) {
@@ -84,7 +84,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
         if (false === $h) {
             self::fail('failed to open php://temp');
         }
-        addWriteStream($h, function () use ($h) {
+        addWriteStream($h, function () use ($h): void {
             fwrite($h, 'hello world');
             removeWriteStream($h);
         });
@@ -104,7 +104,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
 
         $result = null;
 
-        addReadStream($h, function () use ($h, &$result) {
+        addReadStream($h, function () use ($h, &$result): void {
             $result = fgets($h);
             removeReadStream($h);
         });
@@ -115,11 +115,11 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
     public function testStop(): void
     {
         $check = 0;
-        setTimeout(function () use (&$check) {
+        setTimeout(function () use (&$check): void {
             ++$check;
         }, 200);
 
-        nextTick(function () {
+        nextTick(function (): void {
             stop();
         });
         run();
@@ -130,11 +130,11 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
     public function testTick(): void
     {
         $check = 0;
-        setTimeout(function () use (&$check) {
+        setTimeout(function () use (&$check): void {
             ++$check;
         }, 1);
 
-        nextTick(function () use (&$check) {
+        nextTick(function () use (&$check): void {
             ++$check;
         });
         tick();

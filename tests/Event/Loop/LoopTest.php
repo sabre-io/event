@@ -10,7 +10,7 @@ class LoopTest extends \PHPUnit\Framework\TestCase
     {
         $loop = new Loop();
         $check = 0;
-        $loop->nextTick(function () use (&$check) {
+        $loop->nextTick(function () use (&$check): void {
             ++$check;
         });
 
@@ -23,7 +23,7 @@ class LoopTest extends \PHPUnit\Framework\TestCase
     {
         $loop = new Loop();
         $check = 0;
-        $loop->setTimeout(function () use (&$check) {
+        $loop->setTimeout(function () use (&$check): void {
             ++$check;
         }, 0.02);
 
@@ -36,13 +36,13 @@ class LoopTest extends \PHPUnit\Framework\TestCase
     {
         $loop = new Loop();
         $check = [];
-        $loop->setTimeout(function () use (&$check) {
+        $loop->setTimeout(function () use (&$check): void {
             $check[] = 'a';
         }, 0.2);
-        $loop->setTimeout(function () use (&$check) {
+        $loop->setTimeout(function () use (&$check): void {
             $check[] = 'b';
         }, 0.1);
-        $loop->setTimeout(function () use (&$check) {
+        $loop->setTimeout(function () use (&$check): void {
             $check[] = 'c';
         }, 0.3);
 
@@ -56,7 +56,7 @@ class LoopTest extends \PHPUnit\Framework\TestCase
         $loop = new Loop();
         $check = 0;
         $intervalId = null;
-        $intervalId = $loop->setInterval(function () use (&$check, &$intervalId, $loop) {
+        $intervalId = $loop->setInterval(function () use (&$check, &$intervalId, $loop): void {
             ++$check;
             if ($check > 5) {
                 if (null === $intervalId) {
@@ -77,7 +77,7 @@ class LoopTest extends \PHPUnit\Framework\TestCase
             self::fail('failed to open php://temp');
         }
         $loop = new Loop();
-        $loop->addWriteStream($h, function () use ($h, $loop) {
+        $loop->addWriteStream($h, function () use ($h, $loop): void {
             fwrite($h, 'hello world');
             $loop->removeWriteStream($h);
         });
@@ -99,7 +99,7 @@ class LoopTest extends \PHPUnit\Framework\TestCase
 
         $result = null;
 
-        $loop->addReadStream($h, function () use ($h, $loop, &$result) {
+        $loop->addReadStream($h, function () use ($h, $loop, &$result): void {
             $result = fgets($h);
             $loop->removeReadStream($h);
         });
@@ -111,11 +111,11 @@ class LoopTest extends \PHPUnit\Framework\TestCase
     {
         $check = 0;
         $loop = new Loop();
-        $loop->setTimeout(function () use (&$check) {
+        $loop->setTimeout(function () use (&$check): void {
             ++$check;
         }, 200);
 
-        $loop->nextTick(function () use ($loop) {
+        $loop->nextTick(function () use ($loop): void {
             $loop->stop();
         });
         $loop->run();
@@ -127,11 +127,11 @@ class LoopTest extends \PHPUnit\Framework\TestCase
     {
         $check = 0;
         $loop = new Loop();
-        $loop->setTimeout(function () use (&$check) {
+        $loop->setTimeout(function () use (&$check): void {
             ++$check;
         }, 1);
 
-        $loop->nextTick(function () use (&$check) {
+        $loop->nextTick(function () use (&$check): void {
             ++$check;
         });
         $loop->tick();
@@ -147,8 +147,8 @@ class LoopTest extends \PHPUnit\Framework\TestCase
     {
         $loop = new Loop();
         $check = 0;
-        $loop->nextTick(function () use (&$check, $loop) {
-            $loop->nextTick(function () use (&$check) {
+        $loop->nextTick(function () use (&$check, $loop): void {
+            $loop->nextTick(function () use (&$check): void {
                 ++$check;
             });
             ++$check;

@@ -9,15 +9,15 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
     public function testInit(): void
     {
         $ee = new WildcardEmitter();
-        self::assertInstanceOf('Sabre\\Event\\WildcardEmitter', $ee);
+        self::assertInstanceOf(WildcardEmitter::class, $ee);
     }
 
     public function testListeners(): void
     {
         $ee = new WildcardEmitter();
 
-        $callback1 = function () { };
-        $callback2 = function () { };
+        $callback1 = function (): void { };
+        $callback2 = function (): void { };
         $ee->on('foo', $callback1, 200);
         $ee->on('foo', $callback2, 100);
 
@@ -28,8 +28,8 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
     {
         $ee = new WildcardEmitter();
 
-        $callback1 = function () { };
-        $callback2 = function () { };
+        $callback1 = function (): void { };
+        $callback2 = function (): void { };
         $ee->on('foo:*', $callback1, 200);
         $ee->on('foo:bar', $callback2, 100);
 
@@ -45,7 +45,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
         $argResult = null;
 
         $ee = new WildcardEmitter();
-        $ee->on('foo:*', function ($arg) use (&$argResult) {
+        $ee->on('foo:*', function ($arg) use (&$argResult): void {
             $argResult = $arg;
         });
 
@@ -69,7 +69,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
 
             return false;
         }, 10);
-        $ee->on('foo:*', function ($arg) use (&$argResult) {
+        $ee->on('foo:*', function ($arg) use (&$argResult): void {
             $argResult = 2;
         }, 20);
 
@@ -120,16 +120,16 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
         $result = [];
         $ee = new WildcardEmitter();
 
-        $ee->on('foo:bar:baz', function () use (&$result) {
+        $ee->on('foo:bar:baz', function () use (&$result): void {
             $result[] = 'a';
         }, 200);
-        $ee->on('foo:bar:*', function () use (&$result) {
+        $ee->on('foo:bar:*', function () use (&$result): void {
             $result[] = 'b';
         }, 50);
-        $ee->on('foo:bar:baz', function () use (&$result) {
+        $ee->on('foo:bar:baz', function () use (&$result): void {
             $result[] = 'c';
         }, 300);
-        $ee->on('foo:bar:*', function () use (&$result) {
+        $ee->on('foo:bar:*', function () use (&$result): void {
             $result[] = 'd';
         });
 
@@ -141,7 +141,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
     {
         $result = false;
 
-        $callBack = function () use (&$result) {
+        $callBack = function () use (&$result): void {
             $result = true;
         };
 
@@ -166,7 +166,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
     {
         $result = false;
 
-        $callBack = function () use (&$result) {
+        $callBack = function () use (&$result): void {
             $result = true;
         };
 
@@ -188,7 +188,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
     {
         $result = false;
 
-        $callBack = function () use (&$result) {
+        $callBack = function () use (&$result): void {
             $result = true;
         };
 
@@ -214,7 +214,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
     public function testRemoveAllListeners(): void
     {
         $result = false;
-        $callBack = function () use (&$result) {
+        $callBack = function () use (&$result): void {
             $result = true;
         };
 
@@ -235,7 +235,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
     {
         $result = false;
 
-        $callBack = function () use (&$result) {
+        $callBack = function () use (&$result): void {
             $result = true;
         };
 
@@ -255,7 +255,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
     public function testRemoveAllListenersWildcard(): void
     {
         $result = false;
-        $callBack = function () use (&$result) {
+        $callBack = function () use (&$result): void {
             $result = true;
         };
 
@@ -276,7 +276,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
     {
         $result = 0;
 
-        $callBack = function () use (&$result) {
+        $callBack = function () use (&$result): void {
             ++$result;
         };
 
@@ -320,7 +320,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
         $ee = new WildcardEmitter();
 
         $handlerCounter = 0;
-        $bla = function () use (&$handlerCounter) {
+        $bla = function () use (&$handlerCounter): void {
             ++$handlerCounter;
         };
         $ee->on('foo', $bla);
@@ -343,7 +343,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
         $ee = new WildcardEmitter();
 
         $handlerCounter = 0;
-        $bla = function () use (&$handlerCounter) {
+        $bla = function () use (&$handlerCounter): void {
             ++$handlerCounter;
         };
         $ee->on('foo', $bla);
