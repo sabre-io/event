@@ -17,20 +17,19 @@ Installation
 
 Make sure you have [composer][3] installed, and then run:
 
-    composer require sabre/event "^5.0"
+    composer require sabre/event "^6.1"
 
-This package requires PHP 7.1.
+This package requires PHP 8.2.
 
 Build status
 ------------
+![Build Status](https://github.com/sabre-io/event/actions/workflows/ci.yml/badge.svg)
 
-| branch | status |
-| ------ | ------ |
-| master | [![Build Status](https://travis-ci.org/sabre-io/event.svg?branch=master)](https://travis-ci.org/sabre-io/event) |
-| 3.0    | [![Build Status](https://travis-ci.org/sabre-io/event.svg?branch=3.0)](https://travis-ci.org/sabre-io/event) |
-| 2.0    | [![Build Status](https://travis-ci.org/sabre-io/event.svg?branch=2.0)](https://travis-ci.org/sabre-io/event) |
-| 1.0    | [![Build Status](https://travis-ci.org/sabre-io/event.svg?branch=1.0)](https://travis-ci.org/sabre-io/event) |
-| php53  | [![Build Status](https://travis-ci.org/sabre-io/event.svg?branch=php53)](https://travis-ci.org/sabre-io/event) |
+| release | minimum PHP version |
+|---------|---------------------|
+| master  | PHP 8.2             |
+| 6.0     | PHP 7.4             |
+| 5.1     | PHP 7.1             |
 
 
 Questions?
@@ -45,4 +44,4 @@ This library is being developed by [fruux](https://fruux.com/). Drop us a line f
 
 [1]: https://sabre.io/event/
 [3]: https://getcomposer.org/
-[5]: https://github.com/fruux/sabre-event/issues/
+[5]: https://github.com/sabre-io/event/issues/
