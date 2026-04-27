@@ -1,6 +1,5 @@
 parameters:
   level: 9
-  phpVersion: 80200 # PHP 8.2.0
   ignoreErrors:
   -
     message: "#^If condition is always true.$#"
