@@ -1,6 +1,12 @@
 ChangeLog
 =========
 
+6.0.2 (2026-04-27)
+------------------
+* #144 chore: adjust code for cs-fixer no-useless-else ( @phil-davis )
+* #146 chore: bump phpstan to v2 and add rector ( @phil-davis )
+* various bumps to versions of tools and actions in CI (@phil-davis)
+
 6.0.1 (2024-09-06)
 ------------------
 * #105 Adjust code for things reported by phpstan ( @phil-davis )
@@ -14,6 +20,13 @@ ChangeLog
 
 * #96 Minor fixes to examples, tests and comments (@phil-davis)
 * #97 PHP min version 7.4 (@phil-davis)
+
+5.1.8 (2026-04-27)
+------------------
+
+* #147 chore: adjust code for cs-fixer no-useless-else (@phil-davis)
+* #151 fix: remove duplicate code from Promise.php and release (@phil-davis)
+* various bumps to versions of tools and actions in CI (@phil-davis)
 
 5.1.7 (2024-08-27)
 ------------------
