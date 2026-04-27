@@ -136,7 +136,12 @@ trait WildcardEmitterTrait
 
             foreach ($this->wildcardListeners as $wcEvent => $wcListeners) {
                 // Wildcard match
-                if (\substr($eventName, 0, \strlen($wcEvent)) === $wcEvent) {
+                // Rector adds the "string" cast because $wcEvent could be a
+                // "numeric string" like "456". And in PHP the array key is
+                // int 456, and so the cast might be needed here.
+                // But phpstan thinks that the cast is useless.
+                // @phpstan-ignore cast.useless
+                if (str_starts_with($eventName, (string) $wcEvent)) {
                     foreach ($wcListeners as $listener) {
                         $listenersPriority[] = $listener[0];
                         $listeners[] = $listener[1];

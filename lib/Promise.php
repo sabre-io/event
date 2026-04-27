@@ -57,8 +57,8 @@ class Promise
     {
         if (is_callable($executor)) {
             $executor(
-                [$this, 'fulfill'],
-                [$this, 'reject']
+                $this->fulfill(...),
+                $this->reject(...)
             );
         }
     }
@@ -241,7 +241,7 @@ class Promise
                         // returned a promise, we only fulfill or reject the
                         // chained promise once that promise has also been
                         // resolved.
-                        $result->then([$subPromise, 'fulfill'], [$subPromise, 'reject']);
+                        $result->then($subPromise->fulfill(...), $subPromise->reject(...));
                     } else {
                         // If the callback returned any other value, we
                         // immediately fulfill the chained promise.

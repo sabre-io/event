@@ -16,7 +16,7 @@
     "homepage": "http://sabre.io/event/",
     "license": "BSD-3-Clause",
     "require": {
-        "php": "^7.4 || ^8.0"
+        "php": "^8.2"
     },
     "authors": [
         {
@@ -52,7 +52,7 @@
         "phpstan/phpstan-strict-rules": "^2.0",
         "phpstan/extension-installer": "^1.4",
         "phpunit/phpunit": "^9.6",
-        "rector/rector": "^2.3"
+        "rector/rector": "^2.4"
     },
     "scripts": {
         "phpstan": [
@@ -79,6 +79,9 @@
     "config": {
         "allow-plugins": {
             "phpstan/extension-installer": true
+        },
+        "platform": {
+            "php": "8.2"
         }
     }
 }
