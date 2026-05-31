@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Sabre\Event;
 
+use PHPUnit\Framework\Attributes\Depends;
+
 class EmitterTest extends \PHPUnit\Framework\TestCase
 {
     public function testInit(): void
@@ -24,9 +26,7 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
         self::assertEquals([$callback2, $callback1], $ee->listeners('foo'));
     }
 
-    /**
-     * @depends testInit
-     */
+    #[Depends('testInit')]
     public function testHandleEvent(): void
     {
         $argResult = null;
@@ -43,9 +43,7 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
         self::assertEquals('bar', $argResult);
     }
 
-    /**
-     * @depends testHandleEvent
-     */
+    #[Depends('testHandleEvent')]
     public function testCancelEvent(): void
     {
         $argResult = 0;
@@ -67,9 +65,7 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
         self::assertEquals(1, $argResult);
     }
 
-    /**
-     * @depends testCancelEvent
-     */
+    #[Depends('testCancelEvent')]
     public function testPriority(): void
     {
         $argResult = 0;
@@ -93,9 +89,7 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
         self::assertEquals(2, $argResult);
     }
 
-    /**
-     * @depends testPriority
-     */
+    #[Depends('testPriority')]
     public function testPriority2(): void
     {
         $result = [];
@@ -249,9 +243,7 @@ class EmitterTest extends \PHPUnit\Framework\TestCase
         self::assertEquals(1, $result);
     }
 
-    /**
-     * @depends testCancelEvent
-     */
+    #[Depends('testCancelEvent')]
     public function testPriorityOnce(): void
     {
         $argResult = 0;

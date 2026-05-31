@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Sabre\Event;
 
+use PHPUnit\Framework\Attributes\Depends;
+
 class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
 {
     public function testInit(): void
@@ -37,9 +39,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
         self::assertEquals([$callback1], $ee->listeners('foo:baz'));
     }
 
-    /**
-     * @depends testInit
-     */
+    #[Depends('testInit')]
     public function testHandleEvent(): void
     {
         $argResult = null;
@@ -56,9 +56,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
         self::assertEquals('bar', $argResult);
     }
 
-    /**
-     * @depends testHandleEvent
-     */
+    #[Depends('testHandleEvent')]
     public function testCancelEvent(): void
     {
         $argResult = 0;
@@ -86,9 +84,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
         self::assertEquals(2, $argResult);
     }
 
-    /**
-     * @depends testCancelEvent
-     */
+    #[Depends('testCancelEvent')]
     public function testPriority(): void
     {
         $argResult = 0;
@@ -112,9 +108,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
         self::assertEquals(2, $argResult);
     }
 
-    /**
-     * @depends testPriority
-     */
+    #[Depends('testPriority')]
     public function testPriority2(): void
     {
         $result = [];
@@ -289,9 +283,7 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
         self::assertEquals(1, $result);
     }
 
-    /**
-     * @depends testCancelEvent
-     */
+    #[Depends('testCancelEvent')]
     public function testPriorityOnce(): void
     {
         $argResult = 0;
