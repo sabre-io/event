@@ -126,11 +126,9 @@ trait WildcardEmitterTrait
         if (!\array_key_exists($eventName, $this->listenerIndex)) {
             // Create a new index.
             $listeners = [];
-            $listenersPriority = [];
             if (isset($this->listeners[$eventName])) {
                 foreach ($this->listeners[$eventName] as $listener) {
-                    $listenersPriority[] = $listener[0];
-                    $listeners[] = $listener[1];
+                    $listeners[] = $listener;
                 }
             }
 
@@ -143,17 +141,16 @@ trait WildcardEmitterTrait
                 // @phpstan-ignore cast.useless
                 if (str_starts_with($eventName, (string) $wcEvent)) {
                     foreach ($wcListeners as $listener) {
-                        $listenersPriority[] = $listener[0];
-                        $listeners[] = $listener[1];
+                        $listeners[] = $listener;
                     }
                 }
             }
 
             // Sorting by priority
-            \array_multisort($listenersPriority, SORT_NUMERIC, $listeners);
+            \usort($listeners, static fn ($l1, $l2) => $l1[0] <=> $l2[0]);
 
             // Creating index
-            $this->listenerIndex[$eventName] = $listeners;
+            $this->listenerIndex[$eventName] = \array_column($listeners, 1);
         }
 
         return $this->listenerIndex[$eventName];
