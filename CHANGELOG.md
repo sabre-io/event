@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+6.1.1 (2026-07-06)
+------------------
+* #162 fix: Do not sort listeners differently depending on their type ( @come-nc )
+
 6.1.0 (2026-04-27)
 ------------------
 * #153 chore: drop support for PHP 7.4 8.0 8.1 ( @phil-davis )
