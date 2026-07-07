@@ -142,7 +142,9 @@ trait WildcardEmitterTrait
             }
 
             // Sorting by priority
-            \usort($listeners, static fn ($l1, $l2) => $l1[0] <=> $l2[0]);
+            \usort($listeners, static function ($l1, $l2) {
+                return $l1[0] <=> $l2[0];
+            });
 
             // Creating index
             $this->listenerIndex[$eventName] = \array_column($listeners, 1);
