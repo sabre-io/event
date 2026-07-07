@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+6.0.3 (2026-07-07)
+------------------
+* #162 fix: Do not sort listeners differently depending on their type ( @come-nc )
+
 6.0.2 (2026-04-27)
 ------------------
 * #144 chore: adjust code for cs-fixer no-useless-else ( @phil-davis )
