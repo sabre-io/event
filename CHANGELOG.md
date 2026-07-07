@@ -1,6 +1,11 @@
 ChangeLog
 =========
 
+5.1.9 (2026-07-07)
+------------------
+
+* #162 fix: Do not sort listeners differently depending on their type (@come-nc)
+
 5.1.8 (2026-04-27)
 ------------------
 
