@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Sabre\Event;
 
-use PHPUnit\Framework\Attributes\DataProvider;
-
 class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
 {
     public function testInit(): void
@@ -51,7 +49,9 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    #[DataProvider('listenersOrderDataProvider')]
+    /**
+     * @dataProvider listenersOrderDataProvider
+     */
     public function testListenersOrder(string $methodName1, string $methodName2): void
     {
         $ee = new WildcardEmitter();
