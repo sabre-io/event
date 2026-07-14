@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Sabre\Event;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
 {
     public function testInit()
@@ -22,6 +24,46 @@ class WildcardEmitterTest extends \PHPUnit\Framework\TestCase
         $ee->on('foo', $callback2, 100);
 
         $this->assertEquals([$callback2, $callback1], $ee->listeners('foo'));
+    }
+
+    public function aMethod(int $number): int
+    {
+        return $number * 2;
+    }
+
+    public function bMethod(int $number): int
+    {
+        return $number * 4;
+    }
+
+    /**
+     * @return array<int, array<int, string>>
+     */
+    public static function listenersOrderDataProvider(): array
+    {
+        // Regardless of the alphabetical order of the method names,
+        // when the event priority is the same, the order of the
+        // event listeners remains in the order specified and is not
+        // "accidentally" sorted.
+        return [
+            ['aMethod', 'bMethod'],
+            ['bMethod', 'aMethod'],
+        ];
+    }
+
+    #[DataProvider('listenersOrderDataProvider')]
+    public function testListenersOrder(string $methodName1, string $methodName2): void
+    {
+        $ee = new WildcardEmitter();
+
+        $event1 = [$this, $methodName1];
+        $event2 = [$this, $methodName2];
+        // @phpstan-ignore argument.type
+        $ee->on('bar', $event1, 200);
+        // @phpstan-ignore argument.type
+        $ee->on('bar', $event2, 200);
+
+        self::assertEquals([$event1, $event2], $ee->listeners('bar'));
     }
 
     public function testWildcardListeners()
