@@ -40,9 +40,7 @@ trait WildcardEmitterTrait
         // of listeners during emitting of events.
         $this->listenerIndex = [];
 
-        if (!isset($listeners[$eventName])) {
-            $listeners[$eventName] = [];
-        }
+        $listeners[$eventName] ??= [];
         $listeners[$eventName][] = [$priority, $callBack];
     }
 
