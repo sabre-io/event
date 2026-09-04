@@ -2,23 +2,23 @@ parameters:
   level: 9
   ignoreErrors:
   -
-    message: "#^If condition is always true.$#"
+    rawMessage: "If condition is always true."
     count: 1
     path: lib/Loop/Loop.php
   -
-    message: "#^Left side of && is always true.$#"
+    rawMessage: "Left side of && is always true."
     count: 1
     path: lib/Loop/Loop.php
   -
-    message: "#^Variable \\$timer might not be defined.$#"
+    rawMessage: "Variable $timer might not be defined."
     count: 1
     path: lib/Loop/Loop.php
   -
-    message: "#^Only booleans are allowed in an if condition, int<0, max>|false given.$#"
+    rawMessage: "Only booleans are allowed in an if condition, int<0, max>|false given."
     count: 1
     path: lib/Loop/Loop.php
   -
-    message: "#^Instanceof between Generator<mixed, mixed, mixed, TReturn> and Generator will always evaluate to true.$#"
+    rawMessage: "Instanceof between Generator<mixed, mixed, mixed, TReturn> and Generator will always evaluate to true."
     count: 1
     path: lib/coroutine.php
   -
