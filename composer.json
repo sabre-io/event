@@ -52,7 +52,7 @@
         "phpstan/phpstan-strict-rules": "^2.0",
         "phpstan/extension-installer": "^1.4",
         "phpunit/phpunit": "^11.5",
-        "rector/rector": "^2.5"
+        "rector/rector": "^2.6"
     },
     "scripts": {
         "phpstan": [
